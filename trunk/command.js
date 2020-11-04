@@ -1,5 +1,5 @@
 const Command = {
-	check: () {
+	check: function() {
 	console.log("Command ready")
 	return true
 	} 
