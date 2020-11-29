@@ -6,15 +6,14 @@
  * @author Jacques 
  * */
 
- const { program } = require('@caporal/core')
- const contactFileExtension = ".csv"
+const { program } = require('@caporal/core')
+const { Contact } = require('./contact')
 
- program
+const contactFileExtension = ".csv"
+
+program
  .name("Mail parser")
- .argument("<test>","test")
- .action(({logger, args}) => {
-    logger.info("hello %s", args.test)
- })
+.description("Mail CLI parser tool, used to generate graphics and text data")
 
  /*
  * Spec 1.1: List data from collaborator and their contacts
@@ -128,7 +127,7 @@ Option: svg or png
 * Spec 1.7 TODO
 */
 
- program.run()
+program.run()
 
  const checkDateFormat = (d) => {
      if ((d instanceof Date && isNaN(d.getDate())))
