@@ -63,7 +63,7 @@ class Mail{
         return this.date;
     }
 
-    get isEqual(mail){
+    isEqual(mail){
         if(mail instanceof Mail){
             if(mail===this){
                 return true;
@@ -73,7 +73,7 @@ class Mail{
         }
     }
 
-    get isOlderThan(mail){
+    isOlderThan(mail){
        if(mail instanceof Mail){
             if(mail.date>this.date){
                 return true;
@@ -108,4 +108,6 @@ class ColMail{
 let m = new Mail("dhgjdfdjfh","20/10/2555","lolo","jj","hh","hhh","oioo","j","kj","jh","kjh","drdd","hu","uh","uç","uh");
 let col = new ColMail("test");
 col.setListeMail(m);
+console.log(m.isEqual(m))
+console.log(m.isOlderThan(m))
 console.log(col.toString);
