@@ -2,7 +2,7 @@
     * Colection Mail class, represent an email collection.
     * @author Augustin Borne
 */
-const mail = require('./Mail.js');
+const { Mail } = require('./Mail.js');
 
 class ColMail{ 
     constructor(nomCollection){
