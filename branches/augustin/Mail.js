@@ -2,6 +2,7 @@
     * Mail class, represent an email.
     * @author Augustin Borne
 */
+const { Contact } = require('./contact');
 
 class Mail{
 
@@ -67,6 +68,21 @@ class Mail{
     get getDate(){
         return this.date;
     }
+    get getMessageId(){
+        return this.messageId;
+    }
+
+    get getEmailAuthor(){
+        return this.mailAuthor;
+    }
+
+    get getEmailReceiver(){
+        return this.mailRecipient;
+    }
+
+    get getAuthor(){
+        return this.author;
+    }
 
     isEqual(mail){
         if(mail instanceof Mail){
@@ -91,7 +107,7 @@ class Mail{
     }
 
     isWeekend(){
-        if(Date.prototype.getDay(this.date)===0 || Date.prototype.getDay(this.date)===6){
+        if(this.date.getDay===0 || this.date.getDay===6){
             return true;
         }else{
             return false;
@@ -123,6 +139,12 @@ class Mail{
         }else{
             return false;
         }
+    }
+
+    authorToContact(){
+        var lignes = this.author.split(/\s/);
+        let contact = new Contact(lignes[0],lignes[1],this.mailAuthor);
+        return contact;
     }
 }
 
