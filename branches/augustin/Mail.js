@@ -90,21 +90,28 @@ class Mail{
                 return true;
             }
         }else{
-            return false;
+            throw Error('Invalid data type, a Mail element is required')
         }
     }
 
     isOlderThan(mail){
        if(mail instanceof Mail){
-            if(mail.date>this.date){
+            if(mail.date.getTime()>this.date.getTime()){
                 return true;
             }else{
                 return false;
             }
        }else{
-           return false;
+        throw Error('Invalid data type, a Mail element is required')
        }
     }
+    isBetweenDate(date1,date2){
+        if(this.date.getTime()>=date1.getTime() && this.date.getTime()<=date2.getTime()){
+            return true;
+        }else{
+            false;
+        }
+     }
 
     isWeekend(){
         if(this.date.getDay===0 || this.date.getDay===6){
@@ -143,6 +150,12 @@ class Mail{
 
     authorToContact(){
         var lignes = this.author.split(/\s/);
+        let contact = new Contact(lignes[0],lignes[1],this.mailAuthor);
+        return contact;
+    }
+
+    recipientToContact(){
+        var lignes = this.recipient.split(/\s/);
         let contact = new Contact(lignes[0],lignes[1],this.mailAuthor);
         return contact;
     }
