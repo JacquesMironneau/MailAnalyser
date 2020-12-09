@@ -41,6 +41,15 @@ class ColMail{
         return this.listeMail;
     }
 
+    /**
+     * @name mailInInterval
+     * @param {Date} date1 
+     * @param {Date} date2 
+     * 
+     * Retourne une collection de mail correspondant au mail envoye pendant un intervalle de temps
+     * @
+     * @author Augustin Borne
+     */
     mailInInterval(date1,date2){
         let result = new ColMail();
         this.listeMail.forEach(element => {
@@ -58,7 +67,15 @@ class ColMail{
     bestCollab(email){
         result =[];
     }
-
+    /**
+     * @name chercherNbinteraction
+     * @param {String} email1 
+     * @param {String} email2 
+     * 
+     * Retourne le nombre d'echange entre 2 adresses mail
+     * 
+     * @author Augustin Borne
+     */
     chercherNbinteraction(email1,email2){
         let result = 0;
         this.listeMail.forEach(element => {
@@ -69,33 +86,41 @@ class ColMail{
         return result;
     }
 
+    /**
+     * @name bestCollab
+     * @param {String} nom 
+     * @param {String} prenom 
+     * 
+     * Permet de retourner les collaborateurs d'un contact  qui echangent le plsu entre eux     (non fonctionnel pour le moment)
+     * @author Augustin Borne
+     */
     bestCollab(nom,prenom){
-       let colab = new Array();
+       let colab = new Object();
        this.listeMail.forEach(element => {
            if(element instanceof Mail){
-               if(element.authorToContact.getName()===nom && element.authorToContact.getLastName()===prenom){
+               if(element.authorToContact.getName()===nom && element.authorToContact.getLastName===prenom){
                     result.setListeMail(element);
 
                     let estInclus = false;
                     let keys = colab.keys();
                     keys.forEach(element2 => {
-                        if(element2 === element.recipientToContact() ){
+                        if(element2 === element.recipientToContact ){
                             estInclus=true;
                             break;
                         }
                     });
                     if(estInclus){
-                        colab[element.recipientToContact()]++;
+                        colab[element.recipientToContact]++;
                     }else{
-                        colab[element.recipientToContact()]=1;
+                        colab[element.recipientToContact]=1;
                     }
-               }else if(element.recipientToContact.getName()===nom && element.recipientToContact.getLastName()===prenom){
+               }else if(element.recipientToContact.getName===nom && element.recipientToContact.getLastName===prenom){
                     result.setListeMail(element);
 
                     let estInclus = false;
                     let keys = colab.keys();
                     keys.forEach(element2 => {
-                        if(element2 === element.authorToContact() ){
+                        if(element2 === element.authorToContact ){
                             estInclus=true;
                             break;
                         }
@@ -109,47 +134,96 @@ class ColMail{
            }
        });    
     }
+    /**
+     * @name chercherTopX
+     * @param {Contact*Int} listeColab 
+     * @param {Int} topX 
+     * 
+     * Permet de retoruner le top X des echanges de colaborateur a partir d'une liste du type contact x int
+     * 
+     * @author Augustin Borne
+     */
 
     chercherTopX(listeColab,topX){
-        let colab = new Array();
+        let colab = new Object();
         let keysLeft = left.keys();
-        for(i=0;i<topX;i++){
+        
+        if(listeColab.length>0){
+            for(let i = 0;i<topX;i++){
+                
+                    let max = null;
+                    let nbMax = null;
+                    for(var i in listeColab){
+                        if(max===null){
+                            max=i;
+                            nbMax=listeColab[i];
+                        }else{
+                            if(listeColab[i]>nbMax){
+                                max=i;
+                                nbMax=listeColab[i];
+                            }
+                        }
+                    }
+                    colab[max]=nbMax;
 
-        }
-    }
-
-    triColab(listeColab){
-        if(listeColab.length < 2){
+                    listeColab = listeColab.filter(function(item){
+                        return item !== max;
+                    })
+                
+            }
+            return colab;
+        }else{
             return listeColab;
         }
-
-        var mid = Math.floor(listeColab.length / 2);
-        var right = listeColab.slice(mid);
-        var left = listeColab.slice(0,mid);
-        var p = this.mergeColab(this.triColab(left),this.triColab(right));
-
-        p.unshift(0, listeColab.length);
-        listeColab.splice.apply(listeColab, p);
-        return listeColab;
     }
 
-    mergeColab(left,right){
-        var tab = new Array();
-        var l= 0;
-        var r =0;
+    /**
+     * 
+     * @param {*} listAuthor
+     * generer la liste des contacts de un ou plusieurs email et si il y a un tableau vide en argument, retourner tous les contacts de la collections de mail 
+     * @author Augustin Borne
+     */
 
-        while(l < left.length && r < right.length){
-            let keysLeft = left.keys();
-            let keysRight = right.keys();
-            if(left[keysLeft[l]] < right[keysRight[r]]){
-                tab[keysLeft[l++]]=left[keysLeft[l++]];
-            }else{
-                tab[keysRight[r++]]=right[keysRight[r++]];
-            }
+
+
+    collabByEmail(listAuthor){
+        let colabResult = new Array();
+        if(listAuthor.lengh===0){
+            
+            colabResult=this.colMailToContact;
+        }else{
+            listAuthor.forEach(element => {
+                this.listeMail.forEach(element2 => {
+
+                    if(element2.getEmailAuthor===element){
+                        let estInclus=false;
+                        colabResult.forEach(element3 => {
+                            if(element3.getMail===element2.getEmailReceiver){
+                                estInclus=true;
+                            }
+                        });
+
+                        if(!estInclus){
+                            colabResult.push(element2.recipientToContact);
+                        }
+                    }else if(element2.getEmailReceiver===element){
+                        let estInclus=false;
+                        colabResult.forEach(element3 => {
+                            if(element3.getMail===element2.getEmailAuthor){
+                                estInclus=true;
+                            }
+                        });
+                        if(!estInclus){
+                            colabResult.push(element2.authorToContact);
+                        }
+                    }
+                });
+            });
         }
-        return tab.concat(left.slice(l)).concat(right.slice(r));
+        return colabResult;
+        
     }
-
+   
     MostUsedTerm(email){
         result=[];
     }
@@ -157,6 +231,14 @@ class ColMail{
     MostUsedTerm(nom,prenom){
         result=[];
     }
+
+    /**
+     * @name SearchByEmail
+     * @param {*} email
+     * 
+     * Chercher dans la collection de mail tous les mail dont l'auteur ou le destinataire correspond a l'argument
+     * @author Augustin Borne
+     */
 
     SearchByEmail(email){
         result = new ColMail();
@@ -171,6 +253,16 @@ class ColMail{
         });
         return result;
     }
+
+    /**
+     * @name MailInbusyDays
+     * @param {Mail} email 
+     * @param {Date} date1 
+     * @param {Date} date2
+     *Permet de retourner tous les mails envoyés le weekend ou le soir dans un intervalle de temps 
+     *
+     * @author Augustin Borne
+     */
 
     MailInbusyDays(email,date1,date2){
         let resultTemp = this.mailInInterval(date1,date2);
@@ -189,6 +281,15 @@ class ColMail{
         
     }
 
+    /**
+     * @name SearchByAuthor
+     * @param {String} nom 
+     * @param {String} prenom
+     * 
+     * permet de retourner tous les mails ecrits par l'auteur donné en argument
+     * @author Augustin Borne
+     */
+
     SearchByAuthor(nom,prenom){
         result = new ColMail();
         const regexNom = new RegExp(nom);
@@ -204,7 +305,11 @@ class ColMail{
         });
         return result;
     }
-
+    /**
+     * @name colMailToContact
+     * Permet de retoruner tous les contact de la collection de mail
+     * @author Augustin Borne
+     */
     colMailToContact(){
         let result = [];
         this.listeMail.forEach(element => {
@@ -245,6 +350,13 @@ class ColMail{
         return result;
     }
 
+    /**
+     * @name getMail
+     * @param {String} messageId
+     * 
+     * Permet d'avoir un mail a partir de l'id de ce mail (inutile)
+     * @author Augustin Borne
+     */
     getMail(messageId){
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
