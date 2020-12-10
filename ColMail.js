@@ -18,7 +18,7 @@ class ColMail{
         }
         
     }
-    setListeMail(mailEntre){
+    setListeColMail(mailEntre){
         if(mailEntre instanceof ColMail){
             mailEntre.getMail.forEach(element => {
                 if(element instanceof Mail){
@@ -33,11 +33,11 @@ class ColMail{
   
 
     get toString(){
-        let res = "colection " + this.nomCollection+" :";
+        let res = "colection de Mail :";
         this.listeMail.forEach(element => res+= "\n" +element.toString);
         return res;
     }
-    get listeMail(){
+    get getlisteMail(){
         return this.listeMail;
     }
 
@@ -94,6 +94,7 @@ class ColMail{
      * Permet de retourner les collaborateurs d'un contact  qui echangent le plsu entre eux     (non fonctionnel pour le moment)
      * @author Augustin Borne
      */
+    /*
     bestCollab(nom,prenom){
        let colab = new Object();
        this.listeMail.forEach(element => {
@@ -133,7 +134,7 @@ class ColMail{
                }
            }
        });    
-    }
+    }*/
     /**
      * @name chercherTopX
      * @param {Contact*Int} listeColab 
@@ -143,7 +144,7 @@ class ColMail{
      * 
      * @author Augustin Borne
      */
-
+/*
     chercherTopX(listeColab,topX){
         let colab = new Object();
         let keysLeft = left.keys();
@@ -176,7 +177,7 @@ class ColMail{
             return listeColab;
         }
     }
-
+*/
     /**
      * 
      * @param {*} listAuthor
@@ -187,10 +188,10 @@ class ColMail{
 
 
     collabByEmail(listAuthor){
+        
         let colabResult = new Array();
-        if(listAuthor.lengh===0){
-            
-            colabResult=this.colMailToContact;
+        if(listAuthor.length===0){
+            colabResult=this.colMailToContact();
         }else{
             listAuthor.forEach(element => {
                 this.listeMail.forEach(element2 => {
@@ -204,17 +205,17 @@ class ColMail{
                         });
 
                         if(!estInclus){
-                            colabResult.push(element2.recipientToContact);
+                            colabResult.push(element2.recipientToContact());
                         }
                     }else if(element2.getEmailReceiver===element){
                         let estInclus=false;
                         colabResult.forEach(element3 => {
-                            if(element3.getMail===element2.getEmailAuthor){
+                            if(element3.getMail===element2.getEmailAuthor()){
                                 estInclus=true;
                             }
                         });
                         if(!estInclus){
-                            colabResult.push(element2.authorToContact);
+                            colabResult.push(element2.authorToContact());
                         }
                     }
                 });
@@ -311,41 +312,43 @@ class ColMail{
      * @author Augustin Borne
      */
     colMailToContact(){
-        let result = [];
+        let result = new Array();
         this.listeMail.forEach(element => {
-            if(element instanceof mail){
-                let contactTempAuthor = element.authorToContact();
-                let contactTempRecipient = element.recipientToContact();
-                let author = false;
-                let recipient = false;
 
-                //on verifie qu'il n'y a pas de doublon dans result(critere = mail)
-                if(result.length != 0){
-                    result.forEach(element => {
-                        if(element.getMail()==contactTempAuthor.getMail()){
-                            author=true;
-                        }else if(element.getMail()==contactTempRecipient.getMail()){
-                            recipient=true;
-                        }
+            let contactTempAuthor = element.authorToContact();
 
-                        if(author && recipient){
-                            break;
-                        }
-                    });
 
-                    if(!author){
-                        result.push(contactTempAuthor);
+            let contactTempRecipient = element.recipientToContact();
+
+            let author = false;
+            let recipient = false;
+
+            //on verifie qu'il n'y a pas de doublon dans result(critere = mail)
+            if(result.length != 0){
+                result.forEach(element => {
+                    if(element.getMail==contactTempAuthor.getMail){
+                        author=true;
+                    }else if(element.getMail==contactTempRecipient.getMail){
+                        recipient=true;
                     }
-                    if(!recipient){
-                        result.push(contactTempRecipient);
-                    }
-                }else{
+                    /*
+                    if(author && recipient){
+                        break;
+                    }*/
+                });
+
+                if(!author){
                     result.push(contactTempAuthor);
+                }
+                if(!recipient){
                     result.push(contactTempRecipient);
                 }
-                
-                
+            }else{
+                result.push(contactTempAuthor);
+                result.push(contactTempRecipient);
             }
+                
+
         });
         return result;
     }

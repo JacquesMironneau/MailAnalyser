@@ -2,7 +2,7 @@
     * Mail class, represent an email.
     * @author Augustin Borne
 */
-const { Contact } = require('./contact');
+const {Contact} = require('./contact');
 
 class Mail{
 
@@ -84,6 +84,10 @@ class Mail{
         return this.author;
     }
 
+    get getRecipient(){
+        return this.recipient;
+    }
+
     isEqual(mail){
         if(mail instanceof Mail){
             if(mail===this){
@@ -150,14 +154,14 @@ class Mail{
 
     authorToContact(){
         var lignes = this.author.split(/\s/);
-        let contact = new Contact(lignes[0],lignes[1],this.mailAuthor);
-        return contact;
+        let contactTest = new Contact(lignes[0],lignes[1],this.mailAuthor);
+        return contactTest;
     }
 
     recipientToContact(){
-        var lignes = this.recipient.split(/\s/);
-        let contact = new Contact(lignes[0],lignes[1],this.mailAuthor);
-        return contact;
+        let lignes = this.recipient.split(/\s/);
+        let contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient);
+        return contactTest;
     }
 }
 
