@@ -3,7 +3,7 @@ const { ColMail } = require('./ColMail');
 
 const fs = require('fs');
 
-// extractMail : create a list of mail with data of several files --> transformer en boucle while pour ne pas avoir le nombre de sous-dossier prédéfnini
+// extractMail : create a list of mail with data of several files
 var extractMail = function(path) {
     var listOfPath = [];
     var listeMail = new ColMail('listeMail');
@@ -42,13 +42,20 @@ var getPathOfFiles = function(path) {
 // createMail : create a mail with data of a file
 var createMail = function(file) {
     fileToString = fs.readFileSync(file).toString();
+
+    //we verify if data in the file is a mail
+    if (!fileToString.includes('Message-ID: ') || !fileToString.includes('Date: ') || !fileToString.includes('From: ') || !fileToString.includes('To: ') || !fileToString.includes('Subject: ') || !fileToString.includes('Mime-Version: ') || !fileToString.includes('Content-Type: ') || !fileToString.includes('Content-Transfer-Encoding: ') || !fileToString.includes('X-From: ') || !fileToString.includes('X-To: ') || !fileToString.includes('X-cc: ') || !fileToString.includes('X-bcc: ') || !fileToString.includes('X-Folder: ') || !fileToString.includes('X-Origin: ') || !fileToString.includes('X-FileName: ')) {
+        return null;
+    }  
+
     var dataTab = createTab(fileToString);
 
+    //we verify if the date, the author and the recipient are not empty
     if (dataTab[1] === '' || dataTab[2] === '' || dataTab[3] === '') {
         return null;
     }
 
-    var mail = new Mail(dataTab[0], transformDate(dataTab[1]), dataTab[2], dataTab[3], dataTab[4], dataTab[5], dataTab[6], dataTab[7], dataTab[8], dataTab[9], dataTab[10], dataTab[11], dataTab[12], dataTab[13], dataTab[14], dataTab[15]);
+    var mail = new Mail(dataTab[0], transformDate(dataTab[1]), dataTab[2], dataTab[3], dataTab[4], dataTab[5], dataTab[6], dataTab[7], transformName(dataTab[8]), transformName(dataTab[9]), dataTab[10], dataTab[11], dataTab[12], dataTab[13], dataTab[14], dataTab[15]);
     return mail;
 }
 
@@ -120,9 +127,10 @@ var transformDate = function(date) {
     return resultDate;
 }
 
-// tranformName : transform the author and recipient to be interpretables (début)
+// tranformName : transform the author and recipient to be interpretables
 var transformName = function(name) {
-    var regexName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+    //var regexName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+    var regexName = /^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/;
     if (name.match(regexName)) {
         return name;
     }
@@ -137,8 +145,33 @@ var transformName = function(name) {
             }
             return name;
         }
+        //several recipient --> we eventually considered only the first (TODO)
+        else if (name.match(/,/)) {
+            name = name.split(/,/);
+            for (let indexName = 0; indexName < name.length; indexName++) {
+                if (name[indexName].charAt(0) === ' ') {
+                    name[indexName] = name[indexName].substring(1);
+                }
+                if (name[indexName].match(regexName)) {
+                    name = name[indexName];
+                    return name;
+                }
+            }
+        }
+        else if (name.match(/@/) && name.match(/ /)) {
+            name = name.split('<');
+            name = name[0];
+            if (!name.match(regexName)) {
+                if (name.match(/ @ /)) {
+                    name = '';
+                    return name;
+                }
+            }
+            return name;
+        }
         else {
-            return "transformation necessaire";
+            name = '';
+            return name;
         }
     }
 }
@@ -164,8 +197,8 @@ var transformName = function(name) {
 //console.log(createTab(fs.readFileSync(file).toString()))
 //console.log(createMail('./mail.txt/7.txt'));
 
-//var folder = './mail.txt';
-//console.log(extractMail(folder));
+//var folder = './BD';
+//console.log(extractMail([folder]));
 
 // var file = './mail.txt/9.txt';
 // //typeOfInput(file);
@@ -191,11 +224,18 @@ var transformName = function(name) {
 //var folder = [folder1, folder2];
 //extractMail(folder);
 
-console.log(transformName('Greg Whalley'));
-console.log(transformName('"Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON'));
-console.log(transformName('"White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
-console.log(transformName('Greg A Whalley'));
-console.log(transformName('Greg Whalley, Jennifer Arrison'));
+// console.log(transformName('Greg Whalley'));
+// console.log(transformName('"Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON'));
+// console.log(transformName('"White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
+// console.log(transformName('Greg A Whalley'));
+// console.log(transformName('Greg Whalley, Jennifer Arrison'));
+// console.log(transformName('greg.whalley@eron.com, Jennifer Arrison'));
+// console.log(transformName('greg.whalley@eron.com'));
+// console.log(transformName('Jennifer White <jenwhite7@zdnetonebox.com> @ ENRON'));
+// console.log(transformName('Sierra O\'Neil'));
+// console.log(transformName('slafontaine@globalp.com @ ENRON'));
 
+//var path = './BD/campbell';
+//console.log(extractMail([path]));
 
 module.exports = { extractMail };
