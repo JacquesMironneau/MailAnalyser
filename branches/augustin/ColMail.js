@@ -18,9 +18,9 @@ class ColMail{
         }
         
     }
-    setListeColMail(mailEntre){
-        if(mailEntre instanceof ColMail){
-            mailEntre.getMail.forEach(element => {
+    setListeColMail(colMailEntre){
+        if(colMailEntre instanceof ColMail){
+            colMailEntre.getMail.forEach(element => {
                 if(element instanceof Mail){
                     this.listeMail.push(element);
                 }
@@ -64,8 +64,53 @@ class ColMail{
         return result;
     }
 
-    bestCollab(email){
-        result =[];
+    bestCollabByEmail(email){
+        let listecolab = this.collabByEmail({email});
+        function nbEchange(contact,nbEchange){
+            this.contact=contact;
+            this.nbEchange=nbEchange;
+        }
+        let resultTemp = new Array();
+
+        listecolab.forEach(element => {
+            resultTemp.push(element,this.chercherNbinteraction(email,element.getMail));
+        });
+
+        let result = new Array();
+
+        let nb = resultTemp.length;
+        if(nb>10){
+            nb=10;
+        }
+
+        for(let i=0;i<nb;i++){
+            result.push(this.chercherMaxListeColab(resultTemp));
+            resultTemp.splice(resultTemp.indexOf(this.chercherMaxListeColab(resultTemp)),1);
+        }
+        return result;
+        
+
+
+    }
+
+    chercherMaxListeColab(listeColab){
+        if(listeColab.length>0){
+            let colabMax = null;
+            listeColab.forEach(element => {
+                if(colabMax===null){
+                    colabMax=element;
+                }else if(element.){
+
+                }
+            });
+            
+           
+
+            return colabMax;
+        }else{
+            return null;
+        }
+        
     }
     /**
      * @name chercherNbinteraction
@@ -94,90 +139,8 @@ class ColMail{
      * Permet de retourner les collaborateurs d'un contact  qui echangent le plsu entre eux     (non fonctionnel pour le moment)
      * @author Augustin Borne
      */
-    /*
-    bestCollab(nom,prenom){
-       let colab = new Object();
-       this.listeMail.forEach(element => {
-           if(element instanceof Mail){
-               if(element.authorToContact.getName()===nom && element.authorToContact.getLastName===prenom){
-                    result.setListeMail(element);
+    
 
-                    let estInclus = false;
-                    let keys = colab.keys();
-                    keys.forEach(element2 => {
-                        if(element2 === element.recipientToContact ){
-                            estInclus=true;
-                            break;
-                        }
-                    });
-                    if(estInclus){
-                        colab[element.recipientToContact]++;
-                    }else{
-                        colab[element.recipientToContact]=1;
-                    }
-               }else if(element.recipientToContact.getName===nom && element.recipientToContact.getLastName===prenom){
-                    result.setListeMail(element);
-
-                    let estInclus = false;
-                    let keys = colab.keys();
-                    keys.forEach(element2 => {
-                        if(element2 === element.authorToContact ){
-                            estInclus=true;
-                            break;
-                        }
-                    });
-                    if(estInclus){
-                        colab[element.authorToContact]++;
-                    }else{
-                        colab[element.authorToContact]=1;
-                    }
-               }
-           }
-       });    
-    }*/
-    /**
-     * @name chercherTopX
-     * @param {Contact*Int} listeColab 
-     * @param {Int} topX 
-     * 
-     * Permet de retoruner le top X des echanges de colaborateur a partir d'une liste du type contact x int
-     * 
-     * @author Augustin Borne
-     */
-/*
-    chercherTopX(listeColab,topX){
-        let colab = new Object();
-        let keysLeft = left.keys();
-        
-        if(listeColab.length>0){
-            for(let i = 0;i<topX;i++){
-                
-                    let max = null;
-                    let nbMax = null;
-                    for(var i in listeColab){
-                        if(max===null){
-                            max=i;
-                            nbMax=listeColab[i];
-                        }else{
-                            if(listeColab[i]>nbMax){
-                                max=i;
-                                nbMax=listeColab[i];
-                            }
-                        }
-                    }
-                    colab[max]=nbMax;
-
-                    listeColab = listeColab.filter(function(item){
-                        return item !== max;
-                    })
-                
-            }
-            return colab;
-        }else{
-            return listeColab;
-        }
-    }
-*/
     /**
      * 
      * @param {*} listAuthor
@@ -186,7 +149,9 @@ class ColMail{
      */
 
 
+    interactionBetweenCollabForACollab(email){
 
+    }
     collabByEmail(listAuthor){
         
         let colabResult = new Array();
@@ -224,14 +189,13 @@ class ColMail{
         return colabResult;
         
     }
-   
+    
+    //object (string * int)
+
     MostUsedTerm(email){
         result=[];
     }
 
-    MostUsedTerm(nom,prenom){
-        result=[];
-    }
 
     /**
      * @name SearchByEmail
@@ -242,10 +206,24 @@ class ColMail{
      */
 
     SearchByEmail(email){
-        result = new ColMail();
+        let result = new ColMail();
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
                 if(element.getEmailAuthor === email || element.getEmailReceiver === email){
+                    result.setListeMail(element);
+                }
+            }else{
+                throw Error('Invalid data type, a Mail element is required')
+            } 
+        });
+        return result;
+    }
+
+    SearchByEmailAuthor(email){
+        let result = new ColMail();
+        this.listeMail.forEach(element => {
+            if(element instanceof Mail){
+                if(element.getEmailAuthor === email ){
                     result.setListeMail(element);
                 }
             }else{
@@ -265,6 +243,9 @@ class ColMail{
      * @author Augustin Borne
      */
 
+
+    //prendre le cas ou email est vide
+
     MailInbusyDays(email,date1,date2){
         let resultTemp = this.mailInInterval(date1,date2);
         let result = new ColMail();
@@ -277,9 +258,7 @@ class ColMail{
                 throw Error('Invalid data type, a Mail element is required');
             }
         });
-        return result;
-
-        
+        return result;    
     }
 
     /**
@@ -291,13 +270,11 @@ class ColMail{
      * @author Augustin Borne
      */
 
-    SearchByAuthor(nom,prenom){
-        result = new ColMail();
-        const regexNom = new RegExp(nom);
-        const regexPrenom = new RegExp(prenom);
+    SearchByAuthor(personn){
+        let result = new ColMail();
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
-                if(regexNom.test(element.getAuthor) && regexPrenom.test(element.getAuthor)){
+                if(element.getAuthor===personn || element.getRecipient===personn){
                     result.setListeMail(element);
                 }
             }else{
@@ -361,16 +338,22 @@ class ColMail{
      * @author Augustin Borne
      */
     getMail(messageId){
+        let result =null;
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
                 if(element.getMessageId === messageId){
-                    return element;
+                    result= element;
                 }
             }else{
                 throw Error('Invalid data type, a Mail element is required')
             }            
         });
-        return "pas d'email correspondant a"+messageId;
+        if(result !== null){
+            return result;
+        }else{
+            return null;
+        }
+        
     }
 
 }
