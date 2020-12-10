@@ -38,6 +38,14 @@ class ColMail{
         this.listeMail.forEach(element => res+= "\n" +element.toString);
         return res;
     }
+
+    get toHumanReadableString()
+    {
+        let res = '';
+        this.listeMail.forEach(mail => res += '\n' + mail.toHumanReadableFormat)
+        return res;
+    }
+    
     get getlisteMail(){
         return this.listeMail;
     }
@@ -279,7 +287,7 @@ class ColMail{
     MailInbusyDays(email,date1,date2){
         let resultTemp = this.mailInInterval(date1,date2);
         let result = new ColMail();
-        resultTemp.forEach(element => {
+        resultTemp.getlisteMail.forEach(element => {
             if(element instanceof Mail){
                 if(element.mailInBusyDays && element.getEmailAuthor==email){
                     result.setListeMail(element);
