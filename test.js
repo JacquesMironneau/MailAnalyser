@@ -5,7 +5,7 @@ const { Mail } = require('./Mail.js');
 const {ColMail} = require('./ColMail.js');
 const { Contact } = require('./contact');
 const { Interaction } = require('./Interaction');
-
+const { NbUseTerm } = require('./NbUseTerm.js');
 
 let date = new Date(2020, 8, 22, 15, 0, 0);
 let date2 = new Date(2020,8,23,17,0,0);
@@ -14,11 +14,13 @@ let m =  new Mail("1",date,"bernard@bernard.com","jojo@jojo.com","reunion sur le
 let m2 = new Mail("2",date2,"laurent@laurent.com","jamie@cps.fr","sps n°20","","","utf8","laurent dupont","Jamie Gourmaud","","","","","sps.xml","salut, c'est quand que tu filmes le prochain sps?");
 let m3 = new Mail("3",date3,"jojo@jojo.com","laurent@laurent.com","tu vas bien?","","","utf8","Jojo Marcel","Laurent Dupont","","","","","","salut mon pote ca va?");
 let m4 = new Mail("4",date3,"bernard@bernard.com","laurent@laurent.com","hi boss","","","utf8","Bernard Durand","Laurent Dupont","","","","","","salut mon pote ca va?");
+let m5 = new Mail("5",date3,"jojo@jojo.com","laurent@laurent.com","reunion avec le boss","","","utf8","Jojo Marcel","Laurent Dupont","","","","","","salut mon pote ca va?");
 let col = new ColMail();
 col.setListeMail(m);
 col.setListeMail(m2);
 col.setListeMail(m3);
 col.setListeMail(m4);
+col.setListeMail(m5);
 //console.log(col.getlisteMail.length);
 //console.log(col.toString);
 
@@ -66,7 +68,13 @@ for (const [key, value] of Object.entries(bestColab)) {
 }*/
 
 //let temp = col.bestCollabByEmail("jojo@jojo.com");
-let temp = col.interactionBetweenCollabForACollab("jojo@jojo.com");
+/*let temp = col.interactionBetweenCollabForACollab("jojo@jojo.com");
 temp.forEach(element => {
     console.log("contact 1 :"+element.getContact1.getMail+" ,contact 2 : "+element.getContact2.getMail+", int :"+element.getNbEchange);
+});*/
+
+let temp = col.MostUsedTerm("jojo@jojo.com");
+
+temp.forEach(element => {
+    console.log("term : "+element.getTerm+" ,nbUse : "+element.getNbUse);
 });
