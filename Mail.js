@@ -49,6 +49,15 @@ class Mail{
         return res;
     }
 
+    get toHumanReadableFormat()
+    {
+        let res = "FROM: " + this.mailAuthor + '\n';
+        res += "TO: " + this.mailRecipient + '\n';
+        res += "SUBJECT: " + this.subject + '\n';
+        res += "\nCONTENT: " + this.message + "\n";
+        return res;
+    }
+
     setSubject(subject){
         this.subject=subject;
     }
