@@ -4,7 +4,9 @@
   "description": "A mail parser project for GL02",
   "main": "cli.js",
   "dependencies": {
-    "@caporal/core": "^2.0.2"
+    "@caporal/core": "^2.0.2",
+    "vega-cli": "^5.17.0",
+    "vega-lite": "^4.17.0"
   },
   "devDependencies": {
     "eslint": "^7.14.0",
