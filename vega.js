@@ -9,6 +9,7 @@ const {ColMail} = require('./ColMail.js');
 const fs = require('fs');
 const vegaCli = require('vega-cli');
 const vegalite = require('vega-lite');
+const vega = require('vega');
 
 function top10Interloc(listeContact){
     let top10 = '{\n\"$schema\": \"https://vega.github.io/schema/vega-lite/v4.json\",\n\"data\": {\n\"values\": [\n'
@@ -27,6 +28,15 @@ function top10Interloc(listeContact){
     })
 
    
+}
+
+function toSVGchart(vlSpec,filename){
+    const myChart = vegalite.compile(vlSpec).spec;
+
+    const runtime =vega.parse(myChart);
+    const view = new vega.View(runtime).renderer('svg').run;
+    const mySvg = view.toSVGchart;
+    view.
 }
 
 
