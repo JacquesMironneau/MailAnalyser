@@ -3,8 +3,9 @@
     * @author Augustin Borne
 */
 const {Mail} = require('./Mail.js');
-const { Contact } = require('./contact');
-const { Interaction } = require('./Interaction');
+const { Contact } = require('./contact.js');
+const { Interaction } = require('./Interaction.js');
+const { NbUseTerm } = require('./NbUseTerm.js');
 
 class ColMail{ 
     constructor(){
@@ -163,6 +164,7 @@ class ColMail{
      * @param {String} email 
      * 
      * Renvoie le nombre d'interaction entre chaque contact d'une liste de contact d'un collaborateur donnée
+     * @author Augustin Borne
      */
     interactionBetweenCollabForACollab(email){
         let tab = [email];
@@ -228,12 +230,76 @@ class ColMail{
         
     }
     
-    //object (string * int)
+    /**
+     * @name MostUsedTerm
+     * @param {String} email
+     * Renvoie un tableau contenant les 10 termes les plus utilisé dans les objet de mail
+     * @author Augustin Borne
+     */
 
     MostUsedTerm(email){
-        result=[];
-    }
+        let colTemp = this.SearchByEmail(email);
+        let result = new Array();
+        colTemp.getlisteMail.forEach(element => {
+            let tabTemp = element.getSubject.split(/\s/);
+            tabTemp.forEach(element2 => {
+                
+               if(element2!=="" && element2!==" "){
+                
+                if(result.length===0){
+                    result.push(new NbUseTerm(element2,1));
+                }else{
+                 let isInclude = false;
+                 
+                 result.forEach(element3 => {
+                    console.log("element 3 :"+element3.getTerm+" ,element2 :"+element2);
+                     if(element3.getTerm===element2){
+                        console.log("test");
+                         isInclude=true;
+                         element3.setNbUse(element3.getNbUse+1);
+                     }
+                 });
+                 if(!isInclude){
+                     result.push(new NbUseTerm(element2,1));
+                 }
+                }
+               }
+                         
+            });
+        });
+        let nb = result.length;
+        let resultFin = new Array();
 
+        if(nb>10){
+            nb=10;
+        }
+
+        for(let i=0;i<nb;i++){
+            resultFin.push(this.chercherMaxListeTerm(result));
+            
+            result.splice(result.indexOf(this.chercherMaxListeTerm(result)),1);
+        }
+        
+        return resultFin;      
+    }
+    chercherMaxListeTerm(listeTerm){
+        if(listeTerm.length>2){
+            
+            let termMax = listeTerm[0];
+            for(let i=1;i<listeTerm.length;i++){
+                if(listeTerm[i].getNbUse>termMax.getNbUse){
+                    termMax=listeTerm[i];
+                    
+                }
+            }
+ 
+            return termMax;
+        }else if(listeTerm.length>0){
+            return listeTerm[0];
+        }else{
+            return null;
+        } 
+    }
 
     /**
      * @name SearchByEmail
@@ -257,6 +323,14 @@ class ColMail{
         return result;
     }
 
+    /**
+     * @name SearchByEmailAuthor
+     * @param {*} email
+     * 
+     * Chercher dans la collection de mail tous les mail dont l'auteur correspond a l'argument
+     * @author Augustin Borne
+     */
+
     SearchByEmailAuthor(email){
         let result = new ColMail();
         this.listeMail.forEach(element => {
@@ -276,21 +350,24 @@ class ColMail{
      * @param {Mail} email 
      * @param {Date} date1 
      * @param {Date} date2
-     *Permet de retourner tous les mails envoyés le weekend ou le soir dans un intervalle de temps 
+     *Permet de retourner tous les mails envoyés le weekend ou le soir dans un intervalle de temps (email peut etre null)
      *
      * @author Augustin Borne
      */
-
-
-    //prendre le cas ou email est vide
 
     MailInbusyDays(email,date1,date2){
         let resultTemp = this.mailInInterval(date1,date2);
         let result = new ColMail();
         resultTemp.getlisteMail.forEach(element => {
             if(element instanceof Mail){
-                if(element.mailInBusyDays && element.getEmailAuthor==email){
-                    result.setListeMail(element);
+                if(email!==null){
+                    if(element.mailInBusyDays() && element.getEmailAuthor==email){
+                        result.setListeMail(element);
+                    }
+                }else{
+                    if(element.mailInBusyDays()){
+                        result.setListeMail(element);
+                    } 
                 }
             }else{
                 throw Error('Invalid data type, a Mail element is required');
