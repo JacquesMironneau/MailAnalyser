@@ -252,9 +252,9 @@ class ColMail{
                  let isInclude = false;
                  
                  result.forEach(element3 => {
-                    console.log("element 3 :"+element3.getTerm+" ,element2 :"+element2);
+                    //console.log("element 3 :"+element3.getTerm+" ,element2 :"+element2);
                      if(element3.getTerm===element2){
-                        console.log("test");
+                        //console.log("test");
                          isInclude=true;
                          element3.setNbUse(element3.getNbUse+1);
                      }
