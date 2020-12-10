@@ -18,7 +18,7 @@ class Contact
     vcardContact += `N:${this.lastname};${this.name};;;\n`;
     vcardContact += `FN:${this.name} ${this.lastname}\n`;
     vcardContact += `EMAIL:${this.mail}\n`;
-    vcardContact += 'END:VCARD\n';
+    vcardContact += 'END:VCARD\n\n';
     return vcardContact;
   }
 
