@@ -21,6 +21,21 @@ class Contact
     vcardContact += 'END:VCARD\n';
     return vcardContact;
   }
+
+  get getName()
+  {
+    return this.name;
+  }
+
+  get getLastName()
+  {
+    return this.lastname;
+  }
+
+  get getMail()
+  {
+    return this.mail;
+  }
 }
 
 module.exports = { Contact };
