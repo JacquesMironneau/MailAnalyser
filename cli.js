@@ -14,7 +14,7 @@ const { program, Program } = require('@caporal/core');
 const fs = require('fs');
 const { Contact } = require('./contact');
 const { ColMail } = require('./ColMail');
-//const { extractMail } = require('./extract');
+const { extractMail } = require('./test.js');
 
 // const {extract} = require('./extract')
 
@@ -64,26 +64,37 @@ program
       logger.info(`Print names of ${list}`);
       contactList = colmail.collabByEmail(args.namelist);
     }
-    contactList = '';
-    contactList.forEach((contact) => contactList += contact.toVcard());
+    let displayList = '';
+    contactList.forEach((contact) => displayList += contact.toVcard());
 
     // print to terminal or to a specified file
     if (displayToTerminal)
     {
-      console.log(contactList);
+      console.log(displayList);
     }
     else
     {
-      fs.writeFile(options.out, contactList);
+      fs.writeFile(options.out, displayList, (err) =>
+      {
+        if (err)
+        {
+          logger.error(err);
+        }
+        else
+        {
+          logger.info(`Contact exported to  ${options.out}`);
+        }
+      });
     }
   })
+
 /*
 * Spec 1.2
 Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mails (optionnel)
 */
-
   .command('count-mail', 'Count the number of mail on a given period')
   .alias('cm')
+  .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
   .argument('<begining-date>', 'Begining date of the period (in mm-dd-yyyy)', {
     validator: (value) =>
     {
@@ -100,9 +111,8 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
       throw new Error('Invalid ending date please use mm-dd-yyyy format');
     },
   })
-  .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
 
-  .option('--mail-senders [emailList]', 'List of the email authors', { validator: program.ARRAY })
+  .option('--mail-senders [mailSenders]', 'List of the email authors', { validator: program.ARRAY })
   .action(({ logger, args, options }) =>
   {
     // Get mail from files
@@ -112,23 +122,27 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
     let total = 0;
 
     // If emails senders are provided, remove the mail from people not in the list
-    if (options.emailList)
+    if (options.mailSenders)
     {
-      options.emailList.reduce((acc, mail) => acc + mails.SearchByEmailAuthor(mail).length, 0);
+      total = options.mailSenders.reduce((acc, mail) => acc + mails.SearchByEmailAuthor(mail)
+        .getlisteMail.length, 0);
     }
     else
     {
-      total = mails.getListMail().length;
+      total = mails.getlisteMail.length;
     }
+
     // Display error message if no mail have been written (in specs)
-    if (mails.getListMail().length === 0)
+    if (total === 0)
     {
-      logger.info('No mail have been written during the period');
+      logger.info('No mail has been written during the period');
     }
     // Display the number of mail
     else
     {
-      console.log(`There are ${total} mail(s) that were sent between ${args.beginingDate} and ${args.endingDate}`);
+      const dateBegin = ` ${args.beginingDate.getMonth()}/${args.beginingDate.getDate()}/${args.beginingDate.getFullYear()}`;
+      const dateEnd = ` ${args.endingDate.getMonth()}/${args.endingDate.getDate()}/${args.endingDate.getFullYear()}`;
+      console.log(`There are ${total} mail(s) that were sent between ${dateBegin} and ${dateEnd} (mm/dd/yyyy format)`);
     }
   })
 
@@ -138,6 +152,7 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
 */
   .command('buzzy-days', 'List the "buzzy-days" were mails are written between 10pm and 8am')
   .alias('bd')
+  .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
   .argument('<begining-date>', 'Begining date of the period', {
     validator: (value) =>
     {
@@ -154,33 +169,35 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
       throw new Error('Invalid ending date please use mm-dd-yyyy format');
     },
   })
-  .option('--mail-senders [mail]', 'The email author', { validator: program.STRING })
-  .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
+  .option('--mail-senders [mailSenders]', 'The email author', { validator: program.STRING })
   .action(({ logger, args, options }) =>
   {
     // Get mail from files
     let colmail = extractMail(args.files);
     // Get only mail in the period
-    colmail = colmail.MailInbusyDays(args.beginingDate, args.endingDate);
-    if (options.mail)
+    if (options.mailSenders)
     {
-      colmail = colmail.SearchByEmailAuthor(options.mail);
+      colmail = colmail.MailInbusyDays(options.mailSenders, args.beginingDate, args.endingDate);
     }
     else
     {
       logger.warn('No author has been specified');
+      colmail = colmail.MailInbusyDays(null, args.beginingDate, args.endingDate);
     }
     const daylist = [];
-    colmail.forEach((mail) =>
+    colmail.getlisteMail.forEach((mail) =>
     {
-      if (!daylist.includes(mail.getDate()))
+      if (!daylist.includes(mail.getDate))
       {
-        daylist.push(mail.getDate());
+        daylist.push(mail.getDate);
       }
     });
-    console.log(`There are ${daylist.length} "buzzy days" mail(s) that were sent between ${args.beginingDate} and ${args.endingDate}`);
+    const dateBegin = ` ${args.beginingDate.getMonth()}/${args.beginingDate.getDate()}/${args.beginingDate.getFullYear()}`;
+    const dateEnd = ` ${args.endingDate.getMonth()}/${args.endingDate.getDate()}/${args.endingDate.getFullYear()}`;
+
+    console.log(`There are ${daylist.length} "buzzy days" mail(s) that were sent between ${dateBegin} and ${dateEnd}`);
     daylist.sort((a, b) => b - a)
-      .forEach((day) => console.log(day));
+      .forEach((day) => console.log(`Day: ${day.getMonth()}/${day.getDate()}/${day.getFullYear()}`));
   })
 
 /*
@@ -249,18 +266,19 @@ Option: svg or png
 */
   .command('search-mail', 'Search mails of a given collaborator')
   .alias('se')
-  .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
+  .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
   .action(({ logger, args }) =>
   {
-    logger.info(`Listing the 10 most frequent word for ${args.mailBox}'s mailbox`);
     let colmail = extractMail(args.files);
     colmail = colmail.SearchByEmailAuthor(args.mail);
+    const mail = colmail.getlisteMail[0];
+    logger.info(`Collaborator ${args.mail} found`);
 
-    const mail = colmail.getListMail()[0];
-    console.log(mail.authoToContact().toVcard());
+    console.log(mail.authorToContact().toVcard());
+    logger.info(`Listing mail of ${args.mail}'s mailbox`);
 
-    console.log(colmail);
+    console.log(colmail.toHumanReadableString);
   });
 
 program.run();
