@@ -4,6 +4,7 @@
 */
 const {Mail} = require('./Mail.js');
 const { Contact } = require('./contact');
+const { Interaction } = require('./Interaction');
 
 class ColMail{ 
     constructor(){
@@ -63,17 +64,36 @@ class ColMail{
         });
         return result;
     }
-
+    /**
+     * @name bestCollab
+     * @param {String} email
+     * 
+     * Permet de retourner les collaborateurs d'un contact  qui echangent le plus entre eux
+     * @author Augustin Borne
+     */
     bestCollabByEmail(email){
-        let listecolab = this.collabByEmail({email});
-        function nbEchange(contact,nbEchange){
-            this.contact=contact;
-            this.nbEchange=nbEchange;
+        let tab = [email];
+
+        //Creation du contact a partir de l'email
+        let colTemp = this.SearchByEmail(email);
+        let contactEmail;
+        if(colTemp.getlisteMail.length>0){
+            let m = colTemp.getlisteMail[0];
+            if(m.getEmailAuthor===email){
+                contactEmail = m.authorToContact();
+            }else{
+                contactEmail = m.recipientToContact();
+            }
         }
+        
+
+
+        let listecolab = this.collabByEmail(tab);
         let resultTemp = new Array();
 
         listecolab.forEach(element => {
-            resultTemp.push(element,this.chercherNbinteraction(email,element.getMail));
+            const temp = new Interaction(contactEmail,element,this.chercherNbinteraction(email,element.getMail));
+            resultTemp.push(temp);
         });
 
         let result = new Array();
@@ -87,6 +107,8 @@ class ColMail{
             result.push(this.chercherMaxListeColab(resultTemp));
             resultTemp.splice(resultTemp.indexOf(this.chercherMaxListeColab(resultTemp)),1);
         }
+
+        
         return result;
         
 
@@ -99,13 +121,10 @@ class ColMail{
             listeColab.forEach(element => {
                 if(colabMax===null){
                     colabMax=element;
-                }else if(element.){
-
+                }else if(element.getNbEchange>colabMax.getNbEchange){
+                    colabMax=element;
                 }
             });
-            
-           
-
             return colabMax;
         }else{
             return null;
@@ -132,13 +151,26 @@ class ColMail{
     }
 
     /**
-     * @name bestCollab
-     * @param {String} nom 
-     * @param {String} prenom 
+     * @name interactionBetweenCollabForACollab
+     * @param {String} email 
      * 
-     * Permet de retourner les collaborateurs d'un contact  qui echangent le plsu entre eux     (non fonctionnel pour le moment)
-     * @author Augustin Borne
+     * Renvoie le nombre d'interaction entre chaque contact d'une liste de contact d'un collaborateur donnée
      */
+    interactionBetweenCollabForACollab(email){
+        let tab = [email];
+        let listeColab = this.collabByEmail(tab);
+        let result = new Array();
+        
+        for(let i=0;i<listeColab.length;i++){
+            for(let y=i+1;y<listeColab.length;y++){
+                result.push(new Interaction(listeColab[i],listeColab[y],0));
+            }
+        }
+        result.forEach(element => {
+            element.setNbEchange(this.chercherNbinteraction(element.getContact1.getMail,element.getContact2.getMail));
+        });
+        return result;
+    }
     
 
     /**
@@ -149,9 +181,7 @@ class ColMail{
      */
 
 
-    interactionBetweenCollabForACollab(email){
-
-    }
+    
     collabByEmail(listAuthor){
         
         let colabResult = new Array();
