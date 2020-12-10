@@ -12,10 +12,8 @@
 
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
-const { Contact } = require('./contact');
-const { ColMail } = require('./ColMail');
 const { extractMail } = require('./test.js');
-
+const { visualInteraction } = require('./vega');
 // const {extract} = require('./extract')
 
 // check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
@@ -251,14 +249,17 @@ Option: svg or png
 */
   .command('exchange-between-collaborators', 'Design a scatter graph with the number of exchange between collaborators')
   .alias('ebc')
-  .argument('<email>', 'The collaborator email')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
+  .argument('<email>', 'The collaborator email')
   .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file',
     { validator: ['svg', 'png'], default: 'png' })
   .action(({ args, options }) =>
   {
-    const interactionList = extractMail(args.files);
-    //  TODO:appel visualInteraction(interactionList,options.format)
+    const colmail = extractMail(args.files);
+    console.log(colmail);
+    const interactionList = colmail.interactionBetweenCollabForACollab(args.email);
+    console.log(interactionList);
+    visualInteraction(interactionList, options.format);
   })
 
 /*
