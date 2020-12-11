@@ -97,6 +97,10 @@ class Mail{
         return this.recipient;
     }
 
+    get getSubject(){
+        return this.subject;
+    }
+
     isEqual(mail){
         if(mail instanceof Mail){
             if(mail===this){

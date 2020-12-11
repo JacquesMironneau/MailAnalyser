@@ -13,7 +13,7 @@
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
 const { extractMail } = require('./test.js');
-const { visualInteraction } = require('./vega');
+const { visualInteraction, top10Interloc, top10term } = require('./vega');
 // const {extract} = require('./extract')
 
 // check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
@@ -205,19 +205,15 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
  */
   .command('top10-collaborator', 'List the 10 most frequent contacts of a given collaborator')
   .alias('tc')
-  .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
   .argument('<files>', 'List of data file (emails file)', { validator: (value) => value.split(',') })
+  .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
   .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
   .action(({ logger, args, options }) =>
   {
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent contacts for ${args.mail}`);
-    const frequentContacts = colmail.bestCollab(args.collaboratorName);
-    // renvoie un objet {contact: nbInterraction}
-    // TODO: vegalite: top10Interloc(frequentContacts, options.format);
-
-    //  frequentContacts.forEach((contact) => console.log(`${index++}: <${contact.getMail()}>,
-    // ${contact.getName()} ${contact.getLastName()}`));
+    const frequentContacts = colmail.bestCollabByEmail(args.mail);
+    top10Interloc(frequentContacts, options.format);
   })
 
 /*
@@ -225,17 +221,16 @@ Spec 1.5
 */
   .command('top10-words', 'List the 10 most frequent words in a given collaborator mail box')
   .alias('tw')
-  .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
   .argument('<files>', 'List of data file (emails file)', { validator: (value) => value.split(',') })
+  .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
   .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file',
     { validator: ['svg', 'png'], default: 'png' })
   .action(({ logger, args, options }) =>
   {
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
-    // renvoie un objet {term: nbInterraction}
     const frequentTerms = colmail.MostUsedTerm(args.mail);
-    // TODO: top10term(frequentTerms, options.format);
+    top10term(frequentTerms, options.format);
   })
 
 /*
