@@ -116,12 +116,7 @@ class ColMail{
             result.push(this.chercherMaxListeColab(resultTemp));
             resultTemp.splice(resultTemp.indexOf(this.chercherMaxListeColab(resultTemp)),1);
         }
-
-        
-        return result;
-        
-
-
+       return result;
     }
 
     chercherMaxListeColab(listeColab){

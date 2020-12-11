@@ -1,6 +1,11 @@
+/**
+    * Mail class, represent an email.
+    * @author Augustin Borne
+*/
+
 class Mail{
 
-    //constructeur de la classe mail avec tous les attributs correspondant a un mail
+    
     constructor(messageId,date,mailAuthor,mailRecipient,subject,version,contentType,encoding,author,recipient,copy,hCopy,path,origin,fileName,message){
         this.messageId=messageId;
         this.date=date;
@@ -77,37 +82,49 @@ class Mail{
        if(mail instanceof Mail){
             if(mail.date>this.date){
                 return true;
+            }else{
+                return false;
             }
        }else{
            return false;
        }
     }
-}
 
-class ColMail{ 
-    constructor(nomCollection){
-        this.nomCollection=nomCollection;
-        this.listeMail = [];
-    }
-
-    setListeMail(mail){
-        if(mail instanceof Mail){
-            this.listeMail.push(mail);
+    isWeekend(){
+        if(Date.prototype.getDay(this.date)===0 || Date.prototype.getDay(this.date)===6){
+            return true;
+        }else{
+            return false;
         }
-        
     }
 
-    get toString(){
-        let res = "colection " + this.nomCollection+" :";
-        this.listeMail.forEach(element => res+= "\n" +element.toString);
-        return res;
+    mailInBusyDays(){
+        if(this.date.getHours()<=8 || this.date.getHours>=22 || this.isWeekend){
+            return true;
+        }else{
+            return false;
+        }
     }
 
+    mailContainsTxtinMessage(txt){
+        let pos = this.message.indexOf(txt);
+
+        if(pos > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    mailContainsTxtinObject(txt){
+        let pos = this.object.indexOf(txt);
+        if(pos > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
-let m = new Mail("dhgjdfdjfh","20/10/2555","lolo","jj","hh","hhh","oioo","j","kj","jh","kjh","drdd","hu","uh","uç","uh");
-let col = new ColMail("test");
-col.setListeMail(m);
-console.log(m.isEqual(m))
-console.log(m.isOlderThan(m))
-console.log(col.toString);
+
+module.exports = { Mail };
