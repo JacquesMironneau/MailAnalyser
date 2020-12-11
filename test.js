@@ -71,10 +71,10 @@ for (const [key, value] of Object.entries(bestColab)) {
 /*let temp = col.interactionBetweenCollabForACollab("jojo@jojo.com");
 temp.forEach(element => {
     console.log("contact 1 :"+element.getContact1.getMail+" ,contact 2 : "+element.getContact2.getMail+", int :"+element.getNbEchange);
-});*/
+});
 
 let temp = col.MostUsedTerm("jojo@jojo.com");
 
 temp.forEach(element => {
     console.log("term : "+element.getTerm+" ,nbUse : "+element.getNbUse);
-});
+});*/
