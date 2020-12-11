@@ -59,7 +59,7 @@ var createMail = function(file) {
     return mail;
 }
 
-// createTab : create a tab with data which are insteresting
+// createTab : create a tab with data which are interesting
 var createTab = function(file) {
     var separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\r\n)/;
     file = file.split(separator);
@@ -136,10 +136,11 @@ var transformDate = function(date) {
     return resultDate;
 }
 
-// tranformName : transform the author and recipient to be interpretables --> TODO : virgule au milieu d'un nom
+// tranformName : transform the author and recipient to be interpretables
 var transformName = function(name) {
     var regexName = /^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/;
     var tabName = [];
+    var needToInverseNameAndFirstname = [];
     if (name.match(regexName)) {
         tabName[0] = name;
         return tabName;
@@ -151,41 +152,49 @@ var transformName = function(name) {
             name = name.filter((val, idx) => !val.match(/, /));
             temporarName = name;
         }
-        else if (name.match(/"[A-Za-z]+,/)) { //TODO
-            name = name.split(/",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"/);
-            console.log("ici");
-            console.log(name);
-            name = name.filter((val, idx) => !val.match(/",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"/));
+        else if (name.match(/"[A-Za-z]+,/)) {
+            name = name.split(/, /);
+            name = name.filter((val, idx) => !val.match(/, /));
+            for (let indexForGroup = 0; indexForGroup < name.length-1; indexForGroup++) {
+                if (name[indexForGroup].match(/"[A-z]+/) && name[indexForGroup+1].match(/[^\"]+" [<A-z@0-9\s]+/)) {
+                    name[indexForGroup] = name[indexForGroup] + ' ' + name[indexForGroup+1];
+                    name.splice(indexForGroup+1, 1);
+                    needToInverseNameAndFirstname.push(indexForGroup);
+                }
+            }
             temporarName = name;
         }
         else {
             temporarName[0] = name;
         }
-        for (let i = 0; i < temporarName.length; i++) {
-            if (temporarName[i].match(regexName)) {
-                tabName[i] = temporarName[i];
+        for (let indexRecipient = 0; indexRecipient < temporarName.length; indexRecipient++) {
+            if (temporarName[indexRecipient].match(regexName)) {
+                tabName[indexRecipient] = temporarName[indexRecipient];
             }
             else {
-                if (temporarName[i].match(/ </) && !temporarName[i].match(/, /)) {
-                    temporarName[i] = temporarName[i].split(' <');
-                    temporarName[i] = temporarName[i][0];
-                    if (temporarName[i].match(/"/)) {
-                        temporarName[i] = temporarName[i].split('"');
-                        temporarName[i] = temporarName[i].filter((val, idx) => !val.match('"'));
-                        tabName[i] = temporarName[i][1];
+                if (temporarName[indexRecipient].match(/ </) && !temporarName[indexRecipient].match(/, /)) {
+                    temporarName[indexRecipient] = temporarName[indexRecipient].split(' <');
+                    temporarName[indexRecipient] = temporarName[indexRecipient][0];
+                    if (temporarName[indexRecipient].match(/"/)) {
+                        temporarName[indexRecipient] = temporarName[indexRecipient].split('"');
+                        temporarName[indexRecipient] = temporarName[indexRecipient].filter((val, idx) => !val.match('"'));
+                        tabName[indexRecipient] = temporarName[indexRecipient][1];
                     }
                     else {
-                        tabName[i] = temporarName[i];
+                        tabName[indexRecipient] = temporarName[indexRecipient];
                     }
                 }
-                else if (temporarName[i].match(/, /)) {
-                    temporarName[i] = temporarName[i].split(/, | <|"/);
-                    temporarName[i] = temporarName[i].filter((val, idx) => !val.match(/, /));
-                    tabName[i] = temporarName[i][2] + ' ' + temporarName[i][1];
-                }
                 else {
-                    tabName[i] = '';
+                    tabName[indexRecipient] = '';
                 }
+            }
+        }
+        for (let indexInverse = 0; indexInverse < needToInverseNameAndFirstname.length; indexInverse++) {
+            if (tabName[needToInverseNameAndFirstname[indexInverse]].match(/\s/)) {
+                var tabTemporar = tabName[needToInverseNameAndFirstname[indexInverse]];
+                tabTemporar = tabTemporar.split(/ /);
+                tabTemporar = tabTemporar.filter((val, idx) => !val.match(/ /));
+                tabName[needToInverseNameAndFirstname[indexInverse]] = tabTemporar[1] + ' ' + tabTemporar[0];
             }
         }
         return tabName;
@@ -243,6 +252,7 @@ var transformName = function(name) {
 // console.log(transformName('Greg Whalley')); // FAIT
 // console.log(transformName('"Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON')); // FAIT
 // console.log(transformName('"White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
+// console.log(transformName('"White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON, "White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
 // console.log(transformName('Greg A Whalley')); // FAIT
 // console.log(transformName('Greg Whalley, Jennifer Arrison')); // FAIT
 // console.log(transformName('greg.whalley@eron.com, Jennifer Arrison')); // FAIT
@@ -253,9 +263,12 @@ var transformName = function(name) {
 // console.log(transformName('Greg Whalley, "Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON')); // FAIT
 // console.log(transformName('Greg Whalley, "Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON, "White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
 // console.log(transformName('Greg Whalley, "Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON, "White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON, greg.whalley@eron.com, slafontaine@globalp.com @ ENRON, Sierra O\'Neil'));
-//on doit avoir [Greg Whalley, Jennifer White, Jennifer White, '', '', '', Sierra O\'Neil]
+//on doit avoir [Greg Whalley, Jennifer White, Jennifer White, '', '', Sierra O\'Neil]
 
 // var path = './BD/j-arnold';
-// console.log(extractMail([path]).getMailRecipient());
+// console.log(extractMail([path]).getMailRecipient()); --> A VERIFIER
+
+var path = './BD';
+console.log(extractMail([path]));
 
 module.exports = { extractMail };
