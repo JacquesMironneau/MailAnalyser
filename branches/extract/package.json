@@ -1,0 +1,27 @@
+{
+  "name": "mailparser",
+  "version": "1.0.0",
+  "description": "A mail parser project for GL02",
+  "main": "cli.js",
+  "dependencies": {
+    "@caporal/core": "^2.0.2",
+    "vega": "^5.17.0",
+    "vega-lite": "^4.17.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "jasmine": "^3.6.3"
+  },
+  "scripts": {
+    "start": "node cli.js",
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "svn",
+    "url": "https://sourceforge.net/p/team4software-gl02/code/HEAD/tree/trunk/"
+  },
+  "author": "Manon Caroy, Augustin Borne, Jacques Mironneau",
+  "license": "ISC"
+}
