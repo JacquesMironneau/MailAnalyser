@@ -1,0 +1,15 @@
+[
+    {
+      "contact1": {
+        "name": "Laurent",
+        "lastname": "Dupont",
+        "mail": "laurent@laurent.com"
+      },
+      "contact2": {
+        "name": "Manon",
+        "lastname": "Caroy",
+        "mail": "manoncaroy@laurent.com"
+      },
+      "nbEchange": "1"
+    }
+  ]
