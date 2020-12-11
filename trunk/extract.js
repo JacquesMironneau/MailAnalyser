@@ -22,7 +22,7 @@ var extractMail = function(path) {
     return listeMail;
 }
 
-//with one way, we get all the ways of files
+// getPathOfFiles : with one way, we get all the ways of files
 var getPathOfFiles = function(path) {
     var results = [];
     var list = fs.readdirSync(path);
@@ -83,6 +83,15 @@ var createTab = function(file) {
     temporarFile = temporarFile.filter((val, idx) => !val.match(separator));
     file[4] = temporarFile[1];
 
+    //we separate all the mailRecipient in a table
+    separator = /(, )/;
+    var tabMailRecipient = [];
+    tabMailRecipient = file[3];
+    tabMailRecipient = tabMailRecipient.split(separator);
+    tabMailRecipient = tabMailRecipient.filter((val, idx) => !val.match(separator));
+    file[3] = tabMailRecipient;
+    console.log(tabMailRecipient);
+
     //we join all the message into one element
     let message = [];
     for (var index = 15; index < file.length; index++) {
@@ -127,52 +136,59 @@ var transformDate = function(date) {
     return resultDate;
 }
 
-// tranformName : transform the author and recipient to be interpretables
+// tranformName : transform the author and recipient to be interpretables --> TODO : virgule au milieu d'un nom
 var transformName = function(name) {
-    //var regexName = /^[a-zA-Z]+ [a-zA-Z]+$/;
     var regexName = /^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/;
+    var tabName = [];
     if (name.match(regexName)) {
-        return name;
+        tabName[0] = name;
+        return tabName;
     }
     else {
-        if (name.match(/"/)) {
-            name = name.split(/"/);
-            name = name[1];
-            if (name.match(/,/)) {
-                name = name.split(/,/);
-                name[1] = name[1].substring(1);
-                name = name[1] + ' ' + name[0];
-            }
-            return name;
+        var temporarName = [];
+        if (name.match(/, /) && !name.match(/"[A-Za-z]+,/)) {
+            name = name.split(/, /);
+            name = name.filter((val, idx) => !val.match(/, /));
+            temporarName = name;
         }
-        //several recipient --> we eventually considered only the first (TODO)
-        else if (name.match(/,/)) {
-            name = name.split(/,/);
-            for (let indexName = 0; indexName < name.length; indexName++) {
-                if (name[indexName].charAt(0) === ' ') {
-                    name[indexName] = name[indexName].substring(1);
-                }
-                if (name[indexName].match(regexName)) {
-                    name = name[indexName];
-                    return name;
-                }
-            }
-        }
-        else if (name.match(/@/) && name.match(/ /)) {
-            name = name.split('<');
-            name = name[0];
-            if (!name.match(regexName)) {
-                if (name.match(/ @ /)) {
-                    name = '';
-                    return name;
-                }
-            }
-            return name;
+        else if (name.match(/"[A-Za-z]+,/)) { //TODO
+            name = name.split(/",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"/);
+            console.log("ici");
+            console.log(name);
+            name = name.filter((val, idx) => !val.match(/",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"/));
+            temporarName = name;
         }
         else {
-            name = '';
-            return name;
+            temporarName[0] = name;
         }
+        for (let i = 0; i < temporarName.length; i++) {
+            if (temporarName[i].match(regexName)) {
+                tabName[i] = temporarName[i];
+            }
+            else {
+                if (temporarName[i].match(/ </) && !temporarName[i].match(/, /)) {
+                    temporarName[i] = temporarName[i].split(' <');
+                    temporarName[i] = temporarName[i][0];
+                    if (temporarName[i].match(/"/)) {
+                        temporarName[i] = temporarName[i].split('"');
+                        temporarName[i] = temporarName[i].filter((val, idx) => !val.match('"'));
+                        tabName[i] = temporarName[i][1];
+                    }
+                    else {
+                        tabName[i] = temporarName[i];
+                    }
+                }
+                else if (temporarName[i].match(/, /)) {
+                    temporarName[i] = temporarName[i].split(/, | <|"/);
+                    temporarName[i] = temporarName[i].filter((val, idx) => !val.match(/, /));
+                    tabName[i] = temporarName[i][2] + ' ' + temporarName[i][1];
+                }
+                else {
+                    tabName[i] = '';
+                }
+            }
+        }
+        return tabName;
     }
 }
 
@@ -210,7 +226,7 @@ var transformName = function(name) {
 // console.log(inputIsFile(file));
 // console.log(inputIsFolder(file));
 
-//var file = './j-arnold/mail.txt/9.txt';
+//var file = './BD/j-arnold/mail.txt/9.txt';
 //console.log(extractMail(file));
 //var folder = './j-arnold/mail.txt';
 //console.log(extractMail(folder));
@@ -224,18 +240,22 @@ var transformName = function(name) {
 //var folder = [folder1, folder2];
 //extractMail(folder);
 
-// console.log(transformName('Greg Whalley'));
-// console.log(transformName('"Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON'));
+// console.log(transformName('Greg Whalley')); // FAIT
+// console.log(transformName('"Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON')); // FAIT
 // console.log(transformName('"White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
-// console.log(transformName('Greg A Whalley'));
-// console.log(transformName('Greg Whalley, Jennifer Arrison'));
-// console.log(transformName('greg.whalley@eron.com, Jennifer Arrison'));
-// console.log(transformName('greg.whalley@eron.com'));
-// console.log(transformName('Jennifer White <jenwhite7@zdnetonebox.com> @ ENRON'));
-// console.log(transformName('Sierra O\'Neil'));
-// console.log(transformName('slafontaine@globalp.com @ ENRON'));
+// console.log(transformName('Greg A Whalley')); // FAIT
+// console.log(transformName('Greg Whalley, Jennifer Arrison')); // FAIT
+// console.log(transformName('greg.whalley@eron.com, Jennifer Arrison')); // FAIT
+// console.log(transformName('greg.whalley@eron.com')); // FAIT
+// console.log(transformName('Jennifer White <jenwhite7@zdnetonebox.com> @ ENRON, Jennifer White <jenwhite7@zdnetonebox.com> @ ENRON')); // FAIT
+// console.log(transformName('Sierra O\'Neil')); // FAIT
+// console.log(transformName('slafontaine@globalp.com @ ENRON')); // FAIT
+// console.log(transformName('Greg Whalley, "Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON')); // FAIT
+// console.log(transformName('Greg Whalley, "Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON, "White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON'));
+// console.log(transformName('Greg Whalley, "Jennifer White" <jenwhite7@zdnetonebox.com> @ ENRON, "White, Jennifer" <jenwhite7@zdnetonebox.com> @ ENRON, greg.whalley@eron.com, slafontaine@globalp.com @ ENRON, Sierra O\'Neil'));
+//on doit avoir [Greg Whalley, Jennifer White, Jennifer White, '', '', '', Sierra O\'Neil]
 
-//var path = './BD/campbell';
-//console.log(extractMail([path]));
+// var path = './BD/j-arnold';
+// console.log(extractMail([path]).getMailRecipient());
 
 module.exports = { extractMail };
