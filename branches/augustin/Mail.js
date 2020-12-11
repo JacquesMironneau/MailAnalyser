@@ -172,6 +172,10 @@ class Mail{
     }
 
     recipientToContact(){
+        let result = new Array();
+        for(let i=0;i<this.mailRecipient.lenght;i++){
+            
+        }
         let lignes = this.recipient.split(/\s/);
         let contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient);
         return contactTest;
