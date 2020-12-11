@@ -2,6 +2,7 @@
     * Mail class, represent an email.
     * @author Augustin Borne
 */
+const {Contact} = require('./contact');
 
 class Mail{
 
@@ -48,6 +49,15 @@ class Mail{
         return res;
     }
 
+    get toHumanReadableFormat()
+    {
+        let res = "FROM: " + this.mailAuthor + '\n';
+        res += "TO: " + this.mailRecipient + '\n';
+        res += "SUBJECT: " + this.subject + '\n';
+        res += "\nCONTENT: " + this.message + "\n";
+        return res;
+    }
+
     setSubject(subject){
         this.subject=subject;
     }
@@ -67,6 +77,29 @@ class Mail{
     get getDate(){
         return this.date;
     }
+    get getMessageId(){
+        return this.messageId;
+    }
+
+    get getEmailAuthor(){
+        return this.mailAuthor;
+    }
+
+    get getEmailReceiver(){
+        return this.mailRecipient;
+    }
+
+    get getAuthor(){
+        return this.author;
+    }
+
+    get getRecipient(){
+        return this.recipient;
+    }
+
+    get getSubject(){
+        return this.subject;
+    }
 
     isEqual(mail){
         if(mail instanceof Mail){
@@ -74,24 +107,31 @@ class Mail{
                 return true;
             }
         }else{
-            return false;
+            throw Error('Invalid data type, a Mail element is required')
         }
     }
 
     isOlderThan(mail){
        if(mail instanceof Mail){
-            if(mail.date>this.date){
+            if(mail.date.getTime()>this.date.getTime()){
                 return true;
             }else{
                 return false;
             }
        }else{
-           return false;
+        throw Error('Invalid data type, a Mail element is required')
        }
     }
+    isBetweenDate(date1,date2){
+        if(this.date.getTime()>=date1.getTime() && this.date.getTime()<=date2.getTime()){
+            return true;
+        }else{
+            false;
+        }
+     }
 
     isWeekend(){
-        if(Date.prototype.getDay(this.date)===0 || Date.prototype.getDay(this.date)===6){
+        if(this.date.getDay===0 || this.date.getDay===6){
             return true;
         }else{
             return false;
@@ -123,6 +163,18 @@ class Mail{
         }else{
             return false;
         }
+    }
+
+    authorToContact(){
+        var lignes = this.author.split(/\s/);
+        let contactTest = new Contact(lignes[0],lignes[1],this.mailAuthor);
+        return contactTest;
+    }
+
+    recipientToContact(){
+        let lignes = this.recipient.split(/\s/);
+        let contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient);
+        return contactTest;
     }
 }
 
