@@ -68,6 +68,10 @@ class Mail{
         return this.date;
     }
 
+    getMailRecipient() {
+        return this.mailRecipient;
+    }
+
     isEqual(mail){
         if(mail instanceof Mail){
             if(mail===this){
