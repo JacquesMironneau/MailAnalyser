@@ -40,7 +40,7 @@ class Mail{
         res+="\n version = "+this.version;
         res+="\n contentType = "+this.contentType;
         res+="\n encoding = "+this.encoding;
-        res+="\n author = "+this.author;
+        res+="\n author = "+this.author[0];
         res+="\n recipient = ";
         this.recipient.forEach(element => {
             res+=element+", ";
@@ -145,7 +145,7 @@ class Mail{
     }
 
     mailInBusyDays(){
-        if(this.date.getHours()<=8 || this.date.getHours>=22 || this.isWeekend){
+        if(this.date.getHours()<8 || this.date.getHours()>22 || this.isWeekend()){
             return true;
         }else{
             return false;
@@ -172,9 +172,13 @@ class Mail{
     }
 
     authorToContact(){
-        var lignes = this.author.split(/\s/);
-        let contactTest = new Contact(lignes[0],lignes[1],this.mailAuthor);
-        return contactTest;
+        //console.log(this.author);
+        if(this.author!==""){
+            var lignes = this.author[0].split(/\s/);
+            return new Contact(lignes[0],lignes[1],this.mailAuthor);
+        }else{
+            return new Contact("anonyme","anonyme",this.mailAuthor);
+        }
     }
 
     get sizeRecipientMail(){
@@ -187,9 +191,15 @@ class Mail{
 
     recipientToContact(){
         let result = new Array();
+        let contactTest;
         for(let i=0;i<this.sizeRecipientMail;i++){
-            let lignes = this.recipient[i].split(/\s/);
-            let contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient[i]);
+            if(this.recipient[i]!==""){
+                let lignes = this.recipient[i].split(/\s/);
+                contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient[i]);
+            }else{
+                contactTest = new Contact("anonyme","anonyme",this.mailRecipient[i]);
+            }
+            
             result.push(contactTest)
         }
         

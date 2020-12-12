@@ -360,7 +360,7 @@ class ColMail{
         resultTemp.getlisteMail.forEach(element => {
             if(element instanceof Mail){
                 if(email!==null){
-                    if(element.mailInBusyDays() && element.getEmailAuthor==email){
+                    if(element.mailInBusyDays() && element.getEmailAuthor===email){
                         result.setListeMail(element);
                     }
                 }else{

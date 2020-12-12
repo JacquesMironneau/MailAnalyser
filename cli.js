@@ -12,9 +12,11 @@
 
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
-const { extractMail } = require('../branches/command/test.js');
+//const { extractMail } = require('../branches/command/test.js');
 const { visualInteraction, top10Interloc, top10term } = require('./vega');
-// const {extract} = require('./extract')
+const {extractMail} = require('./extract');
+const { exit } = require('process');
+const { ConsoleReporter } = require('jasmine');
 
 // check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
 const checkDateFormat = (d) => ((d instanceof Date && d != 'Invalid Date'));
@@ -33,8 +35,6 @@ program
   .option('-o, --out <outputfile>', 'Export contacts in a text file instead of the terminal', { validator: Program.STRING })
   .action(({ logger, args, options }) =>
   {
-    console.log(options);
-    console.log(args);
     let displayToTerminal = false;
     if (options.out && options.out !== true)
     {
@@ -49,7 +49,8 @@ program
     // Here the namelist is undefined or filled with names
 
     const colmail = extractMail(args.files);
-    const list = args.namelist;
+    console.log(colmail.toString);
+    const list = options.collaborators;
     let contactList = [];
 
     if (list === undefined)
@@ -59,8 +60,9 @@ program
     }
     else
     {
+      
       logger.info(`Print names of ${list}`);
-      contactList = colmail.collabByEmail(args.namelist);
+      contactList = colmail.collabByEmail(list);
     }
     let displayList = '';
     contactList.forEach((contact) => displayList += contact.toVcard());
@@ -93,12 +95,13 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
   .command('count-mail', 'Count the number of mail on a given period')
   .alias('cm')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
-  .argument('<begining-date>', 'Begining date of the period (in mm-dd-yyyy)', {
+  .argument('<begining-date>', 'Beginning date of the period (in mm-dd-yyyy)', {
     validator: (value) =>
     {
       const dateValue = new Date(value);
       if (checkDateFormat(dateValue)) return dateValue;
-      throw new Error('Invalid ending date please use mm-dd-yyyy format');
+      console.log('ERROR : Invalid beginning date please use mm-dd-yyyy format');
+      exit(1);
     },
   })
   .argument('<ending-date>', 'Ending date of the period (in mm-dd-yyyy)', {
@@ -106,7 +109,8 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
     {
       const dateValue = new Date(value);
       if (checkDateFormat(dateValue)) return dateValue;
-      throw new Error('Invalid ending date please use mm-dd-yyyy format');
+      console.log('ERROR : Invalid ending date please use mm-dd-yyyy format');
+      exit(1);
     },
   })
 
@@ -138,8 +142,14 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
     // Display the number of mail
     else
     {
-      const dateBegin = ` ${args.beginingDate.getMonth()}/${args.beginingDate.getDate()}/${args.beginingDate.getFullYear()}`;
-      const dateEnd = ` ${args.endingDate.getMonth()}/${args.endingDate.getDate()}/${args.endingDate.getFullYear()}`;
+      const beginMonth =  ((args.beginingDate.getMonth() + 1) < 10) ? '0' + (args.beginingDate.getMonth() +1) : (args.beginingDate.getMonth() + 1);
+      const beginDay = (args.beginingDate.getDate() < 10) ? '0' + args.beginingDate.getDate() : args.beginingDate.getDate();
+
+      const endMonth =  ((args.endingDate.getMonth() + 1) < 10) ? '0' + (args.endingDate.getMonth() +1) : (args.endingDate.getMonth() + 1);
+      const endDay = (args.endingDate.getDate() < 10) ? '0' + args.endingDate.getDate() : args.endingDate.getDate();
+
+      const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginingDate.getFullYear()}`;
+      const dateEnd = ` ${endMonth}/${endDay}/${args.endingDate.getFullYear()}`;
       console.log(`There are ${total} mail(s) that were sent between ${dateBegin} and ${dateEnd} (mm/dd/yyyy format)`);
     }
   })
@@ -151,12 +161,15 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
   .command('buzzy-days', 'List the "buzzy-days" were mails are written between 10pm and 8am')
   .alias('bd')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
-  .argument('<begining-date>', 'Begining date of the period', {
+  .argument('<begining-date>', 'Beginning date of the period', {
     validator: (value) =>
     {
       const dateValue = new Date(value);
+      
+
       if (checkDateFormat(dateValue)) return dateValue;
-      throw new Error('Invalid ending date please use mm-dd-yyyy format');
+      console.log('ERROR : Invalid beginning date please use mm-dd-yyyy format');
+      exit(1);
     },
   })
   .argument('<ending-date>', 'Ending date of the period', {
@@ -164,7 +177,8 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
     {
       const dateValue = new Date(value);
       if (checkDateFormat(dateValue)) return dateValue;
-      throw new Error('Invalid ending date please use mm-dd-yyyy format');
+      console.log('ERROR : Invalid ending date please use mm-dd-yyyy format');
+      exit(1);
     },
   })
   .option('--mail-senders [mailSenders]', 'The email author', { validator: program.STRING })
@@ -190,8 +204,15 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
         daylist.push(mail.getDate);
       }
     });
-    const dateBegin = ` ${args.beginingDate.getMonth()}/${args.beginingDate.getDate()}/${args.beginingDate.getFullYear()}`;
-    const dateEnd = ` ${args.endingDate.getMonth()}/${args.endingDate.getDate()}/${args.endingDate.getFullYear()}`;
+    const beginMonth =  ((args.beginingDate.getMonth() + 1) < 10) ? '0' + (args.beginingDate.getMonth() +1) : (args.beginingDate.getMonth() + 1);
+      const beginDay = (args.beginingDate.getDate() < 10) ? '0' + args.beginingDate.getDate() : args.beginingDate.getDate();
+
+      const endMonth =  ((args.endingDate.getMonth() + 1) < 10) ? '0' + (args.endingDate.getMonth() +1) : (args.endingDate.getMonth() + 1);
+      const endDay = (args.endingDate.getDate() < 10) ? '0' + args.endingDate.getDate() : args.endingDate.getDate();
+
+      const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginingDate.getFullYear()}`;
+      const dateEnd = ` ${endMonth}/${endDay}/${args.endingDate.getFullYear()}`;
+      
 
     console.log(`There are ${daylist.length} "buzzy days" mail(s) that were sent between ${dateBegin} and ${dateEnd}`);
     daylist.sort((a, b) => b - a)

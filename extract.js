@@ -155,6 +155,7 @@ var transformName = function(name) {
             name = name.split(/, /);
             name = name.filter((val, idx) => !val.match(/, /));
             temporarName = name;
+            console.log(temporarName);
         }
         else if (name.match(/"[A-Za-z]+,/)) {
             name = name.split(/, /);
