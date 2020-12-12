@@ -1,7 +1,7 @@
 Message-ID: <12097696.1075857594249.JavaMail.evans@thyme>
 Date: Wed, 13 Dec 2000 04:37:00 -0800 (PST)
 From: john.arnold@enron.com
-To: greg.whalley@enron.com
+To: greg.whalley@enron.com, jeni@nen
 Subject: 
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii

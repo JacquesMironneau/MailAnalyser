@@ -95,7 +95,6 @@ var createTab = function(file) {
     tabMailRecipient = tabMailRecipient.split(separator);
     tabMailRecipient = tabMailRecipient.filter((val, idx) => !val.match(separator));
     file[3] = tabMailRecipient;
-    console.log(tabMailRecipient);
 
     //we join all the message into one element
     let message = [];
@@ -280,7 +279,7 @@ inputIsFile = function(path) {
 // console.log(getPathOfFiles(file));
 // console.log(inputIsFile(file));
 //console.log(extractMail(file));
-//var folder = './BD';
-//console.log(extractMail([folder]));
+// var folder = './BD/j-arnold/mail.txt/3.txt';
+// console.log(extractMail([folder]));
 
 module.exports = { extractMail };
