@@ -10,11 +10,27 @@ const { NbUseTerm } = require('./NbUseTerm.js');
 let date = new Date(2020, 8, 22, 15, 0, 0);
 let date2 = new Date(2020,8,23,17,0,0);
 let date3 = new Date(2020,8,24,19,0,0);
-let m =  new Mail("1",date,"bernard@bernard.com","jojo@jojo.com","reunion sur le projet gl02","2","jsp","utf8","Bernard Durand","Jojo Marcel","","","","","xm.xml","hallo liebe jojo, wie geth s es dir");
-let m2 = new Mail("2",date2,"laurent@laurent.com","jamie@cps.fr","sps n°20","","","utf8","laurent dupont","Jamie Gourmaud","","","","","sps.xml","salut, c'est quand que tu filmes le prochain sps?");
-let m3 = new Mail("3",date3,"jojo@jojo.com","laurent@laurent.com","tu vas bien?","","","utf8","Jojo Marcel","Laurent Dupont","","","","","","salut mon pote ca va?");
-let m4 = new Mail("4",date3,"bernard@bernard.com","laurent@laurent.com","hi boss","","","utf8","Bernard Durand","Laurent Dupont","","","","","","salut mon pote ca va?");
-let m5 = new Mail("5",date3,"jojo@jojo.com","laurent@laurent.com","reunion avec le boss","","","utf8","Jojo Marcel","Laurent Dupont","","","","","","salut mon pote ca va?");
+let tab=["jojo@jojo.com","laurent@laurent.com","ivan@ivan.com"];
+let nom =["Jojo Marcel","laurent dupont","Ivan Lerusse"];
+let m =  new Mail("1",date,"bernard@bernard.com",tab,"reunion sur le projet gl02","2","jsp","utf8","Bernard Durand",nom,"","","","","xm.xml","hallo liebe jojo, wie geth s es dir");
+
+tab=["jamie@cps.fr","bernard@bernard.com"];
+nom =["Jamie Gourmaud","Bernard Durand"];
+let m2 = new Mail("2",date2,"laurent@laurent.com",tab,"sps n°20","","","utf8","laurent dupont",nom,"","","","","sps.xml","salut, c'est quand que tu filmes le prochain sps?");
+
+tab=["laurent@laurent.com"];
+nom =["Laurent Dupont"];
+let m3 = new Mail("3",date3,"jojo@jojo.com",tab,"tu vas bien?","","","utf8","Jojo Marcel",nom,"","","","","","salut mon pote ca va?");
+
+tab=["laurent@laurent.com","fred@cps.fr"];
+nom =["Laurent Dupont","Frederic Courant"];
+let m4 = new Mail("4",date3,"bernard@bernard.com",tab,"hi boss","","","utf8","Bernard Durand",nom,"","","","","","salut mon pote ca va?");
+
+tab=["laurent@laurent.com","Marcel@cps.fr"];
+nom =["Laurent Dupont","Marcel LeChauffeur"];
+let m5 = new Mail("5",date3,"jojo@jojo.com",tab,"reunion avec le boss","","","utf8","Jojo Marcel",nom,"","","","","","salut mon pote ca va?");
+
+
 let col = new ColMail();
 col.setListeMail(m);
 col.setListeMail(m2);
@@ -71,10 +87,40 @@ for (const [key, value] of Object.entries(bestColab)) {
 /*let temp = col.interactionBetweenCollabForACollab("jojo@jojo.com");
 temp.forEach(element => {
     console.log("contact 1 :"+element.getContact1.getMail+" ,contact 2 : "+element.getContact2.getMail+", int :"+element.getNbEchange);
-});
-
+});*/
+/*
 let temp = col.MostUsedTerm("jojo@jojo.com");
 
 temp.forEach(element => {
     console.log("term : "+element.getTerm+" ,nbUse : "+element.getNbUse);
 });*/
+
+
+
+/// test avec plusieurs destinataires
+
+//console.log(m.sizeRecipientMail);
+/*m2.recipientToContact().forEach(element => {
+    console.log("nom : "+element.getName+" ,prenom : "+element.getLastName+" , email : "+element.getMail);
+});*/
+//console.log(m.emailIncludeInRecipientMail("bernard@bernard.com"))
+/*col.colMailToContact().forEach(element => {
+    console.log("nom : "+element.getName+" ,prenom : "+element.getLastName+" , email : "+element.getMail);
+});*/
+/*col.SearchByEmail("jojo@jojo.com").getlisteMail.forEach(element => {
+    console.log(element.toString);
+});*/
+
+/*col.collabByEmail(["Marcel@cps.fr"]).forEach(element =>{
+    //console.log("email 1 :"+element.getContact1.getMail+", email2 : "+ element.getContact2.getMail+" nb : "+element.getNbEchange);
+    console.log("nom : "+element.getName+" ,prenom : "+element.getLastName+" , email : "+element.getMail);
+});*/
+
+//console.log(col.toString);
+
+//console.log(col.verifInstanceOfMail(m5));
+tab=["laurent@laurent.com","Marcel@cps.fr"];
+nom =["Laurent Dupont"];
+m6 = new Mail("5",date3,"jojo@jojo.com",tab,"reunion avec le boss","","","utf8","Jojo Marcel",nom,"","","","","","salut mon pote ca va?");
+
+col.setListeMail(m6);

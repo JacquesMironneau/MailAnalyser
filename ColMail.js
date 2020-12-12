@@ -14,12 +14,38 @@ class ColMail{
 
     setListeMail(mailEntre){
         if(mailEntre instanceof Mail){
-            this.listeMail.push(mailEntre);
+            if(this.verifInstanceOfMail(mailEntre)){
+                this.listeMail.push(mailEntre);
+            }else{
+                console.log("ERROR : invalid data format for Mail")
+            }
+            
         }else{
             throw Error('Invalid data type, a Mail element is required')
         }
         
     }
+    verifInstanceOfMail(mailEntre){
+        let result = true;
+        if(mailEntre instanceof Mail){
+            if(mailEntre.getEmailReceiver.length!==mailEntre.getRecipient.length){
+                result=false;
+            }
+            if(mailEntre.author=== undefined){
+                result=false;
+            }
+            if(mailEntre.getEmailAuthor === undefined || mailEntre.getEmailAuthor === "" ){
+                result=false;
+            }
+            if(!(mailEntre.getDate instanceof Date)){
+                result=false;
+            }
+            return result;
+        }else{
+            return false;
+        }
+    }
+
     setListeColMail(colMailEntre){
         if(colMailEntre instanceof ColMail){
             colMailEntre.getMail.forEach(element => {
@@ -57,7 +83,6 @@ class ColMail{
      * @param {Date} date2 
      * 
      * Retourne une collection de mail correspondant au mail envoye pendant un intervalle de temps
-     * @
      * @author Augustin Borne
      */
     mailInInterval(date1,date2){
