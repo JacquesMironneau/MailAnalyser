@@ -77,6 +77,47 @@ var createTab = function(file) {
         }
     }
 
+    //we remove the element Cc:
+    for (var index = 0; index < file.length; index++) {
+        if (file[index].includes('Subject: ')) {
+            if (file[index+1].includes('Cc: ')) {
+                file.splice(index+1, 1);
+            }
+        }
+    }
+
+    //we join all the mailAuthor into one element
+    let indexTo = 0, indexSubject = 0;
+        //we search when there is the beginning of the mailRecipient
+    for (let index = 0; index < file.length; index++) {
+        if (file[index].includes('To: ')) {
+            indexTo = index;
+            break;
+        }
+    }
+        //we search when there is the subject
+    for (let index = 0; index < file.length; index++) {
+        if (file[index].includes('Subject: ')) {
+            indexSubject = index;
+            break;
+        }
+    }
+        //we join all the mailRecipient
+    if (indexSubject !== indexTo+1) {
+        let to = [];
+        for (var index = indexTo; index < indexSubject; index++) {
+            to[index-indexTo] = file[index];
+        }
+        file[indexTo] = to.join(' ');
+    }
+        //we remove the lines between the mailRecipients and the subject
+    file.splice(indexTo+1, indexSubject-indexTo-1);
+
+    //we remove the element Bcc:
+    if (file[8].includes('Bcc: ')) {
+        file.splice(8, 1);
+    }
+
     //we remove the element To: and Subject:, which are not remove previously because of the message
     separator = /(To: |Subject: )/;
     var temporarFile = file[3];
@@ -94,6 +135,14 @@ var createTab = function(file) {
     tabMailRecipient = file[3];
     tabMailRecipient = tabMailRecipient.split(separator);
     tabMailRecipient = tabMailRecipient.filter((val, idx) => !val.match(separator));
+    for (let i = 0; i < tabMailRecipient.length; i++) {
+        while (tabMailRecipient[i].charAt() === ' ') {
+            tabMailRecipient[i] = tabMailRecipient[i].substring(1);
+        }
+        while (tabMailRecipient[i].charAt() === '\t') {
+            tabMailRecipient[i] = tabMailRecipient[i].substring(1);
+        }
+    }
     file[3] = tabMailRecipient;
 
     //we join all the message into one element
@@ -281,5 +330,11 @@ inputIsFile = function(path) {
 //console.log(extractMail(file));
 // var folder = './BD/j-arnold/mail.txt/3.txt';
 // console.log(extractMail([folder]));
+
+//var file = './BD/j-arnold/mail.txt/1159.txt';
+//extractMail([file]);
+
+//var file = './BD/campbell/5.txt';
+//console.log(extractMail([file]).toString);
 
 module.exports = { extractMail };
