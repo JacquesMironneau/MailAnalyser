@@ -32,13 +32,19 @@ class Mail{
         res+="\n messageID = "+this.messageId;
         res+="\n date = "+this.date;
         res+="\n mailAuthor = "+this.mailAuthor;
-        res+="\n mailRecipient = "+this.mailRecipient;
+        res+="\n mailRecipient = ";
+        this.mailRecipient.forEach(element => {
+            res+=element+", ";
+        }); 
         res+="\n subject = "+this.subject;
         res+="\n version = "+this.version;
         res+="\n contentType = "+this.contentType;
         res+="\n encoding = "+this.encoding;
         res+="\n author = "+this.author;
-        res+="\n recipient = "+this.recipient;
+        res+="\n recipient = ";
+        this.recipient.forEach(element => {
+            res+=element+", ";
+        });
         res+="\n copy = "+this.copy;
         res+="\n hcopy = "+this.hcopy;
         res+="\n path = "+this.path;
@@ -171,14 +177,53 @@ class Mail{
         return contactTest;
     }
 
+    get sizeRecipientMail(){
+        let result = 0;
+        this.mailRecipient.forEach(element => {
+            result++;
+        });
+        return result;
+    }
+
     recipientToContact(){
         let result = new Array();
-        for(let i=0;i<this.mailRecipient.lenght;i++){
-            
+        for(let i=0;i<this.sizeRecipientMail;i++){
+            let lignes = this.recipient[i].split(/\s/);
+            let contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient[i]);
+            result.push(contactTest)
         }
-        let lignes = this.recipient.split(/\s/);
-        let contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient);
-        return contactTest;
+        
+        return result;
+    }
+
+    recipientEmailTocontact(email){
+        let result;
+        let index = this.mailRecipient.indexOf(email);
+        if(index !=-1){
+            let lignes = this.recipient[index].split(/\s/);
+            return new Contact(lignes[0],lignes[1],this.mailRecipient[index]);
+        }else{
+            throw Error('Invalid index n°'+index+', the email :'+email+' is not included in this Mail')
+        }
+        
+    }
+
+    emailIncludeInRecipientMail(email){
+        if(this.mailRecipient.indexOf(email)!=-1){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    personnIncludeInRecipient(personn){
+        if(this.recipient.indexOf(personn)!=-1){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }
 
