@@ -12,7 +12,7 @@
 
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
-const { extractMail } = require('../branches/command/test.js');
+const { extractMail } = require('../command/test.js');
 const { visualInteraction, top10Interloc, top10term } = require('./vega');
 // const {extract} = require('./extract')
 

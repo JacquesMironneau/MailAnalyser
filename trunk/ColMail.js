@@ -91,11 +91,13 @@ class ColMail{
             if(m.getEmailAuthor===email){
                 contactEmail = m.authorToContact();
             }else{
-                contactEmail = m.recipientToContact();
+                contactEmail = m.recipientEmailTocontact(email);
+                
             }
         }
         
-
+        
+        
 
         let listecolab = this.collabByEmail(tab);
         let resultTemp = new Array();
@@ -147,7 +149,7 @@ class ColMail{
     chercherNbinteraction(email1,email2){
         let result = 0;
         this.listeMail.forEach(element => {
-            if((element.getEmailAuthor===email1 && element.getEmailReceiver===email2) || (element.getEmailAuthor===email2 && element.getEmailReceiver===email1)){
+            if((element.getEmailAuthor===email1 && element.emailIncludeInRecipientMail(email2)) || (element.getEmailAuthor===email2 && element.emailIncludeInRecipientMail(email1))){
                 result++;
             }
         });
@@ -197,20 +199,22 @@ class ColMail{
                 this.listeMail.forEach(element2 => {
 
                     if(element2.getEmailAuthor===element){
-                        let estInclus=false;
-                        colabResult.forEach(element3 => {
-                            if(element3.getMail===element2.getEmailReceiver){
-                                estInclus=true;
+                        element2.recipientToContact().forEach(element3 => {
+                            let estInclus=false;
+                            colabResult.forEach(element4 => {
+                                if(element4.getMail===element3.getMail){
+                                    estInclus=true;
+                                }
+                            });
+                            if(!estInclus){
+                                colabResult.push(element3);
                             }
                         });
 
-                        if(!estInclus){
-                            colabResult.push(element2.recipientToContact());
-                        }
-                    }else if(element2.getEmailReceiver===element){
+                    }else if(element2.emailIncludeInRecipientMail(element)){
                         let estInclus=false;
                         colabResult.forEach(element3 => {
-                            if(element3.getMail===element2.getEmailAuthor()){
+                            if(element3.getMail===element2.getEmailAuthor){
                                 estInclus=true;
                             }
                         });
@@ -308,7 +312,7 @@ class ColMail{
         let result = new ColMail();
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
-                if(element.getEmailAuthor === email || element.getEmailReceiver === email){
+                if(element.getEmailAuthor === email || element.emailIncludeInRecipientMail(email)){
                     result.setListeMail(element);
                 }
             }else{
@@ -384,7 +388,7 @@ class ColMail{
         let result = new ColMail();
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
-                if(element.getAuthor===personn || element.getRecipient===personn){
+                if(element.getAuthor===personn || element.personnIncludeInRecipient(personn)){
                     result.setListeMail(element);
                 }
             }else{
@@ -401,15 +405,9 @@ class ColMail{
     colMailToContact(){
         let result = new Array();
         this.listeMail.forEach(element => {
-
             let contactTempAuthor = element.authorToContact();
-
-
             let contactTempRecipient = element.recipientToContact();
-
             let author = false;
-            let recipient = false;
-
             //on verifie qu'il n'y a pas de doublon dans result(critere = mail)
             if(result.length != 0){
                 result.forEach(element => {
@@ -418,24 +416,27 @@ class ColMail{
                     }else if(element.getMail==contactTempRecipient.getMail){
                         recipient=true;
                     }
-                    /*
-                    if(author && recipient){
-                        break;
-                    }*/
                 });
-
                 if(!author){
                     result.push(contactTempAuthor);
                 }
-                if(!recipient){
-                    result.push(contactTempRecipient);
-                }
+                contactTempRecipient.forEach(element =>{
+                    let recipient = false;
+                    result.forEach(element2 => {
+                        if(element.getMail==element2.getMail){
+                            recipient=true;
+                        }
+                    });
+                    if(!recipient){
+                        result.push(element);
+                    }
+                });       
             }else{
                 result.push(contactTempAuthor);
-                result.push(contactTempRecipient);
+                contactTempRecipient.forEach(element => {
+                    result.push(element);
+                });             
             }
-                
-
         });
         return result;
     }
