@@ -322,7 +322,7 @@ inputIsFile = function(path) {
 // console.log(extractMail([path]).getMailRecipient()); --> A VERIFIER
 
 // var path = './BD';
-// console.log(extractMail([path]));
+// console.log(extractMail([path]).toString);
 
 //var file = ['./BD/j-arnold/mail.txt/3.txt', './BD/j-arnold/mail.txt/9.txt'];
 // console.log(getPathOfFiles(file));
