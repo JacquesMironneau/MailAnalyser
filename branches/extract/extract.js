@@ -25,17 +25,22 @@ var extractMail = function(path) {
 // getPathOfFiles : with one way, we get all the ways of files
 var getPathOfFiles = function(path) {
     var results = [];
-    var list = fs.readdirSync(path);
-    list.forEach(function(file) {
-        file = path + '/' + file;
-        var stat = fs.statSync(file);
-        if (stat && stat.isDirectory()) {
-            results = results.concat(getPathOfFiles(file));
-        }
-        else if (stat && stat.isFile()) {
-            results.push(file);
-        }
-    });
+    if (inputIsFile(path)) {
+        results.push(path);
+    }
+    else if (inputIsFolder(path)) {
+        var list = fs.readdirSync(path);
+        list.forEach(function(file) {
+            file = path + '/' + file;
+            var stat = fs.statSync(file);
+            if (stat && stat.isDirectory()) {
+                results = results.concat(getPathOfFiles(file));
+            }
+            else if (stat && stat.isFile()) {
+                results.push(file);
+            }
+        });
+    }
     return results;
 }
 
@@ -201,17 +206,17 @@ var transformName = function(name) {
     }
 }
 
-// // inputIsFolder : verify if the input is a folder
-// inputIsFolder = function(path) {
-//     var stat = fs.lstatSync(path);
-//     return stat.isDirectory();
-// }
+// inputIsFolder : verify if the input is a folder
+inputIsFolder = function(path) {
+    var stat = fs.lstatSync(path);
+    return stat.isDirectory();
+}
 
-// // inputIsFile : verifiy if the input is a file
-// inputIsFile = function(path) {
-//     var stat = fs.lstatSync(path);
-//     return stat.isFile();
-// }
+// inputIsFile : verifiy if the input is a file
+inputIsFile = function(path) {
+    var stat = fs.lstatSync(path);
+    return stat.isFile();
+}
 
 //TEST
 //console.log(transformDate(' Mon, 11 Dec 2000 09:04:00 -0800 (PST) '));
@@ -268,7 +273,14 @@ var transformName = function(name) {
 // var path = './BD/j-arnold';
 // console.log(extractMail([path]).getMailRecipient()); --> A VERIFIER
 
-var path = './BD';
-console.log(extractMail([path]));
+// var path = './BD';
+// console.log(extractMail([path]));
+
+//var file = ['./BD/j-arnold/mail.txt/3.txt', './BD/j-arnold/mail.txt/9.txt'];
+// console.log(getPathOfFiles(file));
+// console.log(inputIsFile(file));
+//console.log(extractMail(file));
+//var folder = './BD';
+//console.log(extractMail([folder]));
 
 module.exports = { extractMail };
