@@ -30,7 +30,7 @@ Chaque commande possède un alias: count-mail est équivalent à cm par exemple.
 Alias: ```node cli.js gc <files> [OPTIONS...]```  
  
 Arguments :   
-**<files>** : List of data file (emails)  
+**< files>** : List of data file (emails)  
 
 Options :  
 - **-c, --collaborators [emaillist]** : emails des collaborateurs séparés par une virgule  
