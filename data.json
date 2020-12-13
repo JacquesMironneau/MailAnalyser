@@ -11,5 +11,18 @@
         "mail": "manoncaroy@laurent.com"
       },
       "nbEchange": "1"
+    },
+    {
+      "contact1": {
+        "name": "Augustin",
+        "lastname": "Borne",
+        "mail": "ogugu@laurent.com"
+      },
+      "contact2": {
+        "name": "Manon",
+        "lastname": "Caroy",
+        "mail": "manoncaroy@laurent.com"
+      },
+      "nbEchange": "2"
     }
   ]
