@@ -207,6 +207,7 @@ class ColMail{
     interactionBetweenCollabForACollab(email){
         let tab = [email];
         let listeColab = this.collabByEmail(tab);
+        console.log(listeColab);
         let result = new Array();
         
         for(let i=0;i<listeColab.length;i++){
