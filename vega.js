@@ -11,9 +11,11 @@ const fs = require('fs');
  * 
  * @param {json vega-lite spec} spec The vegalite spec to export as a file
  * @param {['png','svg']} format format of the exported graphic
+ * @param {String} fileName name of the exported file
  */
-const render = (spec, format) =>
+const render = (spec, format, fileName) =>
 {
+  fileName = fileName + '.' + format
   // Compile vegalite spec to vega spec
   const vgSpec = vl.compile(spec).spec;
   const view = new vega.View(vega.parse(vgSpec))
@@ -22,7 +24,6 @@ const render = (spec, format) =>
 
   if (format === 'svg')
   {
-    const fileName = 'test.svg';
     view.toSVG()
       .then((svg) =>
       {
@@ -40,11 +41,10 @@ const render = (spec, format) =>
       {
         console.error(err);
       });
-  } else
+  } else if (format === 'png')
   {
     view.toCanvas()
       .then((canvas) => {
-        const fileName = "test.png"
         const stream = canvas.createPNGStream();
         const out = fs.createWriteStream(fileName);
         stream.pipe(out);
@@ -57,8 +57,9 @@ const render = (spec, format) =>
  * 
  * @param {Interaction[]} interactionList list of interaction between every contact of the given collaborator
  * @param {String} format Format of the file that will be exported (svg or png)
+ * @param {String} fileName name of the exported file
  */
-const visualInteraction = (interactionList, format) => 
+const visualInteraction = (interactionList, format, fileName) => 
 {
   if (interactionList.every((inter) => inter.nbEchange === 0))
   {
@@ -98,15 +99,16 @@ const visualInteraction = (interactionList, format) =>
     }
   };
 
-  render(spec, format);
+  render(spec, format, fileName);
 
 };
 /**
  * Create the vegalite spec
  * @param {Interaction[]} data  interaction list, contact1 is the collaborator, contact2 is the other contact
  * @param {String} format Format of the file that will be exported (svg or png)
+ * @param {String} fileName name of the exported file
  */
-const top10Interloc = (data, format) =>
+const top10Interloc = (data, format, fileName) =>
 {
    const spec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -125,15 +127,16 @@ const top10Interloc = (data, format) =>
         "title": "Nombre d'échanges"}
       }
   };
-  render(spec,format);
+  render(spec,format, fileName);
 }
 
 /**
  * 
  * @param {NbUseTerm[]} data Array of object: NbUseTerm ( a term and the number of its occurrence)
  * @param {String} format Format of the file that will be exported (svg or png)
+ * @param {String} fileName name of the exported file
  */
-const top10term = (data, format) =>
+const top10term = (data, format, fileName) =>
 {
   const spec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -152,7 +155,7 @@ const top10term = (data, format) =>
         "title": "Occurrence d'un terme"}
       }
   };
-  render(spec,format)
+  render(spec,format, fileName)
 }
 
 module.exports = { visualInteraction, top10Interloc, top10term };
