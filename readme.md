@@ -1,6 +1,7 @@
 # Projet GL02 A20 
 **Nom d'équipe**: Team4Software  
 **Auteurs**: Manon Caroy, Augustin Borne, Jacques Mironneau  
+**Licences**: 
 
 ## I) Aide et installation
 
@@ -136,14 +137,14 @@ Exemple:
 ```node cli.js se <files> toto@utt.fr```  
 ```node cli.js se <files> toto@utt.fr -o resul.txt ```  
 
-### Dépendances
+## Dépendances
 Les dépendances du projet sont :  
 - "@caporal/core": "2.0.2"  
 - "canvas": "2.6.1"  
 - "vega": "5.17.0"  
 - "vega-lite": "4.17.0"  
 
-### Test et jeux de données fournis
+## Test et jeux de données fournis
 
 Pour les jeux de données, nous avons les fichiers :  
 -- donnesSujetB/j-arnold/sent_mail/3_  
@@ -153,7 +154,7 @@ Pour les jeux de données, nous avons les fichiers :
 -- test (fichier créé vide)  
 -- test2 (fichier créé avec le champ From vide)  
 
-### Ecarts éventuels au cahier des charges
+## Ecarts éventuels au cahier des charges
 
 - **SPEC1.1 :** En plus de ce qui a été décrit dans le cahier des charges, on peut exporter les contacts affichés dans un fichier.  
 - **SPEC1.6 :**  
