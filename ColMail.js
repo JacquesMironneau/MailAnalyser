@@ -38,6 +38,7 @@ class ColMail{
         let res = "colection de Mail :";
         this.listeMail.forEach(element => res+= "\n" +element.toString);
         return res;
+        
     }
 
     get toHumanReadableString()
