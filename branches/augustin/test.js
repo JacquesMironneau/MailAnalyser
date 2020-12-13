@@ -111,7 +111,9 @@ temp.forEach(element => {
     console.log(element.toString);
 });*/
 
-col.collabByEmail(["Marcel@cps.fr"]).forEach(element =>{
+/*col.collabByEmail(["Marcel@cps.fr"]).forEach(element =>{
     //console.log("email 1 :"+element.getContact1.getMail+", email2 : "+ element.getContact2.getMail+" nb : "+element.getNbEchange);
     console.log("nom : "+element.getName+" ,prenom : "+element.getLastName+" , email : "+element.getMail);
-});
+});*/
+
+console.log(col.toString);
