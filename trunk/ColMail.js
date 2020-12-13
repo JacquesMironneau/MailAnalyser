@@ -13,11 +13,16 @@ class ColMail{
     }
 
     setListeMail(mailEntre){
+        /*console.log("auteur : " + mailEntre.getAuthor);
+        console.log("mail auteur : " +mailEntre.getEmailAuthor);
+        console.log("mail detinataires : " +mailEntre.getEmailReceiver);
+        console.log("destinataires : " +mailEntre.getRecipient);*/
+
         if(mailEntre instanceof Mail){
             if(this.verifInstanceOfMail(mailEntre)){
                 this.listeMail.push(mailEntre);
             }else{
-                console.log("ERROR : invalid data format for Mail")
+                //console.log("ERROR : invalid data format for Mail")
             }
             
         }else{
@@ -30,25 +35,25 @@ class ColMail{
         if(mailEntre instanceof Mail){
             if (mailEntre.getSubject === undefined)
             {
-                console.log("subject undefined");
+               // console.log("subject undefined");
                 result=false;
             }
             if(mailEntre.getEmailReceiver.length!==mailEntre.getRecipient.length){
-                console.log("longeur tab email != long tab ");
+               // console.log("longeur tab email != long tab ");
                 result=false;
             }
             if(mailEntre.author=== undefined){
-                console.log("pas auteur ");
+               // console.log("pas auteur ");
 
                 result=false;
             }
             if(mailEntre.getEmailAuthor === undefined || mailEntre.getEmailAuthor === "" ){
                 result=false;
-                console.log("pas email auteur ou email auteur vide ");
+                //console.log("pas email auteur ou email auteur vide ");
 
             }
             if(!(mailEntre.getDate instanceof Date)){
-                console.log("pas de date");
+               // console.log("pas de date");
                 result=false;
             }
             return result;
