@@ -1,37 +1,31 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable no-console */
 /**
  * CLI and entry point of the project
  * using framework caporalCli.
  *
  * use "node cli.js help" to get every commands
- * @author Jacques
- * */
-const colors = require('colors');
+ * @author Jacques Mironneau
+ **/
+const { colors} = require('colors')
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
-//const { extractMail } = require('../branches/command/test.js');
 const { visualInteraction, top10Interloc, top10term } = require('./vega');
 const {extractMail} = require('./extract');
 const { exit } = require('process');
-const { ConsoleReporter } = require('jasmine');
 
 // check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
 const checkDateFormat = (d) => ((d instanceof Date && d != 'Invalid Date'));
 
 program
   .name('Mail parser')
-  .description('Mail CLI parser tool, used to generate graphics and text data')
+  .description('Mail CLI parser tool, to generate graphics and text data')
 
 /*
  * Spec 1.1: List data from collaborator and their contacts
  */
-  .command('get-contacts', 'List contacts of given collaborators')
+  .command('get-contacts', 'List contacts of given collaborators in Vcard format')
   .alias('gc')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
-  .option('-c, --collaborators [emailList]', 'Collaborator name separated by a comma', { validator: program.ARRAY })
+  .option('-c, --collaborators [emailList]', 'Collaborator email separated by a comma', { validator: program.ARRAY })
   .option('-o, --out <outputfile>', 'Export contacts in a text file instead of the terminal', { validator: Program.STRING })
   .action(({ logger, args, options }) =>
   {
@@ -49,13 +43,12 @@ program
     // Here the namelist is undefined or filled with names
 
     const colmail = extractMail(args.files);
-    //console.log(colmail.toString);
     const list = options.collaborators;
     let contactList = [];
 
     if (list === undefined)
     {
-      logger.warn('Since no arguments is provided printing every collaborator');
+      logger.warn('Since no collaborators are provided printing every collaborator');
       contactList = colmail.collabByEmail([]);
     }
     else
@@ -82,7 +75,7 @@ program
         }
         else
         {
-          logger.info(`Contact exported to  ${options.out}`);
+          logger.info(`Contact exported to ${options.out}`);
         }
       });
     }
@@ -95,7 +88,7 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
   .command('count-mail', 'Count the number of mail on a given period')
   .alias('cm')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
-  .argument('<begining-date>', 'Beginning date of the period (in mm-dd-yyyy)', {
+  .argument('<beginning-date>', 'Beginning date of the period (in mm-dd-yyyy)', {
     validator: (value) =>
     {
       const dateValue = new Date(value);
@@ -120,7 +113,7 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
     // Get mail from files
     const colmail = extractMail(args.files);
     // Get only mail in the period
-    const mails = colmail.mailInInterval(args.beginingDate, args.endingDate);
+    const mails = colmail.mailInInterval(args.beginningDate, args.endingDate);
     let total = 0;
 
     // If emails senders are provided, remove the mail from people not in the list
@@ -142,13 +135,13 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
     // Display the number of mail
     else
     {
-      const beginMonth =  ((args.beginingDate.getMonth() + 1) < 10) ? '0' + (args.beginingDate.getMonth() +1) : (args.beginingDate.getMonth() + 1);
-      const beginDay = (args.beginingDate.getDate() < 10) ? '0' + args.beginingDate.getDate() : args.beginingDate.getDate();
+      const beginMonth =  ((args.beginningDate.getMonth() + 1) < 10) ? '0' + (args.beginningDate.getMonth() +1) : (args.beginningDate.getMonth() + 1);
+      const beginDay = (args.beginningDate.getDate() < 10) ? '0' + args.beginningDate.getDate() : args.beginningDate.getDate();
 
       const endMonth =  ((args.endingDate.getMonth() + 1) < 10) ? '0' + (args.endingDate.getMonth() +1) : (args.endingDate.getMonth() + 1);
       const endDay = (args.endingDate.getDate() < 10) ? '0' + args.endingDate.getDate() : args.endingDate.getDate();
 
-      const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginingDate.getFullYear()}`;
+      const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginningDate.getFullYear()}`;
       const dateEnd = ` ${endMonth}/${endDay}/${args.endingDate.getFullYear()}`;
       console.log("There are "+ ((String)(total)).green +" mail(s) that were sent between"+ dateBegin.green+" and "+dateEnd.green+" (mm/dd/yyyy format)");
     }
@@ -161,7 +154,7 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
   .command('buzzy-days', 'List the "buzzy-days" were mails are written between 10pm and 8am')
   .alias('bd')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
-  .argument('<begining-date>', 'Beginning date of the period', {
+  .argument('<beginning-date>', 'Beginning date of the period', {
     validator: (value) =>
     {
       const dateValue = new Date(value);
@@ -189,12 +182,12 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
     // Get only mail in the period
     if (options.mailSender)
     {
-      colmail = colmail.MailInbusyDays(options.mailSender, args.beginingDate, args.endingDate);
+      colmail = colmail.MailInbusyDays(options.mailSender, args.beginningDate, args.endingDate);
     }
     else
     {
       logger.warn('No author has been specified');
-      colmail = colmail.MailInbusyDays(null, args.beginingDate, args.endingDate);
+      colmail = colmail.MailInbusyDays(null, args.beginningDate, args.endingDate);
     }
     const daylist = [];
     colmail.getlisteMail.forEach((mail) =>
@@ -210,13 +203,13 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
         daylist.push(maildateBegin);
       }
     });
-    const beginMonth =  ((args.beginingDate.getMonth() + 1) < 10) ? '0' + (args.beginingDate.getMonth() +1) : (args.beginingDate.getMonth() + 1);
-      const beginDay = (args.beginingDate.getDate() < 10) ? '0' + args.beginingDate.getDate() : args.beginingDate.getDate();
+    const beginMonth =  ((args.beginningDate.getMonth() + 1) < 10) ? '0' + (args.beginningDate.getMonth() +1) : (args.beginningDate.getMonth() + 1);
+      const beginDay = (args.beginningDate.getDate() < 10) ? '0' + args.beginningDate.getDate() : args.beginningDate.getDate();
 
       const endMonth =  ((args.endingDate.getMonth() + 1) < 10) ? '0' + (args.endingDate.getMonth() +1) : (args.endingDate.getMonth() + 1);
       const endDay = (args.endingDate.getDate() < 10) ? '0' + args.endingDate.getDate() : args.endingDate.getDate();
 
-      const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginingDate.getFullYear()}`;
+      const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginningDate.getFullYear()}`;
       const dateEnd = ` ${endMonth}/${endDay}/${args.endingDate.getFullYear()}`;
       
 
@@ -256,20 +249,12 @@ Spec 1.5
   {
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
-    //console.log(colmail.getlisteMail.length);
     const frequentTerms = colmail.MostUsedTerm(args.mail);
-    //console.log(frequentTerms);
     top10term(frequentTerms, options.format);
   })
 
 /*
 Spec 1.6
-
-Titre : Créer une visualisation en nuage de points (avec taille différente)
- du nombre d'échange entre collaborateurs pour une boîte mail donnée.
-
-Entrée(s) : Informations du collaborateur : email
-Option: svg or png
 */
   .command('exchange-between-collaborators', 'Design a scatter graph with the number of exchange between collaborators')
   .alias('ebc')
@@ -281,10 +266,6 @@ Option: svg or png
   {
     const colmail = extractMail(args.files);
     const interactionList = colmail.interactionBetweenCollabForACollab(args.email);
-
-    console.log("Nombre d'interactions " + interactionList.length);
-    console.log("Nombre de mails " + colmail.getlisteMail.length);
-
     visualInteraction(interactionList, options.format);
   })
 
@@ -295,17 +276,50 @@ Option: svg or png
   .alias('se')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
   .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
-  .action(({ logger, args }) =>
+  .option('-o, --out <outputfile>', 'Export contacts in a text file instead of the terminal', { validator: Program.STRING })
+  .action(({ logger, args, options }) =>
   {
+
+    let displayToTerminal = false;
+    if (options.out && options.out !== true)
+    {
+      logger.info(`Display set to ${options.out}`);
+    }
+    else
+    {
+      logger.info('Displaying to terminal');
+      displayToTerminal = true;
+    }
+
+
     let colmail = extractMail(args.files);
     colmail = colmail.SearchByEmailAuthor(args.mail);
     const mail = colmail.getlisteMail[0];
-    logger.info(`Collaborator ${args.mail} found`);
+    
 
-    console.log(mail.authorToContact().toVcard());
-    logger.info(`Listing mail of ${args.mail}'s mailbox`);
+    if (displayToTerminal)
+    {
+      logger.info(`Collaborator ${args.mail} found`);
 
-    console.log(colmail.toHumanReadableString);
+      console.log(mail.authorToContact().toVcard());
+      logger.info(`Listing mail of ${args.mail}'s mailbox`);
+  
+      console.log(colmail.toHumanReadableString);    }
+    else
+    {
+      const content = mail.authorToContact().toVcard() + colmail.toHumanReadableString;
+      fs.writeFile(options.out, content, (err) =>
+      {
+        if (err)
+        {
+          logger.error(err);
+        }
+        else
+        {
+          logger.info(`Contact exported to ${options.out} file`);
+        }
+      });
+    }
   });
 
 program.run();

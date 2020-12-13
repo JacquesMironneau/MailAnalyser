@@ -1,9 +1,7 @@
-/* eslint-disable */
 /**
     * vega lite module, export to png or svg.
     * @author Jacques Mironneau
 */
-const colors = require('colors');
 const vega = require('vega');
 const vl = require('vega-lite');
 const fs = require('fs');
@@ -55,7 +53,11 @@ const render = (spec, format) =>
       })
   }
 };
-// Work in progress
+/**
+ * 
+ * @param {Interaction[]} interactionList list of interaction between every contact of the given collaborator
+ * @param {String} format Format of the file that will be exported (svg or png)
+ */
 const visualInteraction = (interactionList, format) => 
 {
   if (interactionList.every((inter) => inter.nbEchange === 0))
@@ -63,7 +65,6 @@ const visualInteraction = (interactionList, format) =>
     console.log('[x]'.red + 'No interactions among the contact of the given collaborator');
     return
   }
-  //console.log(interactionList);
   const spec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "data": { "values": interactionList},
@@ -85,7 +86,7 @@ const visualInteraction = (interactionList, format) =>
       },
       "y": {
         "field": "contact2.mail",
-        "title": "Inerlocuteur"},
+        "title": "Interlocuteur"},
       
       "size": {
         "field": "nbEchange",
@@ -100,7 +101,11 @@ const visualInteraction = (interactionList, format) =>
   render(spec, format);
 
 };
-
+/**
+ * Create the vegalite spec
+ * @param {Interaction[]} data  interaction list, contact1 is the collaborator, contact2 is the other contact
+ * @param {String} format Format of the file that will be exported (svg or png)
+ */
 const top10Interloc = (data, format) =>
 {
    const spec = {
@@ -123,6 +128,11 @@ const top10Interloc = (data, format) =>
   render(spec,format);
 }
 
+/**
+ * 
+ * @param {NbUseTerm[]} data Array of object: NbUseTerm ( a term and the number of its occurrence)
+ * @param {String} format Format of the file that will be exported (svg or png)
+ */
 const top10term = (data, format) =>
 {
   const spec = {
