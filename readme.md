@@ -30,11 +30,11 @@ Chaque commande possède un alias: count-mail est équivalent à cm par exemple.
 Alias: ```node cli.js gc <files> [OPTIONS...]```  
  
 Arguments :   
-**\<files>** : List of data file (emails)  
+**<files>** : List of data file (emails)  
 
 Options :  
 - **-c, --collaborators [emaillist]** : emails des collaborateurs séparés par une virgule  
-- **-o, --out \<outputfile>** : export des contacts dans un fichier texte au lieu du terminal.  
+- **-o, --out <outputfile>** : export des contacts dans un fichier texte au lieu du terminal.  
 Exemple :  
 ```node cli.js gc <files> -c toto@utt.fr```  
 ```node cli.js gc <files> --collaborators toto@utt.fr```  
@@ -48,9 +48,9 @@ Exemple :
 Alias: ```node cli.js cm <files> <beginning-date> <ending-date>```    
 
 Arguments :   
-- **\<files>** : Liste des fichiers (emails)  
-- **\<beginning-date>** : date au format mm/dd/yyyy  
-- **\<ending-date>** : date au format mm/dd/yyyy
+- **<files>** : Liste des fichiers (emails)  
+- **<beginning-date>** : date au format mm/dd/yyyy  
+- **<ending-date>** : date au format mm/dd/yyyy
 
 Options :  
 - **--mail-senders** : permet de spécifier la liste des emails des auteurs des mails comptés
@@ -63,9 +63,9 @@ Exemple:
 Alias: ```node cli.js bd <files> <beginning-date> <ending-date>```
 
 Arguments :   
-- **\<files>** : Liste des fichiers (emails)
-- **\<beginning-date>** : date au format mm/dd/yyyy
-- **\<ending-date>** : date au format mm/dd/yyyy  
+- **<files>** : Liste des fichiers (emails)
+- **<beginning-date>** : date au format mm/dd/yyyy
+- **<ending-date>** : date au format mm/dd/yyyy  
 
 Options : 
 - **--mail-senders** : permet de spécifier l’email d’un auteur  
@@ -77,8 +77,8 @@ Exemple:
 Alias: ```node cli.js tc <files> <mail> [OPTIONS...]```  
 
 Arguments :  
-**\<files>** : Liste des fichiers (emails)  
-**\<mail>** : mail d'un collaborateur  
+**<files>** : Liste des fichiers (emails)  
+**<mail>** : mail d'un collaborateur  
 
 Options :  
 **-f,--format \<format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option: "png"  
@@ -95,8 +95,8 @@ Alias: ```node cli.js tw  <files> <mail> [OPTIONS...]```
 
 
 Arguments :  
-**\<files>** : Liste des fichiers (emails)  
-**\<mail>** : mail d'un collaborateur  
+**<files>** : Liste des fichiers (emails)  
+**<mail>** : mail d'un collaborateur  
 
 Options :  
 **-f,--format \<format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option: "png"  
@@ -127,8 +127,8 @@ Options :
 Alias: ```node cli.js se <files> <mail>```  
 
 Arguments :  
-**\<files>** : Liste des fichiers (emails)  
-**\<mail>** : mail d'un collaborateur  
+**<files>** : Liste des fichiers (emails)  
+**<mail>** : mail d'un collaborateur  
 Options :  
 - **-o, --out \<outputfile>** : export des contacts dans un fichier texte au lieu du terminal.  
 Exemple:  
