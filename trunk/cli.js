@@ -223,7 +223,7 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
  Titre : Lister les 10 interlocuteurs les plus fréquents pour un collaborateur donné
 
  */
-  .command('top10-collaborator', 'List the 10 most frequent contacts of a given collaborator')
+  .command('top10-collaborators', 'List the 10 most frequent contacts of a given collaborator')
   .alias('tc')
   .argument('<files>', 'List of data file (emails file)', { validator: (value) => value.split(',') })
   .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
@@ -233,7 +233,7 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent contacts for ${args.mail}`);
     const frequentContacts = colmail.bestCollabByEmail(args.mail);
-    top10Interloc(frequentContacts, options.format);
+    top10Interloc(frequentContacts, options.format, 'top10-collaborators_'+args.mail);
   })
 
 /*
@@ -250,7 +250,7 @@ Spec 1.5
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
     const frequentTerms = colmail.MostUsedTerm(args.mail);
-    top10term(frequentTerms, options.format);
+    top10term(frequentTerms, options.format, 'top10-words_'+args.mail);
   })
 
 /*
@@ -266,7 +266,7 @@ Spec 1.6
   {
     const colmail = extractMail(args.files);
     const interactionList = colmail.interactionBetweenCollabForACollab(args.email);
-    visualInteraction(interactionList, options.format);
+    visualInteraction(interactionList, options.format, 'exchange-between-collaborators_' + args.email);
   })
 
 /*
