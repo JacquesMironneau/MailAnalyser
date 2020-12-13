@@ -1,7 +1,7 @@
 # Projet GL02 A20 
 **Nom d'équipe**: Team4Software  
 **Auteurs**: Manon Caroy, Augustin Borne, Jacques Mironneau  
-**Licences**: CC BY-SA-N
+**Licences**: CC BY-SA-NC
 
 ## I) Aide et installation
 
