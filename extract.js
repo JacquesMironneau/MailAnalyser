@@ -49,7 +49,7 @@ var createMail = function(file) {
     fileToString = fs.readFileSync(file).toString();
 
     //we verify if data in the file is a mail
-    if (!fileToString.includes('Message-ID: ') || !fileToString.includes('Date: ') || !fileToString.includes('From: ') || !fileToString.includes('To: ') || !fileToString.includes('Subject: ') || !fileToString.includes('Mime-Version: ') || !fileToString.includes('Content-Type: ') || !fileToString.includes('Content-Transfer-Encoding: ') || !fileToString.includes('X-From: ') || !fileToString.includes('X-To: ') || !fileToString.includes('X-cc: ') || !fileToString.includes('X-bcc: ') || !fileToString.includes('X-Folder: ') || !fileToString.includes('X-Origin: ') || !fileToString.includes('X-FileName: ')) {
+    if (!fileToString.includes('Message-ID: ') || !fileToString.includes('\nDate: ') || !fileToString.includes('\nFrom: ') || !fileToString.includes('\nTo: ') || !fileToString.includes('\nSubject: ') || !fileToString.includes('\nMime-Version: ') || !fileToString.includes('Content-Type: ') || !fileToString.includes('Content-Transfer-Encoding: ') || !fileToString.includes('X-From: ') || !fileToString.includes('X-To: ') || !fileToString.includes('X-cc: ') || !fileToString.includes('X-bcc: ') || !fileToString.includes('X-Folder: ') || !fileToString.includes('X-Origin: ') || !fileToString.includes('X-FileName: ')) {
         return null;
     }  
 
@@ -66,7 +66,7 @@ var createMail = function(file) {
 
 // createTab : create a tab with data which are interesting
 var createTab = function(file) {
-    var separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\r\n)/;
+    var separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\n)/;
     file = file.split(separator);
     file = file.filter((val, idx) => !val.match(separator));
 
@@ -82,7 +82,9 @@ var createTab = function(file) {
         if (file[index].includes('Subject: ')) {
             if (file[index+1].includes('Cc: ')) {
                 file.splice(index+1, 1);
+                
             }
+            break;
         }
     }
 
@@ -334,7 +336,5 @@ inputIsFile = function(path) {
 //var file = './BD/j-arnold/mail.txt/1159.txt';
 //extractMail([file]);
 
-//var file = './BD/campbell/5.txt';
-//console.log(extractMail([file]).toString);
 
 module.exports = { extractMail };

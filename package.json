@@ -1,10 +1,11 @@
 {
   "name": "mailparser",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A mail parser project for GL02",
   "main": "cli.js",
   "dependencies": {
     "@caporal/core": "^2.0.2",
+    "canvas": "^2.6.1",
     "vega": "^5.17.0",
     "vega-lite": "^4.17.0"
   },

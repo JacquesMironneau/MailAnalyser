@@ -58,30 +58,43 @@ const render = (spec, format) =>
 // Work in progress
 const visualInteraction = (interactionList, format) => 
 {
-
-  const people = [];
-  interactionList.forEach((inter) => {
-    if (!people.includes(inter.getContact1.getMail))
-      people.push(inter.getContact1.getMail)
-
-    if (!people.includes(inter.getContact2.getMail))
-      people.push(inter.getContact2.getMail)
-
-  });
-  console.log(people)
-
+  if (interactionList.every((inter) => inter.nbEchange === 0))
+  {
+    console.log('[x]'.red + 'No interactions among the contact of the given collaborator');
+    return
+  }
+  console.log(interactionList);
   const spec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
-    data: { url: 'data.json' },
-    mark: {
-      type: 'circle',
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": { "values": interactionList},
+    "transform": [
+      {"filter": "datum.nbEchange > 0"}
+    ],
+    "mark": {
+      "type": "circle",
+      "opacity": 0.8,
+      "stroke": "black",
+      "strokeWidth": 1
     },
-    encoding: {
-      // ne marche pas avec people[0] ou 1, les fields doivent provenir de data.json :c
-      x: { field: people[0], type: 'nominal', axis: { title: 'a' } },
-  
-      y: { field: people[1], type: 'nominal', axis: { title: 'b' } },
-    },
+    "title": "Nombre d'interlocuteurs",
+    "encoding": {
+      "x": {
+        "field": "contact1.mail",
+        "title": "Interlocuteurs",
+        "axis": {"grid": false}
+      },
+      "y": {
+        "field": "contact2.mail",
+        "title": "Inerlocuteur"},
+      
+      "size": {
+        "field": "nbEchange",
+        "type": "quantitative",
+        "legend": {"clipHeight": 60},
+        "scale": {"rangeMin": 1}
+
+      }
+    }
   };
 
   render(spec, format);
