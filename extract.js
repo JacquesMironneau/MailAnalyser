@@ -66,7 +66,7 @@ var createMail = function(file) {
 
 // createTab : create a tab with data which are interesting
 var createTab = function(file) {
-    var separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\n)/;
+    var separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\r\n|\n)/;
     file = file.split(separator);
     file = file.filter((val, idx) => !val.match(separator));
 

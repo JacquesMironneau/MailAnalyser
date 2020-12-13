@@ -9,7 +9,7 @@
  * use "node cli.js help" to get every commands
  * @author Jacques
  * */
-
+const colors = require('colors');
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
 //const { extractMail } = require('../branches/command/test.js');
@@ -49,7 +49,7 @@ program
     // Here the namelist is undefined or filled with names
 
     const colmail = extractMail(args.files);
-    console.log(colmail.toString);
+    //console.log(colmail.toString);
     const list = options.collaborators;
     let contactList = [];
 
@@ -150,7 +150,7 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
 
       const dateBegin = ` ${beginMonth}/${beginDay}/${args.beginingDate.getFullYear()}`;
       const dateEnd = ` ${endMonth}/${endDay}/${args.endingDate.getFullYear()}`;
-      console.log(`There are ${total} mail(s) that were sent between ${dateBegin} and ${dateEnd} (mm/dd/yyyy format)`);
+      console.log("There are "+ ((String)(total)).green +" mail(s) that were sent between"+ dateBegin.green+" and "+dateEnd.green+" (mm/dd/yyyy format)");
     }
   })
 
@@ -199,9 +199,15 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
     const daylist = [];
     colmail.getlisteMail.forEach((mail) =>
     {
-      if (!daylist.includes(mail.getDate))
+      console.log(mail.getDate);
+      const mailbeginMonth =  ((mail.getDate.getMonth() + 1) < 10) ? '0' + (mail.getDate.getMonth() +1) : (mail.getDate.getMonth() + 1);
+      const mailbeginDay = (mail.getDate.getDate() < 10) ? '0' + mail.getDate.getDate() : mail.getDate.getDate();   
+
+      const maildateBegin = ` ${mailbeginMonth}/${mailbeginDay}/${mail.getDate.getFullYear()}`;
+      
+      if (daylist.indexOf(maildateBegin)===-1)
       {
-        daylist.push(mail.getDate);
+        daylist.push(maildateBegin);
       }
     });
     const beginMonth =  ((args.beginingDate.getMonth() + 1) < 10) ? '0' + (args.beginingDate.getMonth() +1) : (args.beginingDate.getMonth() + 1);
@@ -214,9 +220,9 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
       const dateEnd = ` ${endMonth}/${endDay}/${args.endingDate.getFullYear()}`;
       
 
-    console.log(`There are ${daylist.length} "buzzy days" mail(s) that were sent between ${dateBegin} and ${dateEnd}`);
-    daylist.sort((a, b) => b - a)
-      .forEach((day) => console.log(`Day: ${day.getMonth()}/${day.getDate()}/${day.getFullYear()}`));
+    console.log("There are "+ ((String)(daylist.length)).green+ "buzzy days mail(s) that were sent between "+dateBegin.green+" and "+dateEnd.green);
+    daylist.sort((a, b) => new Date(b) - new Date(a))
+      .forEach((day) => console.log(`Day: ${day}`));
   })
 
 /*
@@ -250,9 +256,9 @@ Spec 1.5
   {
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
-    console.log(colmail.getlisteMail.length);
+    //console.log(colmail.getlisteMail.length);
     const frequentTerms = colmail.MostUsedTerm(args.mail);
-    console.log(frequentTerms);
+    //console.log(frequentTerms);
     top10term(frequentTerms, options.format);
   })
 
@@ -275,6 +281,7 @@ Option: svg or png
   {
     const colmail = extractMail(args.files);
     const interactionList = colmail.interactionBetweenCollabForACollab(args.email);
+
     console.log("Nombre d'interactions " + interactionList.length);
     console.log("Nombre de mails " + colmail.getlisteMail.length);
 

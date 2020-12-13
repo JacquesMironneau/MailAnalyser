@@ -63,7 +63,7 @@ const visualInteraction = (interactionList, format) =>
     console.log('[x]'.red + 'No interactions among the contact of the given collaborator');
     return
   }
-  console.log(interactionList);
+  //console.log(interactionList);
   const spec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "data": { "values": interactionList},
