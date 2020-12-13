@@ -15,7 +15,7 @@ const fs = require('fs');
  */
 const render = (spec, format, fileName) =>
 {
-  fileName = fileName + '.' + format
+  fileName = 'resultat/'+fileName + '.' + format
   // Compile vegalite spec to vega spec
   const vgSpec = vl.compile(spec).spec;
   const view = new vega.View(vega.parse(vgSpec))
