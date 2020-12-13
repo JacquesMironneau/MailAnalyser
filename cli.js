@@ -8,8 +8,8 @@
 const { colors} = require('colors')
 const { program, Program } = require('@caporal/core');
 const fs = require('fs');
-const { visualInteraction, top10Interloc, top10term } = require('./vega');
-const {extractMail} = require('./extract');
+const { visualInteraction, top10Interloc, top10term } = require('./vega/vega.js');
+const {extractMail} = require('./extract/extract.js');
 const { exit } = require('process');
 
 // check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)

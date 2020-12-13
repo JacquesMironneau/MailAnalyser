@@ -2,7 +2,7 @@
     * Mail class, represent an email.
     * @author Augustin Borne
 */
-const {Contact} = require('./contact');
+const {Contact} = require('../../contact/contact');
 
 class Mail{
 
@@ -106,6 +106,11 @@ class Mail{
     get getSubject(){
         return this.subject;
     }
+    /**
+     * @name isEqual
+     * @param {String} mail
+     * verifie si un mail est egal a un autre
+     */
 
     isEqual(mail){
         if(mail instanceof Mail){
@@ -117,6 +122,11 @@ class Mail{
         }
     }
 
+    /**
+     * @name isOlderThan
+     * @param {String} mail
+     * verifie si un mail est plus ancien a un autre
+     */
     isOlderThan(mail){
        if(mail instanceof Mail){
             if(mail.date.getTime()>this.date.getTime()){
@@ -128,6 +138,12 @@ class Mail{
         throw Error('Invalid data type, a Mail element is required')
        }
     }
+    /**
+     * @name isBetweenDate
+     * @param {Date} date1 
+     * @param {Date} date2
+     * verifie si un mail est compris entre 2 dates
+     */
     isBetweenDate(date1,date2){
         if(this.date.getTime()>=date1.getTime() && this.date.getTime()<=date2.getTime()){
             return true;
@@ -135,7 +151,10 @@ class Mail{
             false;
         }
      }
-
+    /**
+     * @name isWeekend
+     * verifie si un mail est ecrit pendant un weekend
+     */
     isWeekend(){
         if(this.date.getDay===0 || this.date.getDay===6){
             return true;
@@ -143,7 +162,10 @@ class Mail{
             return false;
         }
     }
-
+    /**
+     * @name mailInBusyDays
+     * Verifie si un mail est ecrit pendant un busy day
+     */
     mailInBusyDays(){
         if(this.date.getHours()<8 || this.date.getHours()>22 || this.isWeekend()){
             return true;
@@ -151,7 +173,11 @@ class Mail{
             return false;
         }
     }
-
+    /**
+     * @name mailContainsTxtinMessage
+     * @param {String} txt 
+     * verifie si un mail contient un message(txt) dans la section message
+     */
     mailContainsTxtinMessage(txt){
         let pos = this.message.indexOf(txt);
 
@@ -161,7 +187,11 @@ class Mail{
             return false;
         }
     }
-
+    /**
+     * @name mailContainsTxtinObject
+     * @param {String} txt 
+     * verifie si un mail contient un message en objet
+     */
     mailContainsTxtinObject(txt){
         let pos = this.object.indexOf(txt);
         if(pos > 0){
@@ -170,7 +200,10 @@ class Mail{
             return false;
         }
     }
-
+    /**
+     * @name authorToContact
+     * revoie un contact correpondant a l'auteur
+     */
     authorToContact(){
         //console.log(this.author);
         if(this.author!==""){
@@ -188,7 +221,10 @@ class Mail{
         });
         return result;
     }
-
+    /**
+     * @name recipientToContact
+     * renvoie des contacts correpondants aux destinataires
+     */
     recipientToContact(){
         let result = new Array();
         let contactTest;
@@ -207,7 +243,6 @@ class Mail{
     }
 
     recipientEmailTocontact(email){
-        let result;
         let index = this.mailRecipient.indexOf(email);
         if(index !=-1){
             let lignes = this.recipient[index].split(/\s/);

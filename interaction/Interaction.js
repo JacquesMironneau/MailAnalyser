@@ -3,7 +3,7 @@
     * @author Augustin Borne
 */
 
-const { Contact } = require('./contact');
+const { Contact } = require('../contact/contact');
 
 class Interaction{
     constructor(contact1,contact2,nbEchange){
