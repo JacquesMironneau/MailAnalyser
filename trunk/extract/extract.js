@@ -1,5 +1,5 @@
-const { Mail } = require('./Mail');
-const { ColMail } = require('./ColMail');
+const { Mail } = require('../collection_mail/mail/Mail');
+const { ColMail } = require('../collection_mail/ColMail');
 
 const fs = require('fs');
 

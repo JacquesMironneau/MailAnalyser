@@ -2,10 +2,10 @@
     * Colection Mail class, represent an email collection.
     * @author Augustin Borne
 */
-const {Mail} = require('./Mail.js');
-const { Contact } = require('./contact.js');
-const { Interaction } = require('./Interaction.js');
-const { NbUseTerm } = require('./NbUseTerm.js');
+const {Mail} = require('./mail/Mail.js');
+const { Contact } = require('../contact/contact.js');
+const { Interaction } = require('../interaction/Interaction.js');
+const { NbUseTerm } = require('../term_nb_utilisation/NbUseTerm.js');
 
 class ColMail{ 
     constructor(){
@@ -13,10 +13,6 @@ class ColMail{
     }
 
     setListeMail(mailEntre){
-        /*console.log("auteur : " + mailEntre.getAuthor);
-        console.log("mail auteur : " +mailEntre.getEmailAuthor);
-        console.log("mail detinataires : " +mailEntre.getEmailReceiver);
-        console.log("destinataires : " +mailEntre.getRecipient);*/
 
         if(mailEntre instanceof Mail){
             if(this.verifInstanceOfMail(mailEntre)){
@@ -207,7 +203,14 @@ class ColMail{
     interactionBetweenCollabForACollab(email){
         let tab = [email];
         let listeColab = this.collabByEmail(tab);
-        console.log(listeColab);
+        listeColab.forEach(element => {
+            if(element.getMail===email){
+                //console.log(element);
+                listeColab.splice(listeColab.indexOf(element),1);
+
+            }
+        });
+        //console.log(listeColab);
         let result = new Array();
         
         for(let i=0;i<listeColab.length;i++){
@@ -223,7 +226,7 @@ class ColMail{
     
 
     /**
-     * 
+     * @name collabByEmail
      * @param {*} listAuthor
      * generer la liste des contacts de un ou plusieurs email et si il y a un tableau vide en argument, retourner tous les contacts de la collections de mail 
      * @author Augustin Borne
@@ -294,9 +297,9 @@ class ColMail{
                  let isInclude = false;
                  
                  result.forEach(element3 => {
-                    //console.log("element 3 :"+element3.getTerm+" ,element2 :"+element2);
+
                      if(element3.getTerm===element2){
-                        //console.log("test");
+
                          isInclude=true;
                          element3.setNbUse(element3.getNbUse+1);
                      }
