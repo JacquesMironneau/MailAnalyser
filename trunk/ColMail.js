@@ -28,16 +28,27 @@ class ColMail{
     verifInstanceOfMail(mailEntre){
         let result = true;
         if(mailEntre instanceof Mail){
+            if (mailEntre.getSubject === undefined)
+            {
+                console.log("subject undefined");
+                result=false;
+            }
             if(mailEntre.getEmailReceiver.length!==mailEntre.getRecipient.length){
+                console.log("longeur tab email != long tab ");
                 result=false;
             }
             if(mailEntre.author=== undefined){
+                console.log("pas auteur ");
+
                 result=false;
             }
             if(mailEntre.getEmailAuthor === undefined || mailEntre.getEmailAuthor === "" ){
                 result=false;
+                console.log("pas email auteur ou email auteur vide ");
+
             }
             if(!(mailEntre.getDate instanceof Date)){
+                console.log("pas de date");
                 result=false;
             }
             return result;
@@ -262,6 +273,7 @@ class ColMail{
      */
 
     MostUsedTerm(email){
+
         let colTemp = this.SearchByEmail(email);
         let result = new Array();
         colTemp.getlisteMail.forEach(element => {

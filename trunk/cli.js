@@ -31,7 +31,7 @@ program
   .command('get-contacts', 'List contacts of given collaborators')
   .alias('gc')
   .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
-  .option('-c, --collaborators [namelist]', 'Collaborator name separated by a comma', { validator: program.ARRAY })
+  .option('-c, --collaborators [emailList]', 'Collaborator name separated by a comma', { validator: program.ARRAY })
   .option('-o, --out <outputfile>', 'Export contacts in a text file instead of the terminal', { validator: Program.STRING })
   .action(({ logger, args, options }) =>
   {
@@ -55,7 +55,7 @@ program
 
     if (list === undefined)
     {
-      logger.warn('Since no arguments is provided printing every contacts of every collaborator');
+      logger.warn('Since no arguments is provided printing every collaborator');
       contactList = colmail.collabByEmail([]);
     }
     else
@@ -181,15 +181,15 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
       exit(1);
     },
   })
-  .option('--mail-senders [mailSenders]', 'The email author', { validator: program.STRING })
+  .option('--mail-sender [mailSenders]', 'The email author', { validator: program.STRING })
   .action(({ logger, args, options }) =>
   {
     // Get mail from files
     let colmail = extractMail(args.files);
     // Get only mail in the period
-    if (options.mailSenders)
+    if (options.mailSender)
     {
-      colmail = colmail.MailInbusyDays(options.mailSenders, args.beginingDate, args.endingDate);
+      colmail = colmail.MailInbusyDays(options.mailSender, args.beginingDate, args.endingDate);
     }
     else
     {
@@ -250,7 +250,9 @@ Spec 1.5
   {
     const colmail = extractMail(args.files);
     logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
+    console.log(colmail.getlisteMail.length);
     const frequentTerms = colmail.MostUsedTerm(args.mail);
+    console.log(frequentTerms);
     top10term(frequentTerms, options.format);
   })
 
@@ -272,9 +274,10 @@ Option: svg or png
   .action(({ args, options }) =>
   {
     const colmail = extractMail(args.files);
-    console.log(colmail);
     const interactionList = colmail.interactionBetweenCollabForACollab(args.email);
-    console.log(interactionList);
+    console.log("Nombre d'interactions " + interactionList.length);
+    console.log("Nombre de mails " + colmail.getlisteMail.length);
+
     visualInteraction(interactionList, options.format);
   })
 
