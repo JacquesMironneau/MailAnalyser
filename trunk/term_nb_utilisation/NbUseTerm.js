@@ -1,7 +1,7 @@
 /**
-    * NbUseTerm class, represent a relation between two contact.
-    * @author Augustin Borne
-*/
+ * NbUseTerm class, represent a relation between two contact.
+ * @author Augustin Borne
+ */
 
 class NbUseTerm{
     constructor(term,nbUse){
@@ -12,7 +12,6 @@ class NbUseTerm{
     get getTerm(){
         return this.term;
     }
-
     get getNbUse(){
         return this.nbUse;
     }
@@ -20,7 +19,6 @@ class NbUseTerm{
     setTerm(term){
         this.term=term;
     }
-
     setNbUse(nb){
         this.nbUse=nb;
     }
@@ -28,10 +26,9 @@ class NbUseTerm{
     addNbUse(){
         this.term++;
     }
-
     minNbUse(){
         this.term--;
     }
 }
 
-module.exports = { NbUseTerm };
+module.exports = {NbUseTerm};
