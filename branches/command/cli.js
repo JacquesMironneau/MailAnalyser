@@ -122,12 +122,12 @@ Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mail
     // If emails senders are provided, remove the mail from people not in the list
     if (options.mailSenders)
     {
-      total = options.mailSenders.reduce((acc, mail) => acc + mails.SearchByEmailAuthor(mail)
-        .getlisteMail.length, 0);
+      total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail)
+        .getListMail.length, 0);
     }
     else
     {
-      total = mails.getlisteMail.length;
+      total = mails.getListMail.length;
     }
 
     // Display error message if no mail have been written (in specs)
@@ -175,12 +175,12 @@ Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
     // Get only mail in the period
     if (options.mailSenders)
     {
-      colmail = colmail.MailInbusyDays(options.mailSenders, args.beginingDate, args.endingDate);
+      colmail = colmail.MailInBusyDays(options.mailSenders, args.beginingDate, args.endingDate);
     }
     else
     {
       logger.warn('No author has been specified');
-      colmail = colmail.MailInbusyDays(null, args.beginingDate, args.endingDate);
+      colmail = colmail.MailInBusyDays(null, args.beginingDate, args.endingDate);
     }
     const daylist = [];
     colmail.getlisteMail.forEach((mail) =>

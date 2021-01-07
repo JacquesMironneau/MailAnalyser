@@ -6,12 +6,12 @@
 const {Contact} = require('../contact/contact');
 
 class Interaction{
-    constructor(contact1,contact2,nbEchange){
+    constructor(contact1, contact2, nbExchanges){
         if(contact1 instanceof Contact) this.contact1 = contact1;
         else throw Error('Invalid data type, a Contact instance is required');
-        if(contact2 instanceof Contact) this.contact2=contact2;
+        if(contact2 instanceof Contact) this.contact2 = contact2;
         else throw Error('Invalid data type, a Contact instance is required');
-        this.nbEchange=nbEchange;
+        this.nbEchange = nbExchanges;
     }
 
     get getContact1(){
@@ -20,7 +20,7 @@ class Interaction{
     get getContact2(){
         return this.contact2;
     }
-    get getNbEchange(){
+    get getNbExchanges(){
         return this.nbEchange;
     }
 
@@ -32,14 +32,14 @@ class Interaction{
         if(contact instanceof Contact) this.contact2=contact;
         else throw Error('Invalid data type, a Contact instance is required');
     }
-    setNbEchange(nb){
+    setNbExchanges(nb){
         this.nbEchange=nb;
     }
 
-    addNbEchange(){
+    addNbExchanges(){
         this.nbEchange++;
     }
-    minNbEchange(){
+    minNbExchanges(){
         this.nbEchange--;
     }
 }

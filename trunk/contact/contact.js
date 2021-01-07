@@ -11,12 +11,11 @@ class Contact{
 
   // Display the contact to a vcard format.
   toVcard(){
-    let vcardContact = 'BEGIN:VCARD\nVERSION:4.0\n';
-    vcardContact += `N:${this.lastname};${this.name};;;\n`;
-    vcardContact += `FN:${this.name} ${this.lastname}\n`;
-    vcardContact += `EMAIL:${this.mail}\n`;
-    vcardContact += 'END:VCARD\n\n';
-    return vcardContact;
+    return 'BEGIN:VCARD\nVERSION:4.0\n' +
+        `N:${this.lastname};${this.name};;;\n` +
+        `FN:${this.name} ${this.lastname}\n` +
+        `EMAIL:${this.mail}\n` +
+        'END:VCARD\n\n';
   }
 
   get getName(){
@@ -30,4 +29,4 @@ class Contact{
   }
 }
 
-module.exports = { Contact };
+module.exports = {Contact};

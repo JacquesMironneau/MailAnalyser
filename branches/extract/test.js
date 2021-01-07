@@ -21,7 +21,7 @@ col.setListeMail(m2);
 col.setListeMail(m3);
 col.setListeMail(m4);
 col.setListeMail(m5);
-//console.log(col.getlisteMail.length);
+//console.log(col.getListMail.length);
 //console.log(col.toString);
 
 //fonction intervalle de temps
@@ -29,11 +29,11 @@ col.setListeMail(m5);
 //console.log(colTemp.toString);
 
 //fonction nbInteractions
-//console.log(col.chercherNbinteraction("jojo@jojo.com","jamie@cps.fr"));
+//console.log(col.searchNbInteraction("jojo@jojo.com","jamie@cps.fr"));
 
 
 //let contactTab = col.colMailToContact([]);
-//console.log(m.mailContainsTxtinMessage("liebeeee"));
+//console.log(m.mailContainsTextInMessage("liebeeee"));
 /*
 let lignes = m.getRecipient.split(/\s/);
 console.log(lignes[0]+" "+lignes[1]+" "+m.getEmailReceiver);
@@ -55,8 +55,8 @@ contactTemp.forEach(element => {
     console.log("mail :"+element.getMail+", Prenom :"+element.getName+", Nom : "+element.getLastName+"\n");
 });*/
 
-//let colTemp = col.SearchByEmail("jojo@jojo.com");
-//let colTemp = col.SearchByAuthor("Jojo Marcel");
+//let colTemp = col.searchByEmail("jojo@jojo.com");
+//let colTemp = col.searchByAuthor("Jojo Marcel");
 //console.log(colTemp.toString);
 /*let mail1 = col.getMail("1");
 //console.log(mail1.toString);
@@ -70,10 +70,10 @@ for (const [key, value] of Object.entries(bestColab)) {
 //let temp = col.bestCollabByEmail("jojo@jojo.com");
 /*let temp = col.interactionBetweenCollabForACollab("jojo@jojo.com");
 temp.forEach(element => {
-    console.log("contact 1 :"+element.getContact1.getMail+" ,contact 2 : "+element.getContact2.getMail+", int :"+element.getNbEchange);
+    console.log("contact 1 :"+element.getContact1.getMail+" ,contact 2 : "+element.getContact2.getMail+", int :"+element.getNbExchanges);
 });
 
-let temp = col.MostUsedTerm("jojo@jojo.com");
+let temp = col.mostUsedTerm("jojo@jojo.com");
 
 temp.forEach(element => {
     console.log("term : "+element.getTerm+" ,nbUse : "+element.getNbUse);

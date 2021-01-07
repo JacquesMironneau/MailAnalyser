@@ -26,33 +26,31 @@ class Mail{
 
     get toString(){
         let res = "[";
-        res += "\n messageID = " + this.messageId;
-        res += "\n date = " + this.date;
-        res += "\n mailAuthor = " + this.mailAuthor;
-        res += "\n mailRecipient = ";
+        res += "\n messageID = " + this.messageId +
+            "\n date = " + this.date +
+            "\n mailAuthor = " + this.mailAuthor +
+            "\n mailRecipient = ";
         this.mailRecipient.forEach(element => res += element + ", ");
-        res += "\n subject = " + this.subject;
-        res += "\n version = " + this.version;
-        res += "\n contentType = " + this.contentType;
-        res += "\n encoding = " + this.encoding;
-        res += "\n author = " + this.author[0];
-        res += "\n recipient = ";
+        res += "\n subject = " + this.subject +
+            "\n version = " + this.version +
+            "\n contentType = " + this.contentType +
+            "\n encoding = " + this.encoding +
+            "\n author = " + this.author[0] +
+            "\n recipient = ";
         this.recipient.forEach(element => res += element + ", ");
-        res += "\n copy = " + this.copy;
-        res += "\n hcopy = " + this.hcopy;
-        res += "\n path = " + this.path;
-        res += "\n origin = " + this.origin;
-        res += "\n filename = " + this.fileName;
-        res += "\n message = " + this.message;
-        res += "\n]";
+        res += "\n copy = " + this.copy +
+            "\n hCopy = " + this.hCopy +
+            "\n path = " + this.path +
+            "\n origin = " + this.origin +
+            "\n filename = " + this.fileName +
+            "\n message = " + this.message + "\n]";
         return res;
     }
     get toHumanReadableFormat(){
-        let res = "FROM: " + this.mailAuthor + '\n';
-        res += "TO: " + this.mailRecipient + '\n';
-        res += "SUBJECT: " + this.subject + '\n';
-        res += "\nCONTENT: " + this.message + "\n";
-        return res;
+        return "FROM: " + this.mailAuthor + '\n' +
+            "TO: " + this.mailRecipient + '\n' +
+            "SUBJECT: " + this.subject + '\n' +
+            "\nCONTENT: " + this.message + "\n";
     }
 
     setSubject(subject){
@@ -96,7 +94,7 @@ class Mail{
     /**
      * @name isEqual
      * @param {String} mail
-     * verifie si un mail est egal a un autre
+     * vérifie si un mail est égal a un autre
      */
     isEqual(mail){
         if(mail instanceof Mail){
@@ -107,7 +105,7 @@ class Mail{
     /**
      * @name isOlderThan
      * @param {String} mail
-     * verifie si un mail est plus ancien a un autre
+     * vérifie si un mail est plus ancien a un autre
      */
     isOlderThan(mail){
         if(mail instanceof Mail) return mail.date.getTime() > this.date.getTime();
@@ -118,7 +116,7 @@ class Mail{
      * @name isBetweenDate
      * @param {Date} date1
      * @param {Date} date2
-     * verifie si un mail est compris entre 2 dates
+     * vérifie si un mail est compris entre 2 dates
      */
     isBetweenDate(date1,date2){
         return this.date.getTime() >= date1.getTime() && this.date.getTime() <= date2.getTime();
@@ -126,7 +124,7 @@ class Mail{
 
     /**
      * @name isWeekend
-     * verifie si un mail est ecrit pendant un weekend
+     * vérifie si un mail est écrit pendant un weekend
      */
     isWeekend(){
         return this.date.getDay === 0 || this.date.getDay === 6;
@@ -134,35 +132,33 @@ class Mail{
 
     /**
      * @name mailInBusyDays
-     * Verifie si un mail est ecrit pendant un busy day
+     * vérifie si un mail est écrit pendant un busy day
      */
     mailInBusyDays(){
         return !!(this.date.getHours() < 8 || this.date.getHours() > 22 || this.isWeekend());
     }
 
     /**
-     * @name mailContainsTxtinMessage
+     * @name mailContainsTextInMessage
      * @param {String} txt
-     * verifie si un mail contient un message(txt) dans la section message
+     * vérifie si un mail contient un message(txt) dans la section message
      */
-    mailContainsTxtinMessage(txt){
-        let pos = this.message.indexOf(txt);
-        return pos > 0;
+    mailContainsTextInMessage(txt){
+        return this.message.indexOf(txt) > 0;
     }
 
     /**
-     * @name mailContainsTxtinObject
+     * @name mailContainsTextInObject
      * @param {String} txt
-     * verifie si un mail contient un message en objet
+     * vérifie si un mail contient un message en objet
      */
-    mailContainsTxtinObject(txt){
-        let pos = this.object.indexOf(txt);
-        return pos > 0;
+    mailContainsTextInObject(txt){
+        return this.object.indexOf(txt) > 0;
     }
 
     /**
      * @name authorToContact
-     * revoie un contact correpondant a l'auteur
+     * revoie un contact correspondant à l'auteur
      */
     authorToContact(){
         //console.log(this.author);
@@ -180,22 +176,21 @@ class Mail{
 
     /**
      * @name recipientToContact
-     * renvoie des contacts correpondants aux destinataires
+     * renvoie des contacts correspondants aux destinataires
      */
     recipientToContact(){
-        let result = [];
-        let contactTest;
-        for(let i=0;i<this.sizeRecipientMail;i++){
-            if(this.recipient[i]!==""){
+        let result = [], contactTest;
+        for(let i=0; i < this.sizeRecipientMail; i++){
+            if(this.recipient[i] !== ""){
                 let lignes = this.recipient[i].split(/\s/);
-                contactTest = new Contact(lignes[0],lignes[1],this.mailRecipient[i]);
-            } else contactTest = new Contact("anonyme","anonyme",this.mailRecipient[i]);
+                contactTest = new Contact(lignes[0], lignes[1], this.mailRecipient[i]);
+            } else contactTest = new Contact("anonyme", "anonyme", this.mailRecipient[i]);
             result.push(contactTest);
         }
         return result;
     }
 
-    recipientEmailTocontact(email){
+    recipientEmailToContact(email){
         let index = this.mailRecipient.indexOf(email);
         if(index !== -1){
             let lignes = this.recipient[index].split(/\s/);
@@ -207,14 +202,8 @@ class Mail{
         return this.mailRecipient.indexOf(email) !== -1;
     }
 
-    personnIncludeInRecipient(personn){
-        return this.recipient.indexOf(personn) !== -1;
-    }
-
-    dateFromMail(){
-        const mailbeginMonth = ((this.getDate.getMonth() + 1) < 10) ? '0' + (this.getDate.getMonth() +1) : (this.getDate.getMonth() + 1);
-        const mailbeginDay = (this.getDate.getDate() < 10) ? '0' + this.getDate.getDate() : this.getDate.getDate();
-        return ` ${mailbeginMonth}/${mailbeginDay}/${this.getDate.getFullYear()}`;
+    personIncludeInRecipient(person){
+        return this.recipient.indexOf(person) !== -1;
     }
 }
 
