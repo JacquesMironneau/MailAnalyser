@@ -5,8 +5,8 @@
 
 class NbUseTerm{
     constructor(term,nbUse){
-        this.term=term;
-        this.nbUse=nbUse;
+        this.term = term;
+        this.nbUse = nbUse;
     }
 
     get getTerm(){
@@ -17,10 +17,10 @@ class NbUseTerm{
     }
 
     setTerm(term){
-        this.term=term;
+        this.term = term;
     }
     setNbUse(nb){
-        this.nbUse=nb;
+        this.nbUse = nb;
     }
 
     addNbUse(){

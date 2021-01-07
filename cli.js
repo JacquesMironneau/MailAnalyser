@@ -34,7 +34,7 @@ program
             logger.info('Displaying to terminal');
             displayToTerminal = true;
         }
-        // Here the namelist is undefined or filled with names
+        // Here the name list is undefined or filled with names
         const mailCollection = extractMail(args.files);
         const list = options.collaborators;
         let contactList;
@@ -47,7 +47,7 @@ program
             contactList = mailCollection.collabByEmail(list);
         }
         let displayList = '';
-        contactList.forEach((contact) => displayList += contact.toVcard());
+        contactList.forEach(contact => displayList += contact.toVcard());
 
         // print to terminal or to a specified file
         if (displayToTerminal) console.log(displayList);
@@ -60,9 +60,9 @@ program
     })
 
     /*
-    * Spec 1.2
-    * Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mails (optionnel)
-    */
+     * Spec 1.2
+     * Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mails (optionnel)
+     */
     .command('count-mail', 'Count the number of mail on a given period')
     .alias('cm')
     .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
@@ -90,23 +90,23 @@ program
         const mails = mailCollection.mailInInterval(args.beginningDate, args.endingDate);
         let total;
         // If emails senders are provided, remove the mail from people not in the list
-        if (options.mailSenders) total = options.mailSenders.reduce((acc, mail) => acc + mails.SearchByEmailAuthor(mail).getlisteMail.length, 0);
-        else total = mails.getlisteMail.length;
+        if (options.mailSenders) total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
+        else total = mails.getListMail.length;
 
         // Display error message if no mail have been written (in specs)
         if (total === 0) logger.info('No mail has been written during the period');
         // Display the number of mail
         else{
-            const dateBegin = args.beginningDate.dateFromMail();
-            const dateEnd = args.endingDate.dateFromMail();
+            const dateBegin = dateFromMail(args.beginningDate);
+            const dateEnd = dateFromMail(args.endingDate);
             console.log("There are " + ((String)(total)).green + " mail(s) that were sent between" + dateBegin.green + " and " + dateEnd.green + " (mm/dd/yyyy format)");
         }
     })
 
     /*
-    * Spec 1.3
-    * Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
-    */
+     * Spec 1.3
+     * Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
+     */
     .command('buzzy-days', 'List the "buzzy-days" were mails are written between 10pm and 8am')
     .alias('bd')
     .argument('<files>', 'List of data file (emails)', { validator: (value) => value.split(',') })
@@ -131,23 +131,23 @@ program
         // Get mail from files
         let mailCollection = extractMail(args.files);
         // Get only mail in the period
-        if (options.mailSender) mailCollection = mailCollection.MailInbusyDays(options.mailSender, args.beginningDate, args.endingDate);
+        if (options.mailSender) mailCollection = mailCollection.MailInBusyDays(options.mailSender, args.beginningDate, args.endingDate);
         else{
             logger.warn('No author has been specified');
-            mailCollection = mailCollection.MailInbusyDays(null, args.beginningDate, args.endingDate);
+            mailCollection = mailCollection.MailInBusyDays(null, args.beginningDate, args.endingDate);
         }
-        const daylist = [];
-        mailCollection.getlisteMail.forEach(mail => {
-            console.log(mail.getDate);
-            const mailDateBegin = mail.dateFromMail();
-            if (daylist.indexOf(mailDateBegin)===-1) daylist.push(mailDateBegin);
+        const dayList = [];
+        mailCollection.getListMail.forEach(mail => {
+            //console.log(mail.getDate);
+            const mailDateBegin = dateFromMail(mail.getDate);
+            if (dayList.indexOf(mailDateBegin) === -1) dayList.push(mailDateBegin);
         });
 
-        const dateBegin = args.beginningDate.dateFromMail();
-        const dateEnd = args.endingDate.dateFromMail();
+        const dateBegin = dateFromMail(args.beginningDate);
+        const dateEnd = dateFromMail(args.endingDate);
 
-        console.log("There are " + ((String)(daylist.length)).green + "buzzy days mail(s) that were sent between " + dateBegin.green + " and " + dateEnd.green);
-        daylist.sort((a, b) => new Date(b) - new Date(a)).forEach(day => console.log(`Day: ${day}`));
+        console.log("There are " + ((String)(dayList.length)).green + " buzzy days mail(s) that were sent between " + dateBegin.green + " and " + dateEnd.green);
+        dayList.sort((a, b) => new Date(b) - new Date(a)).forEach(day => console.log(`Day: ${day}`));
     })
 
     /*
@@ -166,8 +166,8 @@ program
     })
 
     /*
-    Spec 1.5
-    */
+     * Spec 1.5
+     */
     .command('top10-words', 'List the 10 most frequent words in a given collaborator mail box')
     .alias('tw')
     .argument('<files>', 'List of data file (emails file)', { validator: value => value.split(',') })
@@ -175,13 +175,13 @@ program
     .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
-        const frequentTerms = extractMail(args.files).MostUsedTerm(args.mail);
+        const frequentTerms = extractMail(args.files).mostUsedTerm(args.mail);
         top10term(frequentTerms, options.format, 'top10-words_'+args.mail);
     })
 
     /*
-    Spec 1.6
-    */
+     * Spec 1.6
+     */
     .command('exchange-between-collaborators', 'Design a scatter graph with the number of exchange between collaborators')
     .alias('ebc')
     .argument('<files>', 'List of data file (emails)', { validator: value => value.split(',') })
@@ -193,8 +193,8 @@ program
     })
 
     /*
-    * Spec 1.7
-    */
+     * Spec 1.7
+     */
     .command('search-mail', 'Search mails of a given collaborator')
     .alias('se')
     .argument('<files>', 'List of data file (emails)', { validator: value => value.split(',') })
@@ -208,8 +208,8 @@ program
             displayToTerminal = true;
         }
 
-        let mailCollection = extractMail(args.files).SearchByEmailAuthor(args.mail);
-        const mail = mailCollection.getlisteMail[0];
+        let mailCollection = extractMail(args.files).searchByEmailAuthor(args.mail);
+        const mail = mailCollection.getListMail[0];
 
         if (displayToTerminal){
             logger.info(`Collaborator ${args.mail} found`);
@@ -228,3 +228,9 @@ program
     });
 
 program.run();
+
+dateFromMail = object => {
+    const month = ((object.getMonth() + 1) < 10) ? '0' + (object.getMonth() +1) : (object.getMonth() + 1);
+    const day = (object.getDate() < 10) ? '0' + object.getDate() : object.getDate();
+    return `${month}/${day}/${object.getFullYear()}`;
+}

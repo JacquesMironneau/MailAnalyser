@@ -5,10 +5,9 @@ const fs = require('fs');
 
 //extractMail : create a list of mail with data of several files
 extractMail = path => {
-    let listOfPath = [];
-    let listeMail = new ColMail('listeMail');
+    let listOfPath = [], listeMail = new ColMail('listeMail');
     for (let indexPath = 0; indexPath < path.length; indexPath++) listOfPath = listOfPath.concat(getPathOfFiles(path[indexPath]));
-    for (let indexFiles = 0; indexFiles < listOfPath.length; indexFiles++) {
+    for (let indexFiles = 0; indexFiles < listOfPath.length; indexFiles++){
         let mail = createMail(listOfPath[indexFiles]);
         if (mail === null) console.log(`mail in the file ${listOfPath[indexFiles]} incorrect, we cannot extract it`);
         else listeMail.setListeMail(mail);
@@ -88,16 +87,16 @@ createTab = file => {
     if (file[8].includes('Bcc: ')) file.splice(8, 1);
     //we remove the element To: and Subject:, which are not remove previously because of the message
     separator = /(To: |Subject: )/;
-    let temporarFile = file[3].split(separator).filter(val => !val.match(separator));
-    file[3] = temporarFile[1];
-    temporarFile = file[4].split(separator).filter(val => !val.match(separator));
-    file[4] = temporarFile[1];
+    let temporaryFile = file[3].split(separator).filter(val => !val.match(separator));
+    file[3] = temporaryFile[1];
+    temporaryFile = file[4].split(separator).filter(val => !val.match(separator));
+    file[4] = temporaryFile[1];
     //we separate all the mailRecipient in a table
     separator = /(, )/;
     let tabMailRecipient = file[3].split(separator).filter(val => !val.match(separator));
     for (let i=0; i < tabMailRecipient.length; i++) {
-        while (tabMailRecipient[i].charAt() === ' ') tabMailRecipient[i] = tabMailRecipient[i].substring(1);
-        while (tabMailRecipient[i].charAt() === '\t') tabMailRecipient[i] = tabMailRecipient[i].substring(1);
+        while (tabMailRecipient[i].charAt(0) === ' ') tabMailRecipient[i] = tabMailRecipient[i].substring(1);
+        while (tabMailRecipient[i].charAt(0) === '\t') tabMailRecipient[i] = tabMailRecipient[i].substring(1);
     }
     file[3] = tabMailRecipient;
     //we join all the message into one element
@@ -107,7 +106,7 @@ createTab = file => {
     return file;
 }
 
-// tranformDate : transform the date to be interpretable
+// transformDate : transform the date to be interpretable
 transformDate = date => {
     let separator = /[ :]/;
     if (date.charAt(0) === ' ') date = date.substring(1);
@@ -137,7 +136,7 @@ transformDate = date => {
     return new Date(transformDate[0], transformDate[1], transformDate[2], transformDate[3], transformDate[4], transformDate[5]);
 }
 
-// tranformName : transform the author and recipient to be interpretables
+// transformName : transform the author and recipient to be interpretable
 transformName = name => {
     let regexName = /^[A-Za-z]+((\s)?(['-.]?([A-Za-z])+))*$/;
     let tabName = [], needToInverseNameAndFirstname = [];
@@ -145,10 +144,10 @@ transformName = name => {
         tabName[0] = name;
         return tabName;
     } else{
-        let temporarName = [];
+        let temporaryName = [];
         if (name.match(/, /) && !name.match(/"[A-Za-z]+,/)){
             name = name.split(/, /).filter(val => !val.match(/, /));
-            temporarName = name;
+            temporaryName = name;
         } else if (name.match(/"[A-Za-z]+,/)){
             name = name.split(/, /).filter(val => !val.match(/, /));
             for (let indexForGroup = 0; indexForGroup < name.length-1; indexForGroup++) {
@@ -158,26 +157,26 @@ transformName = name => {
                     needToInverseNameAndFirstname.push(indexForGroup);
                 }
             }
-            temporarName = name;
-        } else temporarName[0] = name;
-        for (let indexRecipient = 0; indexRecipient < temporarName.length; indexRecipient++){
-            if (temporarName[indexRecipient].match(regexName)) tabName[indexRecipient] = temporarName[indexRecipient];
+            temporaryName = name;
+        } else temporaryName[0] = name;
+        for (let indexRecipient = 0; indexRecipient < temporaryName.length; indexRecipient++){
+            if (temporaryName[indexRecipient].match(regexName)) tabName[indexRecipient] = temporaryName[indexRecipient];
             else{
-                if (temporarName[indexRecipient].match(/ </) && !temporarName[indexRecipient].match(/, /)) {
-                    temporarName[indexRecipient] = temporarName[indexRecipient].split(' <');
-                    temporarName[indexRecipient] = temporarName[indexRecipient][0];
-                    if (temporarName[indexRecipient].match(/"/)) {
-                        temporarName[indexRecipient] = temporarName[indexRecipient].split('"').filter(val => !val.match('"'));
-                        tabName[indexRecipient] = temporarName[indexRecipient][1];
-                    } else tabName[indexRecipient] = temporarName[indexRecipient];
+                if (temporaryName[indexRecipient].match(/ </) && !temporaryName[indexRecipient].match(/, /)) {
+                    temporaryName[indexRecipient] = temporaryName[indexRecipient].split(' <');
+                    temporaryName[indexRecipient] = temporaryName[indexRecipient][0];
+                    if (temporaryName[indexRecipient].match(/"/)) {
+                        temporaryName[indexRecipient] = temporaryName[indexRecipient].split('"').filter(val => !val.match('"'));
+                        tabName[indexRecipient] = temporaryName[indexRecipient][1];
+                    } else tabName[indexRecipient] = temporaryName[indexRecipient];
                 } else tabName[indexRecipient] = '';
             }
         }
         for (let indexInverse = 0; indexInverse < needToInverseNameAndFirstname.length; indexInverse++){
             if (tabName[needToInverseNameAndFirstname[indexInverse]].match(/\s/)){
-                let tabTemporar = tabName[needToInverseNameAndFirstname[indexInverse]];
-                tabTemporar = tabTemporar.split(/ /).filter(val => !val.match(/ /));
-                tabName[needToInverseNameAndFirstname[indexInverse]] = tabTemporar[1] + ' ' + tabTemporar[0];
+                let temporaryTab = tabName[needToInverseNameAndFirstname[indexInverse]];
+                temporaryTab = temporaryTab.split(/ /).filter(val => !val.match(/ /));
+                tabName[needToInverseNameAndFirstname[indexInverse]] = temporaryTab[1] + ' ' + temporaryTab[0];
             }
         }
         return tabName;
