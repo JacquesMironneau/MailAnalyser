@@ -73,8 +73,9 @@ class ColMail{
     mailInInterval(date1, date2){
         let result = new ColMail();
         this.listeMail.forEach(element => {
-            if(element instanceof Mail && element.isBetweenDate(date1, date2)) result.setListeMail(element);
-            else throw Error('Invalid data type, a Mail element is required');
+            if(element instanceof Mail) {
+                if (element.isBetweenDate(date1, date2)) result.setListeMail(element);
+            } else throw Error('Invalid data type, a Mail element is required');
         });
         return result;
     }
