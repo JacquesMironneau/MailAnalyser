@@ -4,14 +4,16 @@ const {ColMail} = require('../collection_mail/ColMail');
 const fs = require('fs');
 
 //extractMail : create a list of mail with data of several files
-extractMail = path => {
+extractMail = (path, logger) => {
     let listOfPath = [], listeMail = new ColMail('listeMail');
     for (let indexPath = 0; indexPath < path.length; indexPath++) listOfPath = listOfPath.concat(getPathOfFiles(path[indexPath]));
-    for (let indexFiles = 0; indexFiles < listOfPath.length; indexFiles++){
-        let mail = createMail(listOfPath[indexFiles]);
-        if (mail === null) console.log(`mail in the file ${listOfPath[indexFiles]} incorrect, we cannot extract it`);
-        else listeMail.setListeMail(mail);
-    }
+    if (listOfPath.length > 0){
+        for (let indexFiles = 0; indexFiles < listOfPath.length; indexFiles++){
+            let mail = createMail(listOfPath[indexFiles]);
+            if (mail === null) console.log(`mail in the file ${listOfPath[indexFiles]} incorrect, we cannot extract it`);
+            else listeMail.setListeMail(mail);
+        }
+    } else logger.error("The input file is empty");
     return listeMail;
 }
 
