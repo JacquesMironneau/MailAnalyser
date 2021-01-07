@@ -92,7 +92,7 @@ class ColMail{
             if(m.getEmailAuthor===email){
                 contactEmail = m.authorToContact();
             }else{
-                contactEmail = m.recipientEmailTocontact(email);
+                contactEmail = m.recipientEmailToContact(email);
                 
             }
         }
@@ -128,7 +128,7 @@ class ColMail{
             listeColab.forEach(element => {
                 if(colabMax===null){
                     colabMax=element;
-                }else if(element.getNbEchange>colabMax.getNbEchange){
+                }else if(element.getNbExchanges>colabMax.getNbExchanges){
                     colabMax=element;
                 }
             });
@@ -175,7 +175,7 @@ class ColMail{
             }
         }
         result.forEach(element => {
-            element.setNbEchange(this.chercherNbinteraction(element.getContact1.getMail,element.getContact2.getMail));
+            element.setNbExchanges(this.chercherNbinteraction(element.getContact1.getMail,element.getContact2.getMail));
         });
         return result;
     }
@@ -389,7 +389,7 @@ class ColMail{
         let result = new ColMail();
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
-                if(element.getAuthor===personn || element.personnIncludeInRecipient(personn)){
+                if(element.getAuthor===personn || element.personIncludeInRecipient(personn)){
                     result.setListeMail(element);
                 }
             }else{
