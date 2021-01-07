@@ -200,7 +200,12 @@ program
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
         const frequentTerms = extractMail(args.files, logger);
-        if (frequentTerms.listeMail.length > 0) top10term(frequentTerms.mostUsedTerm(args.mail), options.format, 'top10-words_' + args.mail);
+        if (frequentTerms === undefined){
+            console.log("DEBUG "+frequentTerms.length);
+            top10term(frequentTerms.mostUsedTerm(args.mail), options.format, 'top10-words_' + args.mail);
+        }else{
+            logger.warn("Le collaborateur n'a pas été trouvé.".red);
+        }
     })
 
     /*
