@@ -26,9 +26,6 @@ class NbUseTerm{
     addNbUse(){
         this.term++;
     }
-    minNbUse(){
-        this.term--;
-    }
 }
 
 module.exports = {NbUseTerm};

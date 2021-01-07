@@ -48,14 +48,6 @@ class ColMail{
         } else return false;
     }
 
-    setListColMail(inputMailCollection){
-        if(inputMailCollection instanceof ColMail){
-            inputMailCollection.getMail.forEach(element => {
-                if(element instanceof Mail) this.listeMail.push(element);
-            });
-        } else throw Error('Invalid data type, a ColMail element is required');
-    }
-
     get toString(){
         let res = "collection de Mail :";
         this.listeMail.forEach(element => res += "\n" + element.toString);
