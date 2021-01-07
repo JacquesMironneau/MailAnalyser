@@ -125,7 +125,7 @@ class ColMail{
             listeColab.forEach(element => {
                 if(colabMax===null){
                     colabMax=element;
-                }else if(element.getNbEchange>colabMax.getNbEchange){
+                }else if(element.getNbExchanges>colabMax.getNbExchanges){
                     colabMax=element;
                 }
             });
@@ -172,7 +172,7 @@ class ColMail{
             }
         }
         result.forEach(element => {
-            element.setNbEchange(this.chercherNbinteraction(element.getContact1.getMail,element.getContact2.getMail));
+            element.setNbExchanges(this.chercherNbinteraction(element.getContact1.getMail,element.getContact2.getMail));
         });
         return result;
     }
