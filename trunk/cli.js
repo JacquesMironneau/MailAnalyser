@@ -28,34 +28,37 @@ program
     .option('-c, --collaborators [emailList]', 'Collaborator email separated by a comma', { validator: program.ARRAY })
     .option('-o, --out <outputfile>', 'Export contacts in a text file instead of the terminal', { validator: Program.STRING })
     .action(({ logger, args, options }) => {
-        let displayToTerminal = false;
-        if (options.out && options.out !== true) logger.info(`Display set to ${options.out}`);
-        else{
-            logger.info('Displaying to terminal');
-            displayToTerminal = true;
-        }
         // Here the name list is undefined or filled with names
-        const mailCollection = extractMail(args.files);
-        const list = options.collaborators;
-        let contactList;
+        const mailCollection = extractMail(args.files, logger);
+        if (mailCollection.listeMail.length > 0) {
+            let displayToTerminal = false;
+            if (options.out && options.out !== true) logger.info(`Display set to ${options.out}`);
+            else{
+                logger.info('Displaying to terminal');
+                displayToTerminal = true;
+            }
 
-        if (list === undefined) {
-            logger.warn('Since no collaborators are provided printing every collaborator');
-            contactList = mailCollection.collabByEmail([]);
-        } else{
-            logger.info(`Print names of ${list}`);
-            contactList = mailCollection.collabByEmail(list);
-        }
-        let displayList = '';
-        contactList.forEach(contact => displayList += contact.toVcard());
+            const list = options.collaborators;
+            let contactList;
 
-        // print to terminal or to a specified file
-        if (displayToTerminal) console.log(displayList);
-        else{
-            fs.writeFile(options.out, displayList, 'utf8', err => {
-                if (err) logger.error(err);
-                else logger.info(`Contact exported to ${options.out}`);
-            });
+            if (list === undefined) {
+                logger.warn('Since no collaborators are provided printing every collaborator');
+                contactList = mailCollection.collabByEmail([]);
+            } else {
+                logger.info(`Print names of ${list}`);
+                contactList = mailCollection.collabByEmail(list);
+            }
+            let displayList = '';
+            contactList.forEach(contact => displayList += contact.toVcard());
+
+            // print to terminal or to a specified file
+            if (displayToTerminal) console.log(displayList);
+            else {
+                fs.writeFile(options.out, displayList, 'utf8', err => {
+                    if (err) logger.error(err);
+                    else logger.info(`Contact exported to ${options.out}`);
+                });
+            }
         }
     })
 
@@ -85,21 +88,23 @@ program
     .option('--mail-senders [mailSenders]', 'List of the email authors', { validator: program.ARRAY })
     .action(({ logger, args, options }) => {
         // Get mail from files
-        const mailCollection = extractMail(args.files);
-        // Get only mail in the period
-        const mails = mailCollection.mailInInterval(args.beginningDate, args.endingDate);
-        let total;
-        // If emails senders are provided, remove the mail from people not in the list
-        if (options.mailSenders) total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
-        else total = mails.getListMail.length;
+        const mailCollection = extractMail(args.files, logger);
+        if (mailCollection.listeMail.length > 0){
+            // Get only mail in the period
+            const mails = mailCollection.mailInInterval(args.beginningDate, args.endingDate);
+            let total;
+            // If emails senders are provided, remove the mail from people not in the list
+            if (options.mailSenders) total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
+            else total = mails.getListMail.length;
 
-        // Display error message if no mail have been written (in specs)
-        if (total === 0) logger.info('No mail has been written during the period');
-        // Display the number of mail
-        else{
-            const dateBegin = dateFromMail(args.beginningDate);
-            const dateEnd = dateFromMail(args.endingDate);
-            console.log("There are " + ((String)(total)).green + " mail(s) that were sent between" + dateBegin.green + " and " + dateEnd.green + " (mm/dd/yyyy format)");
+            // Display error message if no mail have been written (in specs)
+            if (total === 0) logger.info('No mail has been written during the period');
+            // Display the number of mail
+            else {
+                const dateBegin = dateFromMail(args.beginningDate);
+                const dateEnd = dateFromMail(args.endingDate);
+                console.log("There are " + ((String)(total)).green + " mail(s) that were sent between" + dateBegin.green + " and " + dateEnd.green + " (mm/dd/yyyy format)");
+            }
         }
     })
 
@@ -129,25 +134,27 @@ program
     .option('--mail-sender [mailSenders]', 'The email author', { validator: program.STRING })
     .action(({ logger, args, options }) => {
         // Get mail from files
-        let mailCollection = extractMail(args.files);
+        let mailCollection = extractMail(args.files, logger);
         // Get only mail in the period
-        if (options.mailSender) mailCollection = mailCollection.MailInBusyDays(options.mailSender, args.beginningDate, args.endingDate);
-        else{
-            logger.warn('No author has been specified');
-            mailCollection = mailCollection.MailInBusyDays(null, args.beginningDate, args.endingDate);
+        if (mailCollection.listeMail.length > 0){
+            if (options.mailSender) mailCollection = mailCollection.MailInBusyDays(options.mailSender, args.beginningDate, args.endingDate);
+            else{
+                logger.warn('No author has been specified');
+                mailCollection = mailCollection.MailInBusyDays(null, args.beginningDate, args.endingDate);
+            }
+            const dayList = [];
+            mailCollection.getListMail.forEach(mail => {
+                //console.log(mail.getDate);
+                const mailDateBegin = dateFromMail(mail.getDate);
+                if (dayList.indexOf(mailDateBegin) === -1) dayList.push(mailDateBegin);
+            });
+
+            const dateBegin = dateFromMail(args.beginningDate);
+            const dateEnd = dateFromMail(args.endingDate);
+
+            console.log("There are " + ((String)(dayList.length)).green + " buzzy days mail(s) that were sent between " + dateBegin.green + " and " + dateEnd.green);
+            dayList.sort((a, b) => new Date(b) - new Date(a)).forEach(day => console.log(`Day: ${day}`));
         }
-        const dayList = [];
-        mailCollection.getListMail.forEach(mail => {
-            //console.log(mail.getDate);
-            const mailDateBegin = dateFromMail(mail.getDate);
-            if (dayList.indexOf(mailDateBegin) === -1) dayList.push(mailDateBegin);
-        });
-
-        const dateBegin = dateFromMail(args.beginningDate);
-        const dateEnd = dateFromMail(args.endingDate);
-
-        console.log("There are " + ((String)(dayList.length)).green + " buzzy days mail(s) that were sent between " + dateBegin.green + " and " + dateEnd.green);
-        dayList.sort((a, b) => new Date(b) - new Date(a)).forEach(day => console.log(`Day: ${day}`));
     })
 
     /*
@@ -161,8 +168,8 @@ program
     .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent contacts for ${args.mail}`);
-        const frequentContacts = extractMail(args.files).bestCollabByEmail(args.mail);
-        top10Interloc(frequentContacts, options.format, 'top10-collaborators_'+args.mail);
+        const frequentContacts = extractMail(args.files, logger);
+        if (frequentContacts.listeMail.length > 0) top10Interloc(frequentContacts.bestCollabByEmail(args.mail), options.format, 'top10-collaborators_' + args.mail);
     })
 
     /*
@@ -175,8 +182,8 @@ program
     .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
-        const frequentTerms = extractMail(args.files).mostUsedTerm(args.mail);
-        top10term(frequentTerms, options.format, 'top10-words_'+args.mail);
+        const frequentTerms = extractMail(args.files, logger);
+        if (frequentTerms.listeMail.length > 0) top10term(frequentTerms.mostUsedTerm(args.mail), options.format, 'top10-words_' + args.mail);
     })
 
     /*
@@ -187,9 +194,9 @@ program
     .argument('<files>', 'List of data file (emails)', { validator: value => value.split(',') })
     .argument('<email>', 'The collaborator email')
     .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
-    .action(({ args, options }) => {
-        const interactionList = extractMail(args.files).interactionBetweenCollabForACollab(args.email);
-        visualInteraction(interactionList, options.format, 'exchange-between-collaborators_' + args.email);
+    .action(({ logger, args, options }) => {
+        const interactionList = extractMail(args.files, logger);
+        if (interactionList.listeMail.length > 0) visualInteraction(interactionList.interactionBetweenCollabForACollab(args.email), options.format, 'exchange-between-collaborators_' + args.email);
     })
 
     /*
@@ -201,29 +208,28 @@ program
     .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
     .option('-o, --out <outputfile>', 'Export contacts in a text file instead of the terminal', { validator: Program.STRING })
     .action(({ logger, args, options }) => {
-        let displayToTerminal = false;
-        if (options.out && options.out !== true) logger.info(`Display set to ${options.out}`);
-        else{
-            logger.info('Displaying to terminal');
-            displayToTerminal = true;
-        }
+        let mailCollection = extractMail(args.files, logger);
+        if (mailCollection.listeMail.length > 0){
+            mailCollection = mailCollection.searchByEmailAuthor(args.mail);
+            const collaboratorMail = mailCollection.getListMail[0];
 
-        let mailCollection = extractMail(args.files).searchByEmailAuthor(args.mail);
-        const mail = mailCollection.getListMail[0];
+            if (collaboratorMail !== undefined){
+                logger.info(`Collaborator ${args.mail} found`);
 
-        if (displayToTerminal){
-            logger.info(`Collaborator ${args.mail} found`);
-
-            console.log(mail.authorToContact().toVcard());
-            logger.info(`Listing mail of ${args.mail}'s mailbox`);
-
-            console.log(mailCollection.toHumanReadableString);
-        } else{
-            const content = mail.authorToContact().toVcard() + mailCollection.toHumanReadableString;
-            fs.writeFile(options.out, content, 'utf8', err => {
-                if (err) logger.error(err);
-                else logger.info(`Contact exported to ${options.out} file`);
-            });
+                if (options.out && options.out !== true){
+                    logger.info(`Display set to ${options.out}`);
+                    const content = collaboratorMail.authorToContact().toVcard() + mailCollection.toHumanReadableString;
+                    fs.writeFile(options.out, content, 'utf8', err => {
+                        if (err) logger.error(err);
+                        else logger.info(`Contact exported to ${options.out} file`);
+                    });
+                } else{
+                    logger.info('Displaying to terminal\n');
+                    console.log(collaboratorMail.authorToContact().toVcard());
+                    logger.info(`Listing mail of ${args.mail}'s mailbox`);
+                    console.log(mailCollection.toHumanReadableString);
+                }
+            } else logger.error(`${args.mail} doesn't exist`);
         }
     });
 
