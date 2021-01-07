@@ -151,7 +151,7 @@ transformName = name => {
         } else if (name.match(/"[A-Za-z]+,/)){
             name = name.split(/, /).filter(val => !val.match(/, /));
             for (let indexForGroup = 0; indexForGroup < name.length-1; indexForGroup++) {
-                if (name[indexForGroup].match(/"[A-z]+/) && name[indexForGroup+1].match(/[^\"]+" [<A-z@0-9\s]+/)) {
+                if (name[indexForGroup].match(/"[A-z]+/) && name[indexForGroup+1].match(/[^"]+" [<A-z@0-9\s]+/)) {
                     name[indexForGroup] = name[indexForGroup] + ' ' + name[indexForGroup+1];
                     name.splice(indexForGroup+1, 1);
                     needToInverseNameAndFirstname.push(indexForGroup);

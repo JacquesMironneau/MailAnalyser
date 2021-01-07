@@ -9,7 +9,7 @@ const fs = require('fs');
 
 /**
  *
- * @param {json vega-lite spec} spec The vegaLite spec to export as a file
+ * @param {json} spec The vegaLite spec to export as a file
  * @param {['png','svg']} format format of the exported graphic
  * @param {String} fileName name of the exported file
  */

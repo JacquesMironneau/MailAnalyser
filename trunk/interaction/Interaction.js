@@ -24,14 +24,6 @@ class Interaction{
         return this.nbEchange;
     }
 
-    setContact1(contact){
-        if(contact instanceof Contact) this.contact1=contact;
-        else throw Error('Invalid data type, a Contact instance is required');
-    }
-    setContact2(contact){
-        if(contact instanceof Contact) this.contact2=contact;
-        else throw Error('Invalid data type, a Contact instance is required');
-    }
     setNbExchanges(nb){
         this.nbEchange=nb;
     }

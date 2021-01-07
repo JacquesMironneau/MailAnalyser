@@ -53,20 +53,11 @@ class Mail{
             "\nCONTENT: " + this.message + "\n";
     }
 
-    setSubject(subject){
-        this.subject = subject;
-    }
     setDate(date){
         this.date = date;
     }
     setReceiver(receiver){
         this.mailRecipient = receiver;
-    }
-    setSender(sender){
-        this.mailAuthor = sender;
-    }
-    setContent(content){
-        this.message = content;
     }
 
     get getDate(){
@@ -89,17 +80,6 @@ class Mail{
     }
     get getSubject(){
         return this.subject;
-    }
-
-    /**
-     * @name isEqual
-     * @param {String} mail
-     * vérifie si un mail est égal a un autre
-     */
-    isEqual(mail){
-        if(mail instanceof Mail){
-            if(mail === this) return true;
-        } else throw Error('Invalid data type, a Mail element is required');
     }
 
     /**
@@ -139,15 +119,6 @@ class Mail{
     }
 
     /**
-     * @name mailContainsTextInMessage
-     * @param {String} txt
-     * vérifie si un mail contient un message(txt) dans la section message
-     */
-    mailContainsTextInMessage(txt){
-        return this.message.indexOf(txt) > 0;
-    }
-
-    /**
      * @name mailContainsTextInObject
      * @param {String} txt
      * vérifie si un mail contient un message en objet
@@ -161,7 +132,6 @@ class Mail{
      * revoie un contact correspondant à l'auteur
      */
     authorToContact(){
-        //console.log(this.author);
         if(this.author!==""){
             let lignes = this.author[0].split(/\s/);
             return new Contact(lignes[0],lignes[1],this.mailAuthor);
