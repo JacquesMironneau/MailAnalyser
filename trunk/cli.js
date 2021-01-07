@@ -89,7 +89,7 @@ program
     .action(({ logger, args, options }) => {
         //Check if dates are good
         if(args.beginningDate > args.endingDate){
-            logger.info("First date is higher than the second");
+            logger.error("First date is higher than the second");
             return;
         }
         // Get mail from files
@@ -102,7 +102,7 @@ program
             if (options.mailSenders) {
                 total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
                 if(total === 0){
-                    return logger.info("The collaborators don't exist");
+                    return logger.error("The collaborators don't exist");
                 }
             }
             else total = mails.getListMail.length;
@@ -143,11 +143,18 @@ program
     })
     .option('--mail-sender [mailSenders]', 'The email author', { validator: program.STRING })
     .action(({ logger, args, options }) => {
+        if(args.beginningDate > args.endingDate){
+            logger.error("First date is higher than the second");
+            return;
+        }
         // Get mail from files
         let mailCollection = extractMail(args.files, logger);
         // Get only mail in the period
         if (mailCollection.listeMail.length > 0){
-            if (options.mailSender) mailCollection = mailCollection.MailInBusyDays(options.mailSender, args.beginningDate, args.endingDate);
+            if (options.mailSender) {
+                mailCollection = mailCollection.MailInBusyDays(options.mailSender, args.beginningDate, args.endingDate);
+                if(mailCollection.listeMail.length === 0) return logger.error("The collaborator does not exist")
+            }
             else{
                 logger.warn('No author has been specified');
                 mailCollection = mailCollection.MailInBusyDays(null, args.beginningDate, args.endingDate);
