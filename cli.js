@@ -186,7 +186,11 @@ program
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent contacts for ${args.mail}`);
         const frequentContacts = extractMail(args.files, logger);
-        if (frequentContacts.listeMail.length > 0) top10Interloc(frequentContacts.bestCollabByEmail(args.mail), options.format, 'top10-collaborators_' + args.mail);
+        if (frequentContacts.listeMail.length === undefined){
+            top10Interloc(frequentContacts.bestCollabByEmail(args.mail), options.format, 'top10-collaborators_' + args.mail);
+        }else{
+            logger.warn("Email du collaborateur non existant.");
+        }
     })
 
     /*
