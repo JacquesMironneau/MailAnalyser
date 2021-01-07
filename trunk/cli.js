@@ -87,6 +87,11 @@ program
     })
     .option('--mail-senders [mailSenders]', 'List of the email authors', { validator: program.ARRAY })
     .action(({ logger, args, options }) => {
+        //Check if dates are good
+        if(args.beginningDate > args.endingDate){
+            logger.info("First date is higher than the second");
+            return;
+        }
         // Get mail from files
         const mailCollection = extractMail(args.files, logger);
         if (mailCollection.listeMail.length > 0){
@@ -94,7 +99,12 @@ program
             const mails = mailCollection.mailInInterval(args.beginningDate, args.endingDate);
             let total;
             // If emails senders are provided, remove the mail from people not in the list
-            if (options.mailSenders) total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
+            if (options.mailSenders) {
+                total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
+                if(total === 0){
+                    return logger.info("The collaborators don't exist");
+                }
+            }
             else total = mails.getListMail.length;
 
             // Display error message if no mail have been written (in specs)
