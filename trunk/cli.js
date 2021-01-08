@@ -41,10 +41,10 @@ program
             const list = options.collaborators;
             let contactList;
 
-            if (list === undefined) {
+            if (list === undefined){
                 logger.warn('Since no collaborators are provided printing every collaborator');
                 contactList = mailCollection.collabByEmail([]);
-            } else {
+            } else{
                 logger.info(`Print names of ${list}`);
                 contactList = mailCollection.collabByEmail(list);
             }
@@ -53,7 +53,7 @@ program
 
             // print to terminal or to a specified file
             if (displayToTerminal) console.log(displayList);
-            else {
+            else{
                 fs.writeFile(options.out, displayList, 'utf8', err => {
                     if (err) logger.error(err);
                     else logger.info(`Contact exported to ${options.out}`);
@@ -99,18 +99,15 @@ program
             const mails = mailCollection.mailInInterval(args.beginningDate, args.endingDate);
             let total;
             // If emails senders are provided, remove the mail from people not in the list
-            if (options.mailSenders) {
+            if (options.mailSenders){
                 total = options.mailSenders.reduce((acc, mail) => acc + mails.searchByEmailAuthor(mail).getListMail.length, 0);
-                if(total === 0){
-                    return logger.error("The collaborators don't exist");
-                }
-            }
-            else total = mails.getListMail.length;
+                if(total === 0) return logger.error("The collaborators don't exist");
+            } else total = mails.getListMail.length;
 
             // Display error message if no mail have been written (in specs)
             if (total === 0) logger.info('No mail has been written during the period');
             // Display the number of mail
-            else {
+            else{
                 const dateBegin = dateFromMail(args.beginningDate);
                 const dateEnd = dateFromMail(args.endingDate);
                 console.log("There are " + ((String)(total)).green + " mail(s) that were sent between" + dateBegin.green + " and " + dateEnd.green + " (mm/dd/yyyy format)");
@@ -151,7 +148,7 @@ program
         let mailCollection = extractMail(args.files, logger);
         // Get only mail in the period
         if (mailCollection.listeMail.length > 0){
-            if (options.mailSender) {
+            if (options.mailSender){
                 mailCollection = mailCollection.MailInBusyDays(options.mailSender, args.beginningDate, args.endingDate);
                 if(mailCollection.listeMail.length === 0) return logger.error("The collaborator does not exist")
             }
@@ -182,14 +179,13 @@ program
     .alias('tc')
     .argument('<files>', 'List of data file (emails file)', { validator: (value) => value.split(',') })
     .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
-    .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
+    .option('-f, --format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent contacts for ${args.mail}`);
-        const frequentContacts = extractMail(args.files, logger);
-        if (frequentContacts.listeMail.length === undefined){
-            top10Interloc(frequentContacts.bestCollabByEmail(args.mail), options.format, 'top10-collaborators_' + args.mail);
-        }else{
-            logger.warn("Email du collaborateur non existant.");
+        let frequentContacts = extractMail(args.files, logger);
+        if (frequentContacts.listeMail.length > 0) { // If the file wasn't empty
+            if ((frequentContacts = frequentContacts.bestCollabByEmail(args.mail)).length > 0) top10Interloc(frequentContacts, options.format, 'top10-collaborators_' + args.mail);
+            else logger.warn(`${args.mail} doesn't exist`);
         }
     })
 
@@ -200,15 +196,13 @@ program
     .alias('tw')
     .argument('<files>', 'List of data file (emails file)', { validator: value => value.split(',') })
     .argument('<mail>', 'Mail of the collaborator', { validator: program.STRING })
-    .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
+    .option('-f, --format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
     .action(({ logger, args, options }) => {
         logger.info(`Listing the 10 most frequent words for ${args.mail}'s mailbox`);
-        const frequentTerms = extractMail(args.files, logger);
-        if (frequentTerms === undefined){
-            console.log("DEBUG "+frequentTerms.length);
-            top10term(frequentTerms.mostUsedTerm(args.mail), options.format, 'top10-words_' + args.mail);
-        }else{
-            logger.warn("Le collaborateur n'a pas été trouvé.".red);
+        let frequentTerms = extractMail(args.files, logger);
+        if (frequentTerms.listeMail.length > 0){ // If the file wasn't empty
+            if ((frequentTerms = frequentTerms.mostUsedTerm(args.mail)).length > 0) top10term(frequentTerms, options.format, 'top10-words_' + args.mail);
+            else logger.warn(`${args.mail} doesn't exist`);
         }
     })
 
@@ -218,11 +212,14 @@ program
     .command('exchange-between-collaborators', 'Design a scatter graph with the number of exchange between collaborators')
     .alias('ebc')
     .argument('<files>', 'List of data file (emails)', { validator: value => value.split(',') })
-    .argument('<email>', 'The collaborator email')
-    .option('-f,--format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
+    .argument('<mail>', 'The collaborator email')
+    .option('-f, --format <format>', 'Precise if the graphic should be exported as a svg or png file', { validator: ['svg', 'png'], default: 'png' })
     .action(({ logger, args, options }) => {
-        const interactionList = extractMail(args.files, logger);
-        if (interactionList.listeMail.length > 0) visualInteraction(interactionList.interactionBetweenCollabForACollab(args.email), options.format, 'exchange-between-collaborators_' + args.email);
+        let interactionList = extractMail(args.files, logger);
+        if (interactionList.listeMail.length > 0){ // If the file wasn't empty
+            if ((interactionList = interactionList.interactionBetweenCollabForACollab(args.mail)).length > 0) visualInteraction(interactionList, options.format, 'exchange-between-collaborators_' + args.mail);
+            else logger.warn(`${args.mail} doesn't exist`);
+        }
     })
 
     /*
@@ -255,7 +252,7 @@ program
                     logger.info(`Listing mail of ${args.mail}'s mailbox`);
                     console.log(mailCollection.toHumanReadableString);
                 }
-            } else logger.error(`${args.mail} doesn't exist`);
+            } else logger.warn(`${args.mail} doesn't exist`);
         }
     });
 
