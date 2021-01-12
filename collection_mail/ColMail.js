@@ -12,6 +12,11 @@ class ColMail{
         this.listeMail = [];
     }
 
+    /**
+     * @name setListeMail
+     * Ajoute un élement de type mail à la liste des mails
+     * @param inputMail
+     */
     setListeMail(inputMail){
         if(inputMail instanceof Mail){
             if(this.verifInstanceOfMail(inputMail)) this.listeMail.push(inputMail);
@@ -21,6 +26,12 @@ class ColMail{
         } else throw Error('Invalid data type, a Mail element is required');
     }
 
+    /**
+     * @name verifInstanceOfMail
+     * Vérifie si l'entrée est bien un Mail valide
+     * @param inputMail
+     * @return {boolean}
+     */
     verifInstanceOfMail(inputMail){
         let result = true;
         if(inputMail instanceof Mail){
@@ -48,11 +59,22 @@ class ColMail{
         } else return false;
     }
 
+    /**
+     * @name toString
+     * Affichage d'une collection de mails
+     * @return {string}
+     */
     get toString(){
         let res = "collection de Mail :";
         this.listeMail.forEach(element => res += "\n" + element.toString);
         return res;
     }
+
+    /**
+     * @name toHumanReadableString
+     * Affiche la liste de mails de manière visible pour un humain
+     * @return {string}
+     */
     get toHumanReadableString(){
         let res = '';
         this.listeMail.forEach(mail => res += '\n' + mail.toHumanReadableFormat);
@@ -117,6 +139,12 @@ class ColMail{
         return result;
     }
 
+    /**
+     * @name searchMaxListeCollab
+     * Renvoie le collaborateur qui a eu le plus d'échanges dans la liste
+     * @param listeCollab
+     * @return {null | []}
+     */
     searchMaxListeCollab(listeCollab){
         if(listeCollab.length > 0){
             let collabMax = null;
@@ -237,6 +265,12 @@ class ColMail{
         return resultFin;
     }
 
+    /**
+     * @name searchMaxListTerm
+     * Renvoie le terme le plus utilisé de la liste passé en paramètre
+     * @param listeTerm
+     * @return {null|*}
+     */
     searchMaxListTerm(listeTerm){
         if(listeTerm.length > 2){
             let termMax = listeTerm[0];
