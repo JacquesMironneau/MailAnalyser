@@ -1,5 +1,5 @@
 /**
- * NbUseTerm class, represent a relation between two contact.
+ * Classe NbUseTerm, représente une relation entre 2 contacts.
  * @author Augustin Borne
  */
 

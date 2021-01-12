@@ -1,5 +1,5 @@
 /**
- * vega lite module, export to png or svg.
+ * Module Vega lite, exporte en png ou svg.
  * @author Jacques Mironneau
  */
 
@@ -49,7 +49,7 @@ const render = (spec, format, fileName) => {
  * @param {String} fileName name of the exported file
  */
 const visualInteraction = (interactionList, format, fileName) => {
-  if (interactionList.every((inter) => inter.nbEchange === 0)){
+  if (interactionList.every(inter => inter.nbEchange === 0)){
     console.log('[x]'.red + 'No interactions among the contact of the given collaborator');
     return;
   }
@@ -142,4 +142,4 @@ const top10term = (data, format, fileName) => {
   render(spec, format, fileName);
 }
 
-module.exports = { visualInteraction, top10Interloc, top10term };
+module.exports = {visualInteraction, top10Interloc, top10term};
