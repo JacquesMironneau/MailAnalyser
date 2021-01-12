@@ -54,7 +54,7 @@ class Mail{
 
     /**
      * @name toHumanReadableFormat
-     * Retourne un mail au format VCard
+     * Retourne un mail visible correctement pour un humain
      * @returns {string}
      */
     get toHumanReadableFormat(){

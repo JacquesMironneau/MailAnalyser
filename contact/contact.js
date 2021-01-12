@@ -9,7 +9,11 @@ class Contact{
     this.mail = mail;
   }
 
-  // Display the contact to a vcard format.
+  /**
+   * @name toVcard
+   * Convert Contact to a VCard Format
+   * @return {string}
+   */
   toVcard(){
     return 'BEGIN:VCARD\nVERSION:4.0\n' +
         `N:${this.lastname};${this.name};;;\n` +
