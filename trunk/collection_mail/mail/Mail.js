@@ -1,10 +1,29 @@
+const {Contact} = require('../../contact/contact');
+
 /**
  * Classe Mail, représente un mail.
  * @author Augustin Borne
  */
-const {Contact} = require('../../contact/contact');
-
 class Mail{
+    /**
+     * Constructeur de la classe Mail
+     * @param messageId
+     * @param date
+     * @param mailAuthor
+     * @param mailRecipient
+     * @param subject
+     * @param version
+     * @param contentType
+     * @param encoding
+     * @param author
+     * @param recipient
+     * @param copy
+     * @param hCopy
+     * @param path
+     * @param origin
+     * @param fileName
+     * @param message
+     */
     constructor(messageId, date, mailAuthor, mailRecipient, subject, version, contentType, encoding, author, recipient, copy, hCopy, path, origin, fileName, message){
         this.messageId = messageId;
         this.date = date;
@@ -25,7 +44,6 @@ class Mail{
     }
 
     /**
-     * @name toString
      * Convertit un objet mail en String pour l'affichage
      * @return {string}
      */
@@ -53,7 +71,6 @@ class Mail{
     }
 
     /**
-     * @name toHumanReadableFormat
      * Retourne un mail visible correctement pour un humain
      * @return {string}
      */
@@ -94,10 +111,9 @@ class Mail{
     }
 
     /**
-     * @name isOlderThan
+     * Vérifie si un mail est plus ancien qu'un autre
      * @param {String} mail
-     * Vérifie si un mail est plus ancien a un autre
-     * @return {boolean || Error}
+     * @return {boolean | Error}
      */
     isOlderThan(mail){
         if(mail instanceof Mail) return mail.date.getTime() > this.date.getTime();
@@ -105,10 +121,9 @@ class Mail{
     }
 
     /**
-     * @name isBetweenDate
+     * Vérifie si un mail est compris entre 2 dates
      * @param {Date} date1
      * @param {Date} date2
-     * Vérifie si un mail est compris entre 2 dates
      * @return {boolean}
      */
     isBetweenDate(date1,date2){
@@ -116,7 +131,6 @@ class Mail{
     }
 
     /**
-     * @name isWeekend
      * Vérifie si un mail est écrit pendant un weekend
      * @return {boolean}
      */
@@ -125,7 +139,6 @@ class Mail{
     }
 
     /**
-     * @name mailInBusyDays
      * Vérifie si un mail est écrit pendant un busy day
      * @return {boolean}
      */
@@ -134,9 +147,8 @@ class Mail{
     }
 
     /**
-     * @name mailContainsTextInObject
-     * @param {String} txt
      * Vérifie si un mail contient un message en objet
+     * @param {String} txt
      * @return {boolean}
      */
     mailContainsTextInObject(txt){
@@ -144,7 +156,6 @@ class Mail{
     }
 
     /**
-     * @name authorToContact
      * Renvoie un contact correspondant à l'auteur
      * @return {Contact}
      */
@@ -156,7 +167,6 @@ class Mail{
     }
 
     /**
-     * @name sizeRecipientMail
      * Renvoie la taille de la liste recipient mail
      * @return {number}
      */
@@ -167,7 +177,6 @@ class Mail{
     }
 
     /**
-     * @name recipientToContact
      * Renvoie des contacts correspondants aux destinataires
      * @return {[]}
      */
@@ -184,7 +193,6 @@ class Mail{
     }
 
     /**
-     * @name recipientEmailToContact
      * Retourne un contact créé à partir d'un mail
      * @param email
      * @return {Contact}
@@ -198,7 +206,6 @@ class Mail{
     }
 
     /**
-     * @name emailIncludeInRecipientMail
      * Vérifie si un mail est contenu dans la liste des recipients mails
      * @param email
      * @return {boolean}
@@ -208,7 +215,6 @@ class Mail{
     }
 
     /**
-     * @name personIncludeInRecipient
      * Vérifie si une personne est contenue dans recipient
      * @param person
      * @return {boolean}
