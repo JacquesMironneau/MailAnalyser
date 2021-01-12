@@ -6,6 +6,13 @@
 const {Contact} = require('../contact/contact');
 
 class Interaction{
+    /**
+     * Constructeur de la classe Interaction
+     * Vérfie si les contacts sont bien des instance de la classe Contact avant assignation de ces derniers
+     * @param contact1
+     * @param contact2
+     * @param nbExchanges
+     */
     constructor(contact1, contact2, nbExchanges){
         if(contact1 instanceof Contact) this.contact1 = contact1;
         else throw Error('Invalid data type, a Contact instance is required');
