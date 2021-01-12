@@ -12,7 +12,11 @@ const {visualInteraction, top10Interloc, top10term} = require('./vega/vega.js');
 const {extractMail} = require('./extract/extract.js');
 const {exit} = require('process');
 
-// check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
+/**
+ * check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
+ * @param Date d
+ * @returns {boolean}
+ */
 const checkDateFormat = d => (d instanceof Date && d !== 'Invalid Date');
 
 program
@@ -255,9 +259,14 @@ program
             } else logger.warn(`${args.mail} doesn't exist`);
         }
     });
-
+//Lancement de l'application
 program.run();
 
+/**
+ * Convert a Date object to a string (mm/dd/YYYY)
+ * @param object
+ * @returns {string}
+ */
 dateFromMail = object => {
     const month = ((object.getMonth() + 1) < 10) ? '0' + (object.getMonth() +1) : (object.getMonth() + 1);
     const day = (object.getDate() < 10) ? '0' + object.getDate() : object.getDate();
