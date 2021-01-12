@@ -1,19 +1,18 @@
-/**
- * Classe Collection Mail, représente une collection de mails.
- * @author Augustin Borne
- */
 const {Mail} = require('./mail/Mail.js');
 require('../contact/contact.js');
 const {Interaction} = require('../interaction/Interaction.js');
 const {NbUseTerm} = require('../term_nb_utilisation/NbUseTerm.js');
 
+/**
+ * Classe ColMail, représente une collection de mails.
+ * @author Augustin Borne
+ */
 class ColMail{
     constructor(){
         this.listeMail = [];
     }
 
     /**
-     * @name setListeMail
      * Ajoute un élément de type mail à la liste des mails
      * @param inputMail
      */
@@ -24,7 +23,6 @@ class ColMail{
     }
 
     /**
-     * @name verifInstanceOfMail
      * Vérifie si l'entrée est bien un Mail valide
      * @param inputMail
      * @return {boolean}
@@ -53,7 +51,6 @@ class ColMail{
     }
 
     /**
-     * @name toString
      * Affichage d'une collection de mails
      * @return {string}
      */
@@ -64,7 +61,6 @@ class ColMail{
     }
 
     /**
-     * @name toHumanReadableString
      * Affiche la liste de mails de manière visible pour un humain
      * @return {string}
      */
@@ -78,9 +74,8 @@ class ColMail{
     }
 
     /**
-     * @name mailInInterval
-     * @author Augustin Borne
      * Retourne une collection de mail correspondant au mail envoyé pendant un intervalle de temps
+     * @author Augustin Borne
      * @param {Date} date1
      * @param {Date} date2
      * @return {ColMail}
@@ -96,9 +91,8 @@ class ColMail{
     }
 
     /**
-     * @name bestCollab
-     * @author Augustin Borne
      * Permet de retourner les collaborateurs d'un contact  qui échangent le plus entre eux
+     * @author Augustin Borne
      * @param {String} email
      * @return {[]}
      */
@@ -133,7 +127,6 @@ class ColMail{
     }
 
     /**
-     * @name searchMaxListeCollab
      * Renvoie le collaborateur qui a eu le plus d'échanges dans la liste
      * @param listeCollab
      * @return {null | []}
@@ -149,9 +142,8 @@ class ColMail{
     }
 
     /**
-     * @name searchNbInteraction
-     * @author Augustin Borne
      * Retourne le nombre d'échanges entre 2 adresses mail
+     * @author Augustin Borne
      * @param {String} email1
      * @param {String} email2
      * @return {number}
@@ -165,9 +157,8 @@ class ColMail{
     }
 
     /**
-     * @name interactionBetweenCollabForACollab
-     * @author Augustin Borne
      * Renvoie le nombre d'interaction entre chaque contact d'une liste de contact d'un collaborateur donnée
+     * @author Augustin Borne
      * @param {String} email
      * @return {[]}
      */
@@ -191,9 +182,8 @@ class ColMail{
     }
 
     /**
-     * @name collabByEmail
-     * @author Augustin Borne
      * Génère la liste des contacts d'un ou plusieurs email(s) et s'il y a un tableau vide en argument, retourne tous les contacts de la collections de mail
+     * @author Augustin Borne
      * @param {*} listAuthor
      * @return {[]}
      */
@@ -223,9 +213,8 @@ class ColMail{
     }
 
     /**
-     * @name mostUsedTerm
-     * @author Augustin Borne
      * Renvoie un tableau contenant les 10 termes les plus utilisé dans les objet de mail
+     * @author Augustin Borne
      * @param {String} email
      * @return {[]}
      */
@@ -260,7 +249,6 @@ class ColMail{
     }
 
     /**
-     * @name searchMaxListTerm
      * Renvoie le terme le plus utilisé de la liste passé en paramètre
      * @param listeTerm
      * @return {null | *}
@@ -277,9 +265,8 @@ class ColMail{
     }
 
     /**
-     * @name searchByEmail
+     * Cherche dans la collection de mail tous les mail dont l'auteur ou le destinataire correspond à l'argument
      * @author Augustin Borne
-     * Cherche dans la collection de mail tous les mail dont l'auteur ou le destinataire correspond a l'argument
      * @param {*} email
      * @return {ColMail}
      */
@@ -294,9 +281,8 @@ class ColMail{
     }
 
     /**
-     * @name searchByEmailAuthor
-     * @author Augustin Borne
      * Cherche dans la collection de mail tous les mail dont l'auteur correspond a l'argument
+     * @author Augustin Borne
      * @param {*} email
      * @return {ColMail}
      */
@@ -311,9 +297,8 @@ class ColMail{
     }
 
     /**
-     * @name MailInBusyDays
-     * @author Augustin Borne
      * Permet de retourner tous les mails envoyés le weekend ou le soir dans un intervalle de temps (email peut être null)
+     * @author Augustin Borne
      * @param {Mail} email
      * @param {Date} date1
      * @param {Date} date2
@@ -335,9 +320,8 @@ class ColMail{
     }
 
     /**
-     * @name searchByAuthor
-     * @author Augustin Borne
      * Permet de retourner tous les mails écrits par l'auteur donné en argument
+     * @author Augustin Borne
      * @param {String} person
      * @return {ColMail}
      */
@@ -352,9 +336,8 @@ class ColMail{
     }
 
     /**
-     * @name colMailToContact
-     * @author Augustin Borne
      * Permet de retourner tous les contact de la collection de mail
+     * @author Augustin Borne
      * @return {[]}
      */
     colMailToContact(){
@@ -386,9 +369,8 @@ class ColMail{
     }
 
     /**
-     * @name getMail
+     * Permet d'avoir un mail à partir de l'Id de ce mail (inutile)
      * @author Augustin Borne
-     * Permet d'avoir un mail a partir de l'Id de ce mail (inutile)
      * @param {String} messageId
      * @return {Mail | boolean}
      */

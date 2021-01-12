@@ -1,10 +1,10 @@
 /**
- * CLI et point d'entrée du projet
- * utilisant le framework CaporalCli
+ * @file cli.js CLI et point d'entrée du projet utilisant le framework CaporalCli
  *
  * utiliser "node cli.js help" pour avoir toutes les commandes
  * @author Jacques Mironneau
  **/
+
 require('colors');
 const {program, Program} = require('@caporal/core');
 const fs = require('fs');
@@ -255,21 +255,21 @@ program
 program.run();
 
 /**
- * @name dateFromMail
  * Convertit un objet date en une chaîne de caractère (MM/DD/YYYY)
  * @param object
  * @return {string}
  */
-dateFromMail = object => {
+function dateFromMail(object){
     const month = ((object.getMonth() + 1) < 10) ? '0' + (object.getMonth() +1) : (object.getMonth() + 1);
     const day = (object.getDate() < 10) ? '0' + object.getDate() : object.getDate();
     return `${month}/${day}/${object.getFullYear()}`;
 }
 
 /**
- * @name checkDateFormat
  * Vérifie si la date est au format MM-DD-YYYY et valide (13/12/2020 n'est pas valide par exemple)
- * @param {Date} d
+ * @param {Date} date
  * @return {boolean}
  */
-const checkDateFormat = d => (d instanceof Date && d !== 'Invalid Date');
+function checkDateFormat(date){
+    return date instanceof Date && date !== 'Invalid Date';
+}

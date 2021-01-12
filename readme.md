@@ -1,22 +1,23 @@
 # Projet GL02 A20 
-**Nom d'équipe**: Team4Software  
-**Auteurs**: Manon Caroy, Augustin Borne, Jacques Mironneau  
-**Licences**: CC BY-SA-NC
+**Nom de l'équipe de développement** : Team4Software  
+**Membres** : Manon Caroy, Augustin Borne, Jacques Mironneau  
+**Nom de l'équipe de refactoring**: CRVM  
+**Membres** : Valentin Koeltgen, Uytterhaegen Romain, Parpette Corentin, Corsin Maxime
+**Licence** : CC BY-SA-NC
 
 ## I) Aide et installation
 
 Récupérez le projet, lancez depuis un terminal la commande :  
-```npm install```  
-  (installe toutes les dépendances nécessaires)
+`npm install` (installe toutes les dépendances nécessaires)
 
 Pour vérifier que le projet est correctement installé, une page d’aide sur le logiciel devrait apparaître avec la commande :  
-    ```node cli.js help```  
+`node cli.js help`  
  La commande expliquera succinctement les commandes possibles suivantes :
 
 Les commandes existantes sont affichées dans le node cli.js help : 
-```node cli.js help <nom-commande>```
+`node cli.js help <nom-commande>`
 
-Pour chaque commande : un \<file\> représente une liste de fichier et/ou dossier séparés par une virgule (sans espace), exemples possibles :
+Pour chaque commande : un \<file> représente une liste de fichier et/ou dossier séparés par une virgule (sans espace), exemples possibles :
 - test1.txt,test2.txt,dossier1,dossier2
 - test1.txt
 - dossier1
@@ -24,29 +25,30 @@ Pour chaque commande : un \<file\> représente une liste de fichier et/ou dossie
 - test1.txt,test2.txt
 
 Une date est représentée sous la forme mm/dd/yyyy soit 02/03/2020 pour le 3 février 2020.  
-Chaque commande possède un alias: count-mail est équivalent à cm par exemple.
+Chaque commande possède un alias : count-mail est équivalent à cm par exemple.
 
 ### Afficher les contacts sous format VCard : 
-```node cli.js get-contacts <files> [OPTIONS...]```  
-Alias: ```node cli.js gc <files> [OPTIONS...]```  
+`node cli.js get-contacts <files> [OPTIONS...]`  
+Alias: `node cli.js gc <files> [OPTIONS...]`  
  
 Arguments :   
 **<  files>** : List of data file (emails)  
 
 Options :  
-- **-c, --collaborators [emaillist]** : emails des collaborateurs séparés par une virgule  
-- **-o, --out < outputfile>** : export des contacts dans un fichier texte au lieu du terminal.  
+- **-c, --collaborators [emailList]** : emails des collaborateurs séparés par une virgule  
+- **-o, --out \<outputFile>** : export des contacts dans un fichier texte au lieu du terminal.  
+
 Exemple :  
-```node cli.js gc <files> -c toto@utt.fr```  
-```node cli.js gc <files> --collaborators toto@utt.fr```  
-```node cli.js gc <files> -c toto@utt.fr, tata@utt.fr```  
-```node cli.js gc <files> -c toto@utt.fr -o rendu.txt```  
-```node cli.js gc <files> --out rendu.txt``` 
+`node cli.js gc <files> -c toto@utt.fr`  
+`node cli.js gc <files> --collaborators toto@utt.fr`  
+`node cli.js gc <files> -c toto@utt.fr, tata@utt.fr`  
+`node cli.js gc <files> -c toto@utt.fr -o rendu.txt`  
+`node cli.js gc <files> --out rendu.txt` 
 
 
 ### Récupérer le nombre de mails écrits sur une période : 
-```node cli.js count-mail <files> <beginning-date> <ending-date>```    
-Alias: ```node cli.js cm <files> <beginning-date> <ending-date>```    
+`node cli.js count-mail <files> <beginning-date> <ending-date>`    
+Alias: `node cli.js cm <files> <beginning-date> <ending-date>`    
 
 Arguments :   
 - **< files>** : Liste des fichiers (emails)  
@@ -56,12 +58,12 @@ Arguments :
 Options :  
 - **--mail-senders** : permet de spécifier la liste des emails des auteurs des mails comptés
 
-Exemple:  
-```node cli.js count-mail <files> <beginning-date> <ending-date> --mail-senders augustin@utt.fr,manon@utt.fr,jacques@utt.fr```
+Exemple :  
+`node cli.js count-mail <files> <beginning-date> <ending-date> --mail-senders augustin@utt.fr,manon@utt.fr,jacques@utt.fr`
 
 ### Récupérer les jours où un mail a été écrit entre 22h et 8h ou le week-end
-```node cli.js buzzy-days <files> <beginning-date> <ending-date>```  
-Alias: ```node cli.js bd <files> <beginning-date> <ending-date>```
+`node cli.js buzzy-days <files> <beginning-date> <ending-date>`  
+Alias: `node cli.js bd <files> <beginning-date> <ending-date>`
 
 Arguments :   
 - **< files>** : Liste des fichiers (emails)
@@ -70,29 +72,31 @@ Arguments :
 
 Options : 
 - **--mail-senders** : permet de spécifier l’email d’un auteur  
-Exemple:  
-```node cli.js buzzy-days <files> <beginning-date> <ending-date> --mail-sender manoncaroy@utt.fr```
+
+Exemple :  
+`node cli.js buzzy-days <files> <beginning-date> <ending-date> --mail-sender manoncaroy@utt.fr`
 
 ### Récupérer le top 10 des interlocuteurs les plus fréquents pour un collaborateur
-```node cli.js top10-collaborator <files> <mail> [OPTIONS...]```  
-Alias: ```node cli.js tc <files> <mail> [OPTIONS...]```  
+`node cli.js top10-collaborator <files> <mail> [OPTIONS...]`  
+Alias: `node cli.js tc <files> <mail> [OPTIONS...]`  
 
 Arguments :  
 **< files>** : Liste des fichiers (emails)  
 **< mail>** : mail d'un collaborateur  
 
 Options :  
-**-f,--format < format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option: "png"  
-Exemples:  
-```node cli.js tc <files> toto@utt.fr```  
-```node clis.js top10-collaborator <files> toto@utt.fr```  
-```node clis.js tc <files> -f svg```  
-```node clis.js tc <files> --format svg```  
-```node clis.js tc <files> --format png```  
+**-f,--format < format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png"  
+
+Exemples :  
+`node cli.js tc <files> toto@utt.fr`  
+`node clis.js top10-collaborator <files> toto@utt.fr`  
+`node clis.js tc <files> -f svg`  
+`node clis.js tc <files> --format svg`  
+`node clis.js tc <files> --format png`  
 
 ### Récupérer le top 10 des termes les plus utilisés dans le sujet pour une boîte mail donnée
-```node cli.js top10-words  <files> <mail> [OPTIONS...]```  
-Alias: ```node cli.js tw  <files> <mail> [OPTIONS...]```
+`node cli.js top10-words  <files> <mail> [OPTIONS...]`  
+Alias: `node cli.js tw  <files> <mail> [OPTIONS...]`
 
 
 Arguments :  
@@ -100,42 +104,45 @@ Arguments :
 **< mail>** : mail d'un collaborateur  
 
 Options :  
-**-f,--format < format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option: "png"  
+**-f,--format < format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png"  
 
-Exemples:  
-```node cli.js tw <files> toto@utt.fr```  
-```node clis.js top10-words  <files> toto@utt.fr```  
-```node clis.js tw <files> -f svg```  
-```node clis.js tw <files> --format svg```  
-```node clis.js tw <files> --format png```  
+Exemples :  
+`node cli.js tw <files> toto@utt.fr`  
+`node clis.js top10-words  <files> toto@utt.fr`  
+`node clis.js tw <files> -f svg`  
+`node clis.js tw <files> --format svg`  
+`node clis.js tw <files> --format png`  
 
 ### Créer une visualisation en nuage de points des interactions entre les collaborateurs d’une boîte mail donnée
-```node cli.js exchange-between-collaborators <files> <email> [OPTIONS...]```  
-Alias: ```node cli.js ebc <files> <email> [OPTIONS...]```  
+`node cli.js exchange-between-collaborators <files> <email> [OPTIONS...]`  
+Alias: `node cli.js ebc <files> <email> [OPTIONS...]`  
 
 Arguments :  
-- **< files>** : Liste de fichiers de données (emails file)  
+- **< files>** : Liste de fichiers de données (fichier emails)  
 - **< mail>** : Email du collaborateur  
 
 Options :  
-- **-f,--format < format>** :  Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option: "png".  
-    Exemple :
-        ```node cli.js exchange-between-collaborators dossier  manoncaroy@utt.fr -f svg```
+- **-f,--format < format>** :  Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png".  
+
+Exemple :  
+`node cli.js exchange-between-collaborators dossier  manoncaroy@utt.fr -f svg`
 
 
 ### Récupérer une liste de mails selon le collaborateur donné
-```node cli.js search-mail  <files> <mail>```  
-Alias: ```node cli.js se <files> <mail>```  
+`node cli.js search-mail  <files> <mail>`  
+Alias: `node cli.js se <files> <mail>`  
 
 Arguments :  
 **< files>** : Liste des fichiers (emails)  
 **< mail>** : mail d'un collaborateur  
+
 Options :  
-- **-o, --out < outputfile>** : export des contacts dans un fichier texte au lieu du terminal.  
-Exemple:  
-```node cli.js search-mail <files> toto@utt.fr```    
-```node cli.js se <files> toto@utt.fr```  
-```node cli.js se <files> toto@utt.fr -o resul.txt ```  
+- **-o, --out \<outputFile>** : export des contacts dans un fichier texte au lieu du terminal.  
+
+Exemple :  
+`node cli.js search-mail <files> toto@utt.fr`    
+`node cli.js se <files> toto@utt.fr`  
+`node cli.js se <files> toto@utt.fr -o resul.txt`  
 
 ## II) Dépendances
 Les dépendances du projet sont :  
@@ -155,7 +162,7 @@ Pour les jeux de données, nous avons les fichiers :
 - test (fichier créé vide)  
 - test2 (fichier créé avec le champ From vide)
 
-## IV) Ecarts éventuels au cahier des charges
+## IV) Écarts éventuels au cahier des charges
 
 - **SPEC1.1 :** En plus de ce qui a été décrit dans le cahier des charges, on peut exporter les contacts affichés dans un fichier.  
 - **SPEC1.6 :**  

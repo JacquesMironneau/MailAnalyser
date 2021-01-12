@@ -4,13 +4,12 @@ const {ColMail} = require('../collection_mail/ColMail');
 const fs = require('fs');
 
 /**
- * @name extractMail
  * Création d'une liste de mail à l'aide d'un fichier ou d'un dossier passé en paramètres
  * @param path
  * @param logger
  * @return {ColMail}
  */
-extractMail = (path, logger) => {
+function extractMail(path, logger){
     let listOfPath = [], listeMail = new ColMail('listeMail');
     for (let indexPath = 0; indexPath < path.length; indexPath++) listOfPath = listOfPath.concat(getPathOfFiles(path[indexPath]));
     if (listOfPath.length > 0){
@@ -24,12 +23,11 @@ extractMail = (path, logger) => {
 }
 
 /**
- * @name getPathOfFiles
  * Retourne une liste contenant les chemins de tous les fichiers
  * @param path
  * @return {[]}
  */
-getPathOfFiles = path => {
+function getPathOfFiles(path){
     let results = [];
     if (inputIsFile(path)) results.push(path);
     else if (inputIsFolder(path)){
@@ -45,12 +43,11 @@ getPathOfFiles = path => {
 }
 
 /**
- * @name createMail
  * Créer un mail avec les données d'un fichier
  * @param file
- * @return {null|Mail}
+ * @return {null | Mail}
  */
-createMail = file => {
+function createMail(file){
     let fileToString = fs.readFileSync(file).toString();
     //we verify if data in the file is a mail
     if (!fileToString.includes('Message-ID: ') || !fileToString.includes('\nDate: ') || !fileToString.includes('\nFrom: ') || !fileToString.includes('\nTo: ') || !fileToString.includes('\nSubject: ') || !fileToString.includes('\nMime-Version: ') || !fileToString.includes('Content-Type: ') || !fileToString.includes('Content-Transfer-Encoding: ') || !fileToString.includes('X-From: ') || !fileToString.includes('X-To: ') || !fileToString.includes('X-cc: ') || !fileToString.includes('X-bcc: ') || !fileToString.includes('X-Folder: ') || !fileToString.includes('X-Origin: ') || !fileToString.includes('X-FileName: ')) return null;
@@ -64,12 +61,11 @@ createMail = file => {
 }
 
 /**
- * @name createTab
  * Retourne un tableau contenant les données intéressantes d'un fichier à stocker
  * @param file
- * @return {any[]}
+ * @return {[]}
  */
-createTab = file => {
+function createTab(file){
     let separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\r\n|\n)/;
     file = file.split(separator).filter(val => !val.match(separator));
 
@@ -130,12 +126,11 @@ createTab = file => {
 }
 
 /**
- * @name transformDate
  * Transforme une date du fichier en un objet Data pour qu'elle soit utilisable.
  * @param date
  * @return {Date}
  */
-transformDate = date => {
+function transformDate(date){
     let separator = /[ :]/;
     if (date.charAt(0) === ' ') date = date.substring(1);
     date = date.split(separator).filter(val => !val.match(separator));
@@ -165,12 +160,11 @@ transformDate = date => {
 }
 
 /**
- * @name transformName
  * Transforme l'auteur du mail et son contenu pour qu'ils deviennent utilisables.
  * @param name
  * @return {[]}
  */
-transformName = name => {
+function transformName(name){
     let regexName = /^[A-Za-z]+((\s)?(['-.]?([A-Za-z])+))*$/;
     let tabName = [], needToInverseNameAndFirstname = [];
     if (name.match(regexName)) {
@@ -217,22 +211,20 @@ transformName = name => {
 }
 
 /**
- * @name inputIsFolder
  * Vérifie si le chemin correspond à un dossier
  * @param path
  * @return {boolean}
  */
-inputIsFolder = path => {
+function inputIsFolder(path){
     return fs.lstatSync(path).isDirectory();
 }
 
 /**
- * @name inputIsFile
  * Vérifie si le chemin correspond à un fichier
  * @param path
  * @return {boolean}
  */
-inputIsFile = path => {
+function inputIsFile(path){
     return fs.lstatSync(path).isFile();
 }
 

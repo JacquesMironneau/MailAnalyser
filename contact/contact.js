@@ -1,8 +1,14 @@
 /**
- * Contact class, represent a contact of a mailbox.
+ * Classe Contact, représente un contact d'une boîte mail.
  * @author Jacques
  */
 class Contact{
+  /**
+   * Constructeur de la classe Contact
+   * @param name
+   * @param lastname
+   * @param mail
+   */
   constructor(name, lastname, mail){
     this.name = name;
     this.lastname = lastname;
@@ -10,8 +16,7 @@ class Contact{
   }
 
   /**
-   * @name toVcard
-   * Convert Contact to a VCard Format
+   * Convertit un contact au format VCard
    * @return {string}
    */
   toVcard(){

@@ -1,5 +1,5 @@
 /**
- * Module Vega lite, exporte en png ou svg.
+ * @file Module Vega lite, exporte en png ou svg.
  * @author Jacques Mironneau
  */
 
@@ -8,13 +8,12 @@ const vl = require('vega-lite');
 const fs = require('fs');
 
 /**
- * @name render
  * Rendu d'un graphique vega lite avec des données passées au format JSON. Graphique au format png ou svg
  * @param {json} spec The vegaLite spec to export as a file
  * @param {['png','svg']} format format of the exported graphic
  * @param {String} fileName name of the exported file
  */
-const render = (spec, format, fileName) => {
+function render(spec, format, fileName){
   fileName = 'resultat/' + fileName + '.' + format
   // Compile vegaLite spec to vega spec
   const vgSpec = vl.compile(spec).spec;
@@ -39,16 +38,15 @@ const render = (spec, format, fileName) => {
           out.on('finish', () => console.log(`${'[OK]'.green.bold} Graphic rendered to ${fileName}`));
         });
   }
-};
+}
 
 /**
- * @name visualInteraction
  * Rendu du graphique pour les interactions entre les collaborateurs
  * @param {Interaction[]} interactionList list of interaction between every contact of the given collaborator
  * @param {String} format Format of the file that will be exported (svg or png)
  * @param {String} fileName name of the exported file
  */
-const visualInteraction = (interactionList, format, fileName) => {
+function visualInteraction(interactionList, format, fileName){
   if (interactionList.every(inter => inter.nbEchange === 0)){
     console.log('[x]'.red + 'No interactions among the contact of the given collaborator');
     return;
@@ -82,16 +80,15 @@ const visualInteraction = (interactionList, format, fileName) => {
     }
   };
   render(spec, format, fileName);
-};
+}
 
 /**
- * @name top10Interloc
  * Rendu du graphique pour le top 10 des interlocuteurs
  * @param {Interaction[]} data  interaction list, contact1 is the collaborator, contact2 is the other contact
  * @param {String} format Format of the file that will be exported (svg or png)
  * @param {String} fileName name of the exported file
  */
-const top10Interloc = (data, format, fileName) => {
+function top10Interloc(data, format, fileName){
   const spec = {
     $schema: "https://vega.github.io/schema/vega-lite/v4.json",
     data: {values: data},
@@ -114,13 +111,12 @@ const top10Interloc = (data, format, fileName) => {
 }
 
 /**
- * @name top10term
  * Rendu du graphique du top 10 des terms utilisés dans les mails
  * @param {NbUseTerm[]} data Array of object: NbUseTerm ( a term and the number of its occurrence)
  * @param {String} format Format of the file that will be exported (svg or png)
  * @param {String} fileName name of the exported file
  */
-const top10term = (data, format, fileName) => {
+function top10term(data, format, fileName){
   const spec = {
     $schema: "https://vega.github.io/schema/vega-lite/v4.json",
     data: {values: data},

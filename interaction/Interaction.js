@@ -1,13 +1,11 @@
+const {Contact} = require('../contact/contact');
+
 /**
  * Classe Interaction, représente une relation entre 2 contacts.
  * @author Augustin Borne
  */
-
-const {Contact} = require('../contact/contact');
-
 class Interaction{
     /**
-     * @name constructor
      * Constructeur de la classe Interaction
      * Vérifie si les contacts sont bien des instance de la classe Contact avant assignation de ces derniers
      * @param contact1
