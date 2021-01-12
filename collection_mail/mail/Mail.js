@@ -1,5 +1,5 @@
 /**
- * Mail class, represent an email.
+ * Classe Mail, représente un mail.
  * @author Augustin Borne
  */
 const {Contact} = require('../../contact/contact');
@@ -26,8 +26,8 @@ class Mail{
 
     /**
      * @name toString
-     * Converti un objet mail en String pour l'affichage
-     * @returns {string}
+     * Convertit un objet mail en String pour l'affichage
+     * @return {string}
      */
     get toString(){
         let res = "[";
@@ -55,7 +55,7 @@ class Mail{
     /**
      * @name toHumanReadableFormat
      * Retourne un mail visible correctement pour un humain
-     * @returns {string}
+     * @return {string}
      */
     get toHumanReadableFormat(){
         return "FROM: " + this.mailAuthor + '\n' +
@@ -96,8 +96,8 @@ class Mail{
     /**
      * @name isOlderThan
      * @param {String} mail
-     * vérifie si un mail est plus ancien a un autre
-     * @return boolean || Error
+     * Vérifie si un mail est plus ancien a un autre
+     * @return {boolean || Error}
      */
     isOlderThan(mail){
         if(mail instanceof Mail) return mail.date.getTime() > this.date.getTime();
@@ -108,8 +108,8 @@ class Mail{
      * @name isBetweenDate
      * @param {Date} date1
      * @param {Date} date2
-     * vérifie si un mail est compris entre 2 dates
-     * @return boolean
+     * Vérifie si un mail est compris entre 2 dates
+     * @return {boolean}
      */
     isBetweenDate(date1,date2){
         return this.date.getTime() >= date1.getTime() && this.date.getTime() <= date2.getTime();
@@ -117,9 +117,8 @@ class Mail{
 
     /**
      * @name isWeekend
-     * vérifie si un mail est écrit pendant un weekend
-     * @return boolean
-     *
+     * Vérifie si un mail est écrit pendant un weekend
+     * @return {boolean}
      */
     isWeekend(){
         return this.date.getDay === 0 || this.date.getDay === 6;
@@ -127,8 +126,8 @@ class Mail{
 
     /**
      * @name mailInBusyDays
-     * vérifie si un mail est écrit pendant un busy day
-     * @return boolean
+     * Vérifie si un mail est écrit pendant un busy day
+     * @return {boolean}
      */
     mailInBusyDays(){
         return !!(this.date.getHours() < 8 || this.date.getHours() > 22 || this.isWeekend());
@@ -138,7 +137,7 @@ class Mail{
      * @name mailContainsTextInObject
      * @param {String} txt
      * Vérifie si un mail contient un message en objet
-     * @return boolean
+     * @return {boolean}
      */
     mailContainsTextInObject(txt){
         return this.object.indexOf(txt) > 0;
@@ -147,7 +146,7 @@ class Mail{
     /**
      * @name authorToContact
      * Renvoie un contact correspondant à l'auteur
-     * @return Contact
+     * @return {Contact}
      */
     authorToContact(){
         if(this.author!==""){
@@ -159,7 +158,7 @@ class Mail{
     /**
      * @name sizeRecipientMail
      * Renvoie la taille de la liste recipient mail
-     * @returns {number}
+     * @return {number}
      */
     get sizeRecipientMail(){
         let result = 0;
@@ -170,7 +169,7 @@ class Mail{
     /**
      * @name recipientToContact
      * Renvoie des contacts correspondants aux destinataires
-     * @return Contact
+     * @return {[]}
      */
     recipientToContact(){
         let result = [], contactTest;
@@ -188,7 +187,7 @@ class Mail{
      * @name recipientEmailToContact
      * Retourne un contact créé à partir d'un mail
      * @param email
-     * @returns {Contact}
+     * @return {Contact}
      */
     recipientEmailToContact(email){
         let index = this.mailRecipient.indexOf(email);
@@ -202,17 +201,17 @@ class Mail{
      * @name emailIncludeInRecipientMail
      * Vérifie si un mail est contenu dans la liste des recipients mails
      * @param email
-     * @returns {boolean}
+     * @return {boolean}
      */
     emailIncludeInRecipientMail(email){
         return this.mailRecipient.indexOf(email) !== -1;
     }
 
     /**
-     * Vérifie si une personne est contenue dans recipient
      * @name personIncludeInRecipient
+     * Vérifie si une personne est contenue dans recipient
      * @param person
-     * @returns {boolean}
+     * @return {boolean}
      */
     personIncludeInRecipient(person){
         return this.recipient.indexOf(person) !== -1;

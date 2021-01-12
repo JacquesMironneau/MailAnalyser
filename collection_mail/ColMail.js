@@ -1,5 +1,5 @@
 /**
- * Collection Mail class, represent an email collection.
+ * Classe Collection Mail, représente une collection de mails.
  * @author Augustin Borne
  */
 const {Mail} = require('./mail/Mail.js');
@@ -14,15 +14,12 @@ class ColMail{
 
     /**
      * @name setListeMail
-     * Ajoute un élement de type mail à la liste des mails
+     * Ajoute un élément de type mail à la liste des mails
      * @param inputMail
      */
     setListeMail(inputMail){
         if(inputMail instanceof Mail){
             if(this.verifInstanceOfMail(inputMail)) this.listeMail.push(inputMail);
-            else{
-                //console.log("ERROR : invalid data format for Mail");
-            }
         } else throw Error('Invalid data type, a Mail element is required');
     }
 
@@ -38,20 +35,16 @@ class ColMail{
             if (inputMail.getSubject === undefined){
                 //console.log("subject undefined");
                 result = false;
-            }
-            else if(inputMail.getEmailReceiver.length !== inputMail.getRecipient.length){
-                //console.log("longeur tab email != long tab ");
+            } else if(inputMail.getEmailReceiver.length !== inputMail.getRecipient.length){
+                //console.log("longueur tab email != long tab ");
                 result = false;
-            }
-            else if(inputMail.author === undefined){
+            } else if(inputMail.author === undefined){
                 //console.log("pas auteur ");
                 result = false;
-            }
-            else if(inputMail.getEmailAuthor === undefined || inputMail.getEmailAuthor === ""){
+            } else if(inputMail.getEmailAuthor === undefined || inputMail.getEmailAuthor === ""){
                 //console.log("pas email auteur ou email auteur vide ");
                 result = false;
-            }
-            else if(!(inputMail.getDate instanceof Date)){
+            } else if(!(inputMail.getDate instanceof Date)){
                 //console.log("pas de date");
                 result = false;
             }
@@ -86,11 +79,11 @@ class ColMail{
 
     /**
      * @name mailInInterval
+     * @author Augustin Borne
+     * Retourne une collection de mail correspondant au mail envoyé pendant un intervalle de temps
      * @param {Date} date1
      * @param {Date} date2
-     *
-     * Retourne une collection de mail correspondant au mail envoyé pendant un intervalle de temps
-     * @author Augustin Borne
+     * @return {ColMail}
      */
     mailInInterval(date1, date2){
         let result = new ColMail();
@@ -104,15 +97,15 @@ class ColMail{
 
     /**
      * @name bestCollab
-     * @param {String} email
-     *
-     * Permet de retourner les collaborateurs d'un contact  qui échangent le plus entre eux
      * @author Augustin Borne
+     * Permet de retourner les collaborateurs d'un contact  qui échangent le plus entre eux
+     * @param {String} email
+     * @return {[]}
      */
     bestCollabByEmail(email){
         let tab = [email];
 
-        //Creation du contact a partir de l'email
+        //Creation du contact a partir de l'Email
         let tempCollection = this.searchByEmail(email);
         let contactEmail;
         if(tempCollection.getListMail.length > 0){
@@ -157,12 +150,11 @@ class ColMail{
 
     /**
      * @name searchNbInteraction
+     * @author Augustin Borne
+     * Retourne le nombre d'échanges entre 2 adresses mail
      * @param {String} email1
      * @param {String} email2
-     *
-     * Retourne le nombre d'échanges entre 2 adresses mail
-     *
-     * @author Augustin Borne
+     * @return {number}
      */
     searchNbInteraction(email1, email2){
         let result = 0;
@@ -174,10 +166,10 @@ class ColMail{
 
     /**
      * @name interactionBetweenCollabForACollab
-     * @param {String} email
-     *
-     * Renvoie le nombre d'interaction entre chaque contact d'une liste de contact d'un collaborateur donnée
      * @author Augustin Borne
+     * Renvoie le nombre d'interaction entre chaque contact d'une liste de contact d'un collaborateur donnée
+     * @param {String} email
+     * @return {[]}
      */
     interactionBetweenCollabForACollab(email){
         let tab = [email];
@@ -200,9 +192,10 @@ class ColMail{
 
     /**
      * @name collabByEmail
-     * @param {*} listAuthor
-     * générer la liste des contacts de un ou plusieurs email et si il y a un tableau vide en argument, retourner tous les contacts de la collections de mail
      * @author Augustin Borne
+     * Génère la liste des contacts d'un ou plusieurs email(s) et s'il y a un tableau vide en argument, retourne tous les contacts de la collections de mail
+     * @param {*} listAuthor
+     * @return {[]}
      */
     collabByEmail(listAuthor){
         let collabResult = [];
@@ -231,9 +224,10 @@ class ColMail{
 
     /**
      * @name mostUsedTerm
-     * @param {String} email
-     * Renvoie un tableau contenant les 10 termes les plus utilisé dans les objet de mail
      * @author Augustin Borne
+     * Renvoie un tableau contenant les 10 termes les plus utilisé dans les objet de mail
+     * @param {String} email
+     * @return {[]}
      */
     mostUsedTerm(email){
         let colTemp = this.searchByEmail(email);
@@ -269,7 +263,7 @@ class ColMail{
      * @name searchMaxListTerm
      * Renvoie le terme le plus utilisé de la liste passé en paramètre
      * @param listeTerm
-     * @return {null|*}
+     * @return {null | *}
      */
     searchMaxListTerm(listeTerm){
         if(listeTerm.length > 2){
@@ -284,10 +278,10 @@ class ColMail{
 
     /**
      * @name searchByEmail
-     * @param {*} email
-     *
-     * Chercher dans la collection de mail tous les mail dont l'auteur ou le destinataire correspond a l'argument
      * @author Augustin Borne
+     * Cherche dans la collection de mail tous les mail dont l'auteur ou le destinataire correspond a l'argument
+     * @param {*} email
+     * @return {ColMail}
      */
     searchByEmail(email){
         let result = new ColMail();
@@ -301,10 +295,10 @@ class ColMail{
 
     /**
      * @name searchByEmailAuthor
-     * @param {*} email
-     *
-     * Chercher dans la collection de mail tous les mail dont l'auteur correspond a l'argument
      * @author Augustin Borne
+     * Cherche dans la collection de mail tous les mail dont l'auteur correspond a l'argument
+     * @param {*} email
+     * @return {ColMail}
      */
     searchByEmailAuthor(email){
         let result = new ColMail();
@@ -318,12 +312,12 @@ class ColMail{
 
     /**
      * @name MailInBusyDays
+     * @author Augustin Borne
+     * Permet de retourner tous les mails envoyés le weekend ou le soir dans un intervalle de temps (email peut être null)
      * @param {Mail} email
      * @param {Date} date1
      * @param {Date} date2
-     *Permet de retourner tous les mails envoyés le weekend ou le soir dans un intervalle de temps (email peut être null)
-     *
-     * @author Augustin Borne
+     * @return {ColMail}
      */
     MailInBusyDays(email, date1, date2){
         let resultTemp = this.mailInInterval(date1, date2);
@@ -342,10 +336,10 @@ class ColMail{
 
     /**
      * @name searchByAuthor
-     * @param {String} person
-     *
-     * permet de retourner tous les mails écrits par l'auteur donné en argument
      * @author Augustin Borne
+     * Permet de retourner tous les mails écrits par l'auteur donné en argument
+     * @param {String} person
+     * @return {ColMail}
      */
     searchByAuthor(person){
         let result = new ColMail();
@@ -359,8 +353,9 @@ class ColMail{
 
     /**
      * @name colMailToContact
-     * Permet de retourner tous les contact de la collection de mail
      * @author Augustin Borne
+     * Permet de retourner tous les contact de la collection de mail
+     * @return {[]}
      */
     colMailToContact(){
         let result = [];
@@ -392,13 +387,13 @@ class ColMail{
 
     /**
      * @name getMail
-     * @param {String} messageId
-     *
-     * Permet d'avoir un mail a partir de l'Id de ce mail (inutile)
      * @author Augustin Borne
+     * Permet d'avoir un mail a partir de l'Id de ce mail (inutile)
+     * @param {String} messageId
+     * @return {Mail | boolean}
      */
     getMail(messageId){
-        let result =null;
+        let result = null;
         this.listeMail.forEach(element => {
             if(element instanceof Mail){
                 if(element.getMessageId === messageId) result = element;
@@ -409,4 +404,4 @@ class ColMail{
     }
 }
 
-module.exports = { ColMail };
+module.exports = {ColMail};

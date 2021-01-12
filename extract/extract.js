@@ -218,7 +218,7 @@ transformName = name => {
 
 /**
  * @name inputIsFolder
- * vérifie si le chemin correspond à un dossier
+ * Vérifie si le chemin correspond à un dossier
  * @param path
  * @return {boolean}
  */
@@ -228,7 +228,7 @@ inputIsFolder = path => {
 
 /**
  * @name inputIsFile
- * vérifie si le chemin correspond à un fichier
+ * Vérifie si le chemin correspond à un fichier
  * @param path
  * @return {boolean}
  */
@@ -236,4 +236,4 @@ inputIsFile = path => {
     return fs.lstatSync(path).isFile();
 }
 
-module.exports = { extractMail };
+module.exports = {extractMail};

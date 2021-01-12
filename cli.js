@@ -1,8 +1,8 @@
 /**
- * CLI and entry point of the project
- * using framework caporalCli.
+ * CLI et point d'entrée du projet
+ * utilisant le framework CaporalCli
  *
- * use "node cli.js help" to get every commands
+ * utiliser "node cli.js help" pour avoir toutes les commandes
  * @author Jacques Mironneau
  **/
 require('colors');
@@ -11,13 +11,6 @@ const fs = require('fs');
 const {visualInteraction, top10Interloc, top10term} = require('./vega/vega.js');
 const {extractMail} = require('./extract/extract.js');
 const {exit} = require('process');
-
-/**
- * check if date is mm-dd-yyyy and not invalid (13/12/2020 is invalid for instance)
- * @param Date d
- * @returns {boolean}
- */
-const checkDateFormat = d => (d instanceof Date && d !== 'Invalid Date');
 
 program
     .name('Mail parser')
@@ -67,7 +60,7 @@ program
     })
 
     /*
-     * Spec 1.2
+     * Spec 1.2: Get the number of mails written in a given timeframe
      * Entrée(s) : Date début, date fin, liste de personnes qui ont envoyés les mails (optionnel)
      */
     .command('count-mail', 'Count the number of mail on a given period')
@@ -120,7 +113,7 @@ program
     })
 
     /*
-     * Spec 1.3
+     * Spec 1.3: Get the days were mails were sent between 10pm and 8am or on the weekend
      * Entrée(s) : Date début, date de fin, auteur des emails (optionnel)
      */
     .command('buzzy-days', 'List the "buzzy-days" were mails are written between 10pm and 8am')
@@ -176,8 +169,7 @@ program
     })
 
     /*
-     * Spec 1.4
-     * Titre : Lister les 10 interlocuteurs les plus fréquents pour un collaborateur donné
+     * Spec 1.4: Get the 10 most frequent collaborators of a collaborator
      */
     .command('top10-collaborators', 'List the 10 most frequent contacts of a given collaborator')
     .alias('tc')
@@ -194,7 +186,7 @@ program
     })
 
     /*
-     * Spec 1.5
+     * Spec 1.5: Get the 10 most frequent words of a collaborator
      */
     .command('top10-words', 'List the 10 most frequent words in a given collaborator mail box')
     .alias('tw')
@@ -211,7 +203,7 @@ program
     })
 
     /*
-     * Spec 1.6
+     * Spec 1.6: Create a visualisation of the exchanges of a collaborator
      */
     .command('exchange-between-collaborators', 'Design a scatter graph with the number of exchange between collaborators')
     .alias('ebc')
@@ -227,7 +219,7 @@ program
     })
 
     /*
-     * Spec 1.7
+     * Spec 1.7: Search mails of a given collaborator
      */
     .command('search-mail', 'Search mails of a given collaborator')
     .alias('se')
@@ -263,12 +255,21 @@ program
 program.run();
 
 /**
- * Convert a Date object to a string (mm/dd/YYYY)
+ * @name dateFromMail
+ * Convertit un objet date en une chaîne de caractère (MM/DD/YYYY)
  * @param object
- * @returns {string}
+ * @return {string}
  */
 dateFromMail = object => {
     const month = ((object.getMonth() + 1) < 10) ? '0' + (object.getMonth() +1) : (object.getMonth() + 1);
     const day = (object.getDate() < 10) ? '0' + object.getDate() : object.getDate();
     return `${month}/${day}/${object.getFullYear()}`;
 }
+
+/**
+ * @name checkDateFormat
+ * Vérifie si la date est au format MM-DD-YYYY et valide (13/12/2020 n'est pas valide par exemple)
+ * @param {Date} d
+ * @return {boolean}
+ */
+const checkDateFormat = d => (d instanceof Date && d !== 'Invalid Date');
