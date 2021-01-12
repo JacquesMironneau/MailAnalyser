@@ -3,7 +3,13 @@ const {ColMail} = require('../collection_mail/ColMail');
 
 const fs = require('fs');
 
-//extractMail : create a list of mail with data of several files
+/**
+ * @name extractMail
+ * Création d'une liste de mail à l'aide d'un fichier ou d'un dossier passé en paramètres
+ * @param path
+ * @param logger
+ * @return {ColMail}
+ */
 extractMail = (path, logger) => {
     let listOfPath = [], listeMail = new ColMail('listeMail');
     for (let indexPath = 0; indexPath < path.length; indexPath++) listOfPath = listOfPath.concat(getPathOfFiles(path[indexPath]));
@@ -17,7 +23,12 @@ extractMail = (path, logger) => {
     return listeMail;
 }
 
-//getPathOfFiles : with one way, we get all the ways of files
+/**
+ * @name getPathOfFiles
+ * Retourne une liste contenant les chemins de tous les fichiers
+ * @param path
+ * @return {[]}
+ */
 getPathOfFiles = path => {
     let results = [];
     if (inputIsFile(path)) results.push(path);
@@ -33,7 +44,12 @@ getPathOfFiles = path => {
     return results;
 }
 
-// createMail : create a mail with data of a file
+/**
+ * @name createMail
+ * Créer un mail avec les données d'un fichier
+ * @param file
+ * @return {null|Mail}
+ */
 createMail = file => {
     let fileToString = fs.readFileSync(file).toString();
     //we verify if data in the file is a mail
@@ -47,7 +63,12 @@ createMail = file => {
     return new Mail(dataTab[0], transformDate(dataTab[1]), dataTab[2], dataTab[3], dataTab[4], dataTab[5], dataTab[6], dataTab[7], transformName(dataTab[8]), transformName(dataTab[9]), dataTab[10], dataTab[11], dataTab[12], dataTab[13], dataTab[14], dataTab[15]);
 }
 
-// createTab : create a tab with data which are interesting
+/**
+ * @name createTab
+ * Retourne un tableau contenant les données intéressantes d'un fichier à stocker
+ * @param file
+ * @return {any[]}
+ */
 createTab = file => {
     let separator = /(Message-ID: |Date: |From: |Mime-Version: |Content-Type: |Content-Transfer-Encoding: |X-From: |X-To: |X-cc: |X-bcc: |X-Folder: |X-Origin: |X-FileName: |\r\n|\n)/;
     file = file.split(separator).filter(val => !val.match(separator));
@@ -108,7 +129,12 @@ createTab = file => {
     return file;
 }
 
-// transformDate : transform the date to be interpretable
+/**
+ * @name transformDate
+ * Transforme une date du fichier en un objet Data pour qu'elle soit utilisable.
+ * @param date
+ * @return {Date}
+ */
 transformDate = date => {
     let separator = /[ :]/;
     if (date.charAt(0) === ' ') date = date.substring(1);
@@ -138,7 +164,12 @@ transformDate = date => {
     return new Date(transformDate[0], transformDate[1], transformDate[2], transformDate[3], transformDate[4], transformDate[5]);
 }
 
-// transformName : transform the author and recipient to be interpretable
+/**
+ * @name transformName
+ * Transforme l'auteur du mail et son contenu pour qu'ils deviennent utilisables.
+ * @param name
+ * @return {[]}
+ */
 transformName = name => {
     let regexName = /^[A-Za-z]+((\s)?(['-.]?([A-Za-z])+))*$/;
     let tabName = [], needToInverseNameAndFirstname = [];
@@ -185,12 +216,22 @@ transformName = name => {
     }
 }
 
-// inputIsFolder : verify if the input is a folder
+/**
+ * @name inputIsFolder
+ * vérifie si le chemin correspond à un dossier
+ * @param path
+ * @return {boolean}
+ */
 inputIsFolder = path => {
     return fs.lstatSync(path).isDirectory();
 }
 
-// inputIsFile : verify if the input is a file
+/**
+ * @name inputIsFile
+ * vérifie si le chemin correspond à un fichier
+ * @param path
+ * @return {boolean}
+ */
 inputIsFile = path => {
     return fs.lstatSync(path).isFile();
 }
