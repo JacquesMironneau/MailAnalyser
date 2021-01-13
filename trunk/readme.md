@@ -1,9 +1,9 @@
 # Projet GL02 A20 
 **Nom de l'équipe de développement** : Team4Software  
 **Membres** : Manon Caroy, Augustin Borne, Jacques Mironneau  
-**Nom de l'équipe de refactoring**: CRVM  
+**Nom de l'équipe de refactoring** : CRVM  
 **Membres** : Valentin Koeltgen, Uytterhaegen Romain, Parpette Corentin, Corsin Maxime
-**Licence** : CC BY-SA-NC
+**Licence** : MIT
 
 ## I) Aide et installation
 
@@ -32,10 +32,10 @@ Chaque commande possède un alias : count-mail est équivalent à cm par exemple
 Alias: `node cli.js gc <files> [OPTIONS...]`  
  
 Arguments :   
-**<  files>** : List of data file (emails)  
+**\<files>** : List of data file (emails)  
 
 Options :  
-- **-c, --collaborators [emailList]** : emails des collaborateurs séparés par une virgule  
+- **-c, --collaborators \[emailList]** : emails des collaborateurs séparés par une virgule  
 - **-o, --out \<outputFile>** : export des contacts dans un fichier texte au lieu du terminal.  
 
 Exemple :  
@@ -51,9 +51,9 @@ Exemple :
 Alias: `node cli.js cm <files> <beginning-date> <ending-date>`    
 
 Arguments :   
-- **< files>** : Liste des fichiers (emails)  
-- **< beginning-date>** : date au format mm/dd/yyyy  
-- **< ending-date>** : date au format mm/dd/yyyy
+- **\<files>** : Liste des fichiers (emails)  
+- **\<beginning-date>** : date au format mm/dd/yyyy  
+- **\<ending-date>** : date au format mm/dd/yyyy
 
 Options :  
 - **--mail-senders** : permet de spécifier la liste des emails des auteurs des mails comptés
@@ -66,9 +66,9 @@ Exemple :
 Alias: `node cli.js bd <files> <beginning-date> <ending-date>`
 
 Arguments :   
-- **< files>** : Liste des fichiers (emails)
-- **< beginning-date>** : date au format mm/dd/yyyy
-- **< ending-date>** : date au format mm/dd/yyyy  
+- **\<files>** : Liste des fichiers (emails)
+- **\<beginning-date>** : date au format mm/dd/yyyy
+- **\<ending-date>** : date au format mm/dd/yyyy  
 
 Options : 
 - **--mail-senders** : permet de spécifier l’email d’un auteur  
@@ -81,11 +81,11 @@ Exemple :
 Alias: `node cli.js tc <files> <mail> [OPTIONS...]`  
 
 Arguments :  
-**< files>** : Liste des fichiers (emails)  
-**< mail>** : mail d'un collaborateur  
+**\<files>** : Liste des fichiers (emails)  
+**\<mail>** : mail d'un collaborateur  
 
 Options :  
-**-f,--format < format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png"  
+**-f,--format \<format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png"  
 
 Exemples :  
 `node cli.js tc <files> toto@utt.fr`  
@@ -100,11 +100,11 @@ Alias: `node cli.js tw  <files> <mail> [OPTIONS...]`
 
 
 Arguments :  
-**< files>** : Liste des fichiers (emails)  
-**< mail>** : mail d'un collaborateur  
+**\<files>** : Liste des fichiers (emails)  
+**\<mail>** : mail d'un collaborateur  
 
 Options :  
-**-f,--format < format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png"  
+**-f,--format \<format>** : Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png"  
 
 Exemples :  
 `node cli.js tw <files> toto@utt.fr`  
@@ -118,11 +118,11 @@ Exemples :
 Alias: `node cli.js ebc <files> <email> [OPTIONS...]`  
 
 Arguments :  
-- **< files>** : Liste de fichiers de données (fichier emails)  
-- **< mail>** : Email du collaborateur  
+- **\<files>** : Liste de fichiers de données (fichier emails)  
+- **\<mail>** : Email du collaborateur  
 
 Options :  
-- **-f,--format < format>** :  Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png".  
+- **-f,--format \<format>** :  Préciser l’extension du fichier exporté "svg"ou "png", Par défaut si on ne spécifie pas l’option : "png".  
 
 Exemple :  
 `node cli.js exchange-between-collaborators dossier  manoncaroy@utt.fr -f svg`
@@ -133,8 +133,8 @@ Exemple :
 Alias: `node cli.js se <files> <mail>`  
 
 Arguments :  
-**< files>** : Liste des fichiers (emails)  
-**< mail>** : mail d'un collaborateur  
+**\<files>** : Liste des fichiers (emails)  
+**\<mail>** : mail d'un collaborateur  
 
 Options :  
 - **-o, --out \<outputFile>** : export des contacts dans un fichier texte au lieu du terminal.  
@@ -152,8 +152,7 @@ Les dépendances du projet sont :
 - "vega-lite": "4.17.0"  
 
 ## III) Test et jeux de données fournis
-
-Pour les jeux de données, nous avons les fichiers :  
+Pour les jeux de données, nous avons testé les fichiers :  
 - donneesSujetB (Toutes les données)
 - donneesSujetB/j-arnold/sent_mail/3_  
 - donneesSujetB/j-arnold/sent_mail/9_  
@@ -163,17 +162,25 @@ Pour les jeux de données, nous avons les fichiers :
 - test2 (fichier créé avec le champ From vide)
 
 ## IV) Écarts éventuels au cahier des charges
-
 - **SPEC1.1 :** En plus de ce qui a été décrit dans le cahier des charges, on peut exporter les contacts affichés dans un fichier.  
 - **SPEC1.6 :**  
-  - entrée = email du collaborateur  
-  - schéma = collaborateurs (contact1) en abscisse et collaborateurs (contact2) en ordonnée  
+    - entrée = email du collaborateur  
+    - schéma = collaborateurs (contact1) en abscisse et collaborateurs (contact2) en ordonnée  
 - **SPEC1.7 :** comparaison de la partie “from:” → on ne peut filtrer qu’avec le mail, on peut exporter les mails dans un fichier.  
 - **SPEC1.8 :**
-  - considérée automatique pour chaque autre spec et non comme une demande de l’utilisateur  
-  - nous n’affichons pas les mails extraits car ils ont la même forme que le fichier de départ et que cela deviendrait illisible pour énormément de données. Cependant, lorsque nous devons afficher des mails dans d’autres specs, nous affichons les informations From: To: Subject: and Content: (=message)  
-  - d’après l’ABNF, nous avons considéré uniquement le dernier mail écrit ou répondu (c’est-à-dire le premier mail de chaque fichier) en considérant que les autres mails font partie du message. En effet, le dernier mail est celui qui nous intéresse car, par exemple, un mail peut avoir été transféré au collaborateur sans pour autant que celui-ci communique directement avec l’auteur du mail transféré.  
-  - nous avons remarqué que certains mails avaient un format particulier en ajoutant les lignes Cc: ou Bcc:. Ces lignes n’étant pas considérées dans l’ABNF, nous ne les avons pas pris en compte. De plus, certains mails prenaient plusieurs lignes pour les destinataires, nous les avons donc regrouper en une seule ligne pour pouvoir extraire les données correctement.  
+    - considérée automatique pour chaque autre spec et non comme une demande de l’utilisateur  
+    - nous n’affichons pas les mails extraits car ils ont la même forme que le fichier de départ et que cela deviendrait illisible pour énormément de données. Cependant, lorsque nous devons afficher des mails dans d’autres specs, nous affichons les informations From: To: Subject: and Content: (=message)  
+    - d’après l’ABNF, nous avons considéré uniquement le dernier mail écrit ou répondu (c’est-à-dire le premier mail de chaque fichier) en considérant que les autres mails font partie du message. En effet, le dernier mail est celui qui nous intéresse car, par exemple, un mail peut avoir été transféré au collaborateur sans pour autant que celui-ci communique directement avec l’auteur du mail transféré.  
+    - nous avons remarqué que certains mails avaient un format particulier en ajoutant les lignes Cc: ou Bcc:. Ces lignes n’étant pas considérées dans l’ABNF, nous ne les avons pas pris en compte. De plus, certains mails prenaient plusieurs lignes pour les destinataires, nous les avons donc regrouper en une seule ligne pour pouvoir extraire les données correctement.  
 - **SPEC2.1 :**  Les graphiques sont par défaut au format PNG mais on peut le générer en SVG à l’aide d’une option (-f svg)  
 - **Spécifications algébriques** :  
 pas de type de données correspondants à StringList[], il peut être simplifié par un tableau de Str
+
+## V) Améliorations et corrections possibles
+Toutes les améliorations ou corrections possibles sont disponibles dans la rubrique "Tickets" de SourceForge
+- Problèmes
+    - Certains fichiers mails ne peuvent être lus, notamment en l'absence du champ "To:"
+- Améliorations
+    - Il serait intéressant d'implémenter des tests unitaires afin de s'assurer de la stabilité du programme
+    - Dans l'objectif d'une plus grande utilisabilité du programme, il serait intéressant d'implémenter une interface graphique
+    - Ajout de filtre comme nom et prénom pour permettre à l'utilisateur d'avoir de nouveaux critères de recherche dans le cas où il manque d'informations
