@@ -141,6 +141,10 @@ program
             logger.error("First date is higher than the second");
             return;
         }
+        if(args.beginningDate === args.endingDate){
+            logger.error("First date is equal to the second ");
+            return;
+        }
         // Get mail from files
         let mailCollection = extractMail(args.files, logger);
         // Get only mail in the period
